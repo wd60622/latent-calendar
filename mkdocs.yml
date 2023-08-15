@@ -1,0 +1,68 @@
+site_name: Latent Calendar 
+
+theme:
+  name: "material"
+  features:
+    # - navigation.indexes
+    - navigation.sections
+    - navigation.tabs
+    - navigation.expand
+    - navigation.top
+  palette:
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: green
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: green
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+repo_name: Latent Calendar
+repo_url: https://github.com/wd60622/latent-calendar
+edit_uri: blob/main/docs/
+site_url: https://wd60622.github.io/latent-calendar
+
+extra: 
+  homepage: https://wd60622.github.io/
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/wd60622/latent-calendar
+
+nav:
+  - Overview: index.md
+  - Modules: 
+    - modules/datasets.md
+    - modules/extensions.md
+    - modules/transformers.md
+    - modules/model.md
+    - modules/plot.md
+    - modules/segments.md
+  - methodology.md
+  - Examples: 
+    - examples/store-transactions.md
+
+plugins:
+- search
+- mkdocstrings:
+    handlers:
+      python:
+        options:
+          docstring_style: google
+
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences

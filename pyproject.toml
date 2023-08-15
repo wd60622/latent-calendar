@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "latent-calendar"
+version = "0.1.0"
+description = "Analysing and modeling weekly calendar distributions using latent components"
+authors = ["Will Dean <wd60622@gmail.com>"]
+readme = "README.md"
+packages = [{include = "latent_calendar"}]
+
+[tool.poetry.dependencies]
+python = ">=3.8,<4.0"
+pandas = "*"
+scikit-learn = ">=1.0.0"
+matplotlib = "*"
+conjugate-models = "^0.1.2"
+pymc = ">=5.0.0"
+
+
+[tool.poetry.group.docs.dependencies]
+mkdocs = "^1.4.3"
+mkdocstrings = {extras = ["python"], version = "^0.22.0"}
+mkdocs-material = "^9.1.18"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
+pytest-cov = "^4.1.0"
+ipython = "8.8.0"
+black = "^23.7.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88

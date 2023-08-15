@@ -1,0 +1,153 @@
+"""Model to learn latent calendar meanings.
+
+Based on [scikit-learn LDA](https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.LatentDirichletAllocation.html).
+
+"""
+from typing import Optional
+
+import numpy as np
+
+from sklearn.base import BaseEstimator, TransformerMixin
+from sklearn.decomposition import LatentDirichletAllocation as BaseLDA
+
+
+from conjugate.distributions import Dirichlet
+from conjugate.models import multinomial_dirichlet
+
+from latent_calendar.const import TIME_SLOTS, EVEN_PROBABILITY
+
+
+def joint_distribution(X_latent: np.ndarray, components: np.ndarray) -> np.ndarray:
+    """Marginalize out the components."""
+    return X_latent @ components
+
+
+class LatentCalendar(BaseLDA):
+    """Main latent calendar model.
+
+    Make use of Latent Dirichlet Allocation model from sklearn
+
+    """
+
+    @property
+    def normalized_components_(self) -> np.ndarray:
+        return self.components_ / self.components_.sum(axis=1)[:, np.newaxis]
+
+    def joint_distribution(self, X_latent: np.ndarray) -> np.ndarray:
+        """Marginalize out the components."""
+        return joint_distribution(
+            X_latent=X_latent, components=self.normalized_components_
+        )
+
+    def predict(self, X: np.ndarray, y=None) -> np.ndarray:
+        """Return the marginal probabilities for a given row.
+
+        Marginalize out the loads via law of total probability
+        P[time=t | Row=r] = sum P[time=t | L=l, Row=r] * P[L=l | Row=r]
+
+        """
+        # (n, n_components)
+        X_latent = self.transform(X)
+
+        return self.joint_distribution(X_latent=X_latent)
+
+
+class DummyModel(LatentCalendar):
+    """Return even probability of a latent.
+
+    This can be used as the worse possible baseline.
+
+    """
+
+    def fit(self, X, y=None) -> "DummyModel":
+        """All components are equal probabilty of every hour."""
+        # Even probabilty for every thing
+        self.n_components = 1
+        self.components_ = np.ones((self.n_components, TIME_SLOTS)) * EVEN_PROBABILITY
+
+        return self
+
+    def transform(self, X, y=None) -> np.ndarray:
+        """Everyone has equal probability of being in each group."""
+        nrows = len(X)
+
+        return np.ones((nrows, self.n_components)) / self.n_components
+
+    @classmethod
+    def create(cls) -> "DummyModel":
+        """Return a dummy model ready for transforming and predicting."""
+        model = cls()
+        model.fit(X=None)
+
+        return model
+
+    @classmethod
+    def from_prior(cls, prior: np.ndarray) -> "DummyModel":
+        """Return a dummy model from a prior."""
+        model = cls()
+        model.components_ = prior[np.newaxis, :]
+        model.n_components = 1
+
+        return model
+
+
+class MarginalModel(LatentCalendar):
+    def fit(self, X, y=None) -> "MarginalModel":
+        """Just sum over all the rows."""
+        self.n_components = 1
+        # (1, n_times)
+        self.components_ = X.sum(axis=0)[np.newaxis, :]
+
+        return self
+
+    def transform(self, X, y=None) -> np.ndarray:
+        """There is only one component to be a part of."""
+        nrows = len(X)
+
+        # (nrows, 1)
+        return np.repeat(1, nrows)[:, np.newaxis]
+
+
+def constant_prior(X: np.ndarray, value: float = 1.0) -> np.ndarray:
+    """Return the prior for each hour of the day.
+
+    This is the average of all the rows.
+
+    Args:
+        X: (nrows, n_times)
+    """
+    return np.repeat(value, TIME_SLOTS)
+
+
+def hourly_prior(X: np.ndarray) -> np.ndarray:
+    """Return the prior for each hour of the day.
+
+    This is the average of all the rows.
+
+    Args:
+        X: (nrows, n_times)
+
+    Returns:
+        (n_times,)
+
+    """
+    return (X > 0).sum(axis=0) / len(X)
+
+
+class ConjugateModel(BaseEstimator, TransformerMixin):
+    def __init__(self, a: Optional[np.ndarray] = None) -> None:
+        self.a = a
+
+    def fit(self, X, y=None) -> "ConjugateModel":
+        """Fit the conjugate model."""
+        if self.a is None:
+            self.a = hourly_prior(X)
+
+        self.prior = Dirichlet(alpha=self.a)
+        return self
+
+    def transform(self, X, y=None) -> np.ndarray:
+        return multinomial_dirichlet(X, self.prior).dist.mean()
+
+    def predict(self, X, y=None) -> np.ndarray:
+        return self.transform(X, y=y)
