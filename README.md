@@ -8,6 +8,6 @@ Analyze and model data on a weekly calendar
 pip install latent-calendar
 ```
 
-## Features
-- Transformation and Visualization Calendar Data
-- Model with `LatentCalendar`
+## Documentation 
+
+Find more examples and documentation [here](https://wd60622.github.io/latent-calendar/).
