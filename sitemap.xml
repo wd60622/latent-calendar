@@ -2,67 +2,67 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://wd60622.github.io/latent-calendar/</loc>
-         <lastmod>2023-08-15</lastmod>
+         <lastmod>2023-08-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://wd60622.github.io/latent-calendar/draft/</loc>
-         <lastmod>2023-08-15</lastmod>
+         <lastmod>2023-08-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://wd60622.github.io/latent-calendar/methodology/</loc>
-         <lastmod>2023-08-15</lastmod>
+         <lastmod>2023-08-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://wd60622.github.io/latent-calendar/examples/cal-attribute/</loc>
-         <lastmod>2023-08-15</lastmod>
+         <lastmod>2023-08-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://wd60622.github.io/latent-calendar/examples/create-segments/</loc>
-         <lastmod>2023-08-15</lastmod>
+         <lastmod>2023-08-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://wd60622.github.io/latent-calendar/examples/plotting-dataframes/</loc>
-         <lastmod>2023-08-15</lastmod>
+         <lastmod>2023-08-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://wd60622.github.io/latent-calendar/examples/store-transactions/</loc>
-         <lastmod>2023-08-15</lastmod>
+         <lastmod>2023-08-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://wd60622.github.io/latent-calendar/modules/datasets/</loc>
-         <lastmod>2023-08-15</lastmod>
+         <lastmod>2023-08-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://wd60622.github.io/latent-calendar/modules/extensions/</loc>
-         <lastmod>2023-08-15</lastmod>
+         <lastmod>2023-08-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://wd60622.github.io/latent-calendar/modules/model/</loc>
-         <lastmod>2023-08-15</lastmod>
+         <lastmod>2023-08-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://wd60622.github.io/latent-calendar/modules/plot/</loc>
-         <lastmod>2023-08-15</lastmod>
+         <lastmod>2023-08-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://wd60622.github.io/latent-calendar/modules/segments/</loc>
-         <lastmod>2023-08-15</lastmod>
+         <lastmod>2023-08-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://wd60622.github.io/latent-calendar/modules/transformers/</loc>
-         <lastmod>2023-08-15</lastmod>
+         <lastmod>2023-08-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
