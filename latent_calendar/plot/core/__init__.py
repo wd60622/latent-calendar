@@ -1,7 +1,9 @@
 from latent_calendar.plot.core.calendar import (
+    plot_blank_calendar,
     plot_calendar,
     plot_calendar_by_row,
     plot_dataframe_as_calendar,
+    plot_series_as_calendar,
     plot_dataframe_grid_across_column,
 )
 from latent_calendar.plot.core.model import (

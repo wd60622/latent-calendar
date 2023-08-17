@@ -12,8 +12,10 @@ from latent_calendar.plot.colors import (
     settle_data_and_cmap,
 )
 from latent_calendar.plot.core import (
+    plot_blank_calendar,
     plot_calendar,
     plot_dataframe_as_calendar,
+    plot_series_as_calendar,
     plot_dataframe_grid_across_column,
     plot_calendar_by_row,
     plot_profile,

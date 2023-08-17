@@ -9,8 +9,12 @@ Functionality includes:
 - making transformations and predictions with models
 - plotting of events, predictions, and comparisons as calendars
 
+Each `DataFrame` will be either at event level or an aggregated wide format. 
+
+Methods that end in `row` or `by_row` will be for wide format DataFrames and will plot each row as a calendar. 
+
 Examples: 
-    Plotting a Series as a calendar 
+    Plotting an event level Series as a calendar 
 
     ```python
     import pandas as pd
@@ -82,12 +86,13 @@ from latent_calendar.plot.core import (
     plot_calendar_by_row,
     plot_profile_by_row,
     plot_dataframe_as_calendar,
+    plot_series_as_calendar,
     plot_dataframe_grid_across_column,
     plot_model_predictions_by_row,
 )
 from latent_calendar.plot.core.calendar import TITLE_FUNC, CMAP_GENERATOR
 from latent_calendar.plot.elements import DayLabeler, TimeLabeler
-from latent_calendar.plot.iterate import StartEndConfig
+from latent_calendar.plot.iterate import StartEndConfig, iterate_series
 
 from latent_calendar.segments.convolution import (
     sum_over_segments,
@@ -107,7 +112,7 @@ class SeriesAccessor:
     def plot(
         self,
         *,
-        length: int = 5,
+        duration: int = 5,
         alpha: float = None,
         cmap=None,
         monday_start: bool = True,
@@ -116,7 +121,7 @@ class SeriesAccessor:
         """Plot Series of timestamps as a calendar.
 
         Args:
-            length: length of event in minutes
+            duration: duration of each event in minutes
             alpha: alpha value for the color
             cmap: function that maps floats to string colors
             monday_start: whether to start the week on Monday or Sunday
@@ -127,7 +132,7 @@ class SeriesAccessor:
 
         """
         tmp_name = "tmp_name"
-        config = StartEndConfig(start=tmp_name, end=None, minutes=length)
+        config = StartEndConfig(start=tmp_name, end=None, minutes=duration)
 
         return plot_dataframe_as_calendar(
             self._obj.rename(tmp_name).to_frame(),
@@ -136,6 +141,30 @@ class SeriesAccessor:
             cmap=cmap,
             monday_start=monday_start,
             ax=ax,
+        )
+
+    def plot_row(
+        self,
+        *,
+        alpha: float = None,
+        cmap=None,
+        monday_start: bool = True,
+        ax: Optional[plt.Axes] = None,
+    ) -> plt.Axes:
+        """Plot Series of timestamps as a calendar.
+
+        Args:
+            alpha: alpha value for the color
+            cmap: function that maps floats to string colors
+            monday_start: whether to start the week on Monday or Sunday
+            ax: matplotlib axis to plot on
+
+        Returns:
+            Modified matplotlib axis
+
+        """
+        return plot_series_as_calendar(
+            self._obj, alpha=alpha, cmap=cmap, ax=ax, monday_start=monday_start
         )
 
 
@@ -213,7 +242,7 @@ class DataFrameAccessor:
         start_col: str,
         *,
         end_col: Optional[str] = None,
-        length: Optional[int] = None,
+        duration: Optional[int] = None,
         alpha: float = None,
         cmap=None,
         monday_start: bool = True,
@@ -224,7 +253,7 @@ class DataFrameAccessor:
         Args:
             start_col: column with start timestamp
             end_col: column with end timestamp
-            length: length of event in minutes. Alternative to end_col
+            minutes: length of event in minutes. Alternative to end_col
             alpha: alpha value for the color
             cmap: function that maps floats to string colors
             monday_start: whether to start the week on Monday or Sunday
@@ -234,7 +263,7 @@ class DataFrameAccessor:
             Modified matplotlib axis
 
         """
-        config = StartEndConfig(start=start_col, end=end_col, minutes=length)
+        config = StartEndConfig(start=start_col, end=end_col, minutes=duration)
 
         return plot_dataframe_as_calendar(
             self._obj,
@@ -251,7 +280,7 @@ class DataFrameAccessor:
         grid_col: str,
         *,
         end_col: Optional[str] = None,
-        length: Optional[int] = None,
+        duration: Optional[int] = None,
         max_cols: int = 3,
         alpha: float = None,
     ) -> None:
@@ -271,7 +300,7 @@ class DataFrameAccessor:
             None
 
         """
-        config = StartEndConfig(start=start_col, end=end_col, minutes=length)
+        config = StartEndConfig(start=start_col, end=end_col, minutes=duration)
 
         plot_dataframe_grid_across_column(
             self._obj, grid_col=grid_col, config=config, max_cols=max_cols, alpha=alpha

@@ -7,11 +7,6 @@ import numpy as np
 from latent_calendar.const import HOURS_IN_DAY, DAYS_IN_WEEK
 
 
-def identity(df_probs: pd.DataFrame) -> pd.DataFrame:
-    """Return the input."""
-    return df_probs
-
-
 def _reverse_columns(df: pd.DataFrame) -> pd.DataFrame:
     """Reverse the order of the columns."""
     return df.iloc[:, ::-1]
@@ -26,11 +21,11 @@ def sum_next_hours(df: pd.DataFrame, hours: int) -> pd.DataFrame:
     TODO: Consider if negative hours should be allowed
 
     Arguments:
-        df: DataFrame of probabilities
+        df: DataFrame of probabilities or counts in wide format
         hours: Number of hours to sum after the current hour
 
     Returns:
-        DataFrame of probabilities summed over the next hours
+        DataFrame summed over the next hours
 
     """
     if hours < 0:
@@ -50,7 +45,7 @@ def sum_next_hours(df: pd.DataFrame, hours: int) -> pd.DataFrame:
     )
 
 
-def mask_probs(X_segments, X_pred) -> np.ndarray:
+def _mask_probs(X_segments, X_pred) -> np.ndarray:
     """Multiply out the mask.
 
     Args:
@@ -75,7 +70,7 @@ def sum_array_over_segments(X_pred: np.ndarray, X_segment: np.ndarray) -> np.nda
         Matrix of (nrows, n_segments) defining the probabilities of each segments
 
     """
-    return mask_probs(X_segment, X_pred).sum(axis=2).T
+    return _mask_probs(X_segment, X_pred).sum(axis=2).T
 
 
 def sum_over_segments(df: pd.DataFrame, df_segments: pd.DataFrame) -> pd.DataFrame:
@@ -112,7 +107,7 @@ def sum_over_vocab(df: pd.DataFrame, aggregation: str = "dow") -> pd.DataFrame:
     """Sum the wide DataFrame columns to hours or dow.
 
     Args:
-        df: DataFrame with the full vocab columns
+        df: DataFrame in wide format with vocab column names
         aggregation: either dow or hour
 
     Returns:

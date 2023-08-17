@@ -7,9 +7,6 @@ import calendar
 from dataclasses import dataclass, field, replace
 from typing import List, Optional, Tuple
 
-import numpy as np
-import pandas as pd
-
 import matplotlib.pyplot as plt
 
 from latent_calendar.const import HOURS_IN_DAY, DAYS_IN_WEEK
@@ -77,7 +74,6 @@ class DayLabeler:
     days_of_week: List[str] = field(default_factory=create_default_days)
     rotation: Optional[float] = 45
     display: bool = True
-    monday_start: bool = True
 
     def __post_init__(self) -> None:
         if self.day_start not in range(DAYS_IN_WEEK):
@@ -163,78 +159,92 @@ class GridLines:
                 )
 
 
-DEFAULT_LW = 0.1
-
-
 @dataclass
 class CalendarEvent:
     """Something on the calendar.
 
-    Plots rectangles on axis
+    Plots rectangles on matplotlib axis.
+
+    Args:
+        day: The day of the week. 0 is Monday.
+        start: The start hour of the event.
+        end: The end hour of the event.
+        duration: The duration of the event. Only used if end is None.
+        fillcolor: The color of the event.
+        fill: Whether to fill the event.
+        alpha: The alpha of the event.
+        lw: The line width of the event.
+        linestyle: The line style of the event.
 
     Examples:
         Plot event from calendar data
 
-        >>> calendar_data = CalendarData(day=0, start=0, end=2.5)
-        >>> event = CalendarEvent.from_calendar_data(calendar_data=calendar_data, cmap=...)
-        >>> event.plot_event(ax=ax)
+        ```python
+        calendar_data = CalendarData(day=0, start=0, end=2.5)
+        event = CalendarEvent.from_calendar_data(calendar_data=calendar_data, cmap=...)
+        event.plot(ax=ax)
 
         Plot a single calendar event from vocab
 
         >>> event = CalendarEvent.from_vocab("00 01")
-        >>> event.plot_event(ax=ax)
+        >>> event.plot(ax=ax)
 
 
     """
 
     day: int
     start: float
-    end: float
-    fillcolor: Optional[str] = None
-    fill: bool = True
-    alpha: Optional[float] = None
-    lw: Optional[float] = None
-    linestyle: Optional[str] = None
+    end: Optional[float] = None
+    duration: Optional[float] = None
+
+    def __post_init__(self) -> None:
+        if self.end is None and self.duration is None:
+            raise ValueError("Either end or duration must be provided")
+
+        if self.end is not None and self.duration is not None:
+            raise ValueError("Only one of end or duration can be provided")
+
+        if self.end is None:
+            self.end = self.start + (self.duration / 60)
+            self.duration = None
 
     @classmethod
     def from_calendar_data(
-        cls, calendar_data: CalendarData, cmap: CMAP, alpha: Optional[float] = None
+        cls,
+        calendar_data: CalendarData,
     ) -> "CalendarEvent":
         return cls(
             day=calendar_data.day,
             start=calendar_data.start,
             end=calendar_data.end,
-            fillcolor=cmap(calendar_data.value),
-            alpha=alpha,
-            lw=calendar_data.lw,
         )
 
     @classmethod
     def from_vocab(
         cls,
         vocab: str,
-        hours: float = 1.0,
-        fillcolor: Optional[str] = None,
-        fill: bool = False,
-        alpha: Optional[float] = None,
-        lw: float = 1.5,
-        linestyle: Optional[str] = "dashed",
+        duration: float = 60.0,
     ) -> "CalendarEvent":
         """Constructor from vocab string in order to plot on an axis.
 
-        TODO: Ability to have the number of days
-        TODO: Ability for the number of days to have wrapping as well.
+        Args:
+            vocab: The vocab string.
+            duration: The duration of the event.
 
         Example:
             Plot on an axis
 
-            >>> event = CalendarEvent.from_vocab("00 01")
-            >>> event.plot_event(ax=ax)
+            ```python
+            event = CalendarEvent.from_vocab("00 01")
+            event.plot(ax=ax)
+            ```
 
             Plot a two and half hour window
 
-            >>> event = CalendarEvent.from_vocab("00 01", hours=2.5)
-            >>> event.plot_event(ax=ax)
+            ```python
+            event = CalendarEvent.from_vocab("00 01", hours=2.5)
+            event.plot(ax=ax)
+            ```
 
         """
         day, hour = get_day_hour(vocab=vocab)
@@ -242,12 +252,7 @@ class CalendarEvent:
         return cls(
             day=day,
             start=hour,
-            end=hour + hours,
-            fillcolor=fillcolor,
-            fill=fill,
-            alpha=alpha,
-            lw=lw,
-            linestyle=linestyle,
+            end=hour + (duration / 60),
         )
 
     @property
@@ -266,11 +271,6 @@ class CalendarEvent:
             day=(self.day + 1) % DAYS_IN_WEEK,
             start=0,
             end=self.end % HOURS_IN_DAY,
-            fillcolor=self.fillcolor,
-            fill=self.fill,
-            alpha=self.alpha,
-            lw=self.lw,
-            linestyle=self.linestyle,
         )
 
     def separate_events(self) -> List["CalendarEvent"]:
@@ -285,7 +285,7 @@ class CalendarEvent:
         return events
 
     def _create_matplotlib_rectangle(
-        self, monday_start: bool, **kwargs
+        self, monday_start: bool, lw, fill: bool, linestyle, fillcolor, alpha, **kwargs
     ) -> plt.Rectangle:
         """Create a rectangle matplotlib instance from the event."""
         height = self.end - self.start
@@ -298,20 +298,30 @@ class CalendarEvent:
             "xy": [x, self.start],
             "width": 1,
             "height": height,
-            "edgecolor": "black",
-            "lw": self.lw or DEFAULT_LW,
-            "fill": self.fill,
-            "linestyle": self.linestyle,
         }
-        if self.fillcolor is not None:
-            rect_kwargs["facecolor"] = self.fillcolor
 
-        if self.alpha is not None:
-            rect_kwargs["alpha"] = self.alpha
+        rect_kwargs["edgecolor"] = "black"
+        rect_kwargs["lw"] = lw
+        rect_kwargs["fill"] = fill
+        rect_kwargs["linestyle"] = linestyle
+        rect_kwargs["facecolor"] = fillcolor
+        rect_kwargs["alpha"] = alpha
 
-        return plt.Rectangle(**rect_kwargs, **kwargs)
+        rect_kwargs.update(kwargs)
 
-    def plot_event(self, ax: plt.Axes, monday_start: bool = True, **kwargs) -> None:
+        return plt.Rectangle(**rect_kwargs)
+
+    def plot(
+        self,
+        ax: plt.Axes,
+        monday_start: bool = True,
+        lw: float = 0.1,
+        fill: bool = True,
+        linestyle=None,
+        fillcolor=None,
+        alpha=None,
+        **kwargs,
+    ) -> None:
         """Put the CalendarEvent instance onto an axis.
 
 
@@ -321,12 +331,26 @@ class CalendarEvent:
         Args:
             ax: Axis to plot on
             monday_start: Whether to start the week on Monday or Sunday.
+            lw: The line width of the event.
+            fill: Whether to fill the event.
+            linestyle: The line style of the event.
+            fillcolor: The color of the event.
+            alpha: The alpha of the event.
             kwargs: Addtional kwargs for the Patch instances or to override.
 
         """
         separated_events = self.separate_events()
         for event in separated_events:
             rectangle = event._create_matplotlib_rectangle(
-                monday_start=monday_start, **kwargs
+                monday_start=monday_start,
+                lw=lw,
+                fill=fill,
+                linestyle=linestyle,
+                fillcolor=fillcolor,
+                alpha=alpha,
+                **kwargs,
             )
+            if "label" in kwargs:
+                kwargs.pop("label")
+
             ax.add_patch(rectangle)

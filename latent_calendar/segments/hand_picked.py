@@ -1,4 +1,32 @@
-"""Create hand picked segments on the calendar."""
+"""Create hand picked segments on the calendar.
+
+
+Examples: 
+    Create some segments for a calendar: 
+
+    ```python
+    mornings = create_box_segment(
+        day_start=0, day_end=7, hour_start=6, hour_end=11, name="Mornings"
+    ) 
+    afternoons = create_box_segment(
+        day_start=0, day_end=7, hour_start=11, hour_end=16, name="Afternoons"
+    )
+    evenings = create_box_segment(
+        day_start=0, day_end=7, hour_start=16, hour_end=21, name="Evenings"
+    )
+
+    df_segments = stack_segments([
+        mornings,
+        afternoons,
+        evenings,
+    ])
+
+    df_segments.cal.plot_by_row()
+    ```
+
+    ![New Segments](./../images/new-segments.png)
+
+"""
 import itertools
 from typing import List, Optional
 

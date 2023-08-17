@@ -24,14 +24,48 @@ from latent_calendar.plot.iterate import (
     CALENDAR_ITERATION,
     DataFrameConfig,
     iterate_dataframe,
+    iterate_series,
     iterate_long_array,
 )
+
+
+def plot_blank_calendar(
+    plot_axes: PlotAxes = PlotAxes(),
+    display_settings: Optional[DisplaySettings] = None,
+    ax: Optional[plt.Axes] = None,
+    grid_lines: GridLines = GridLines(),
+    monday_start: bool = True,
+) -> plt.Axes:
+    """Create a blank calendar with no data
+
+    Args:
+        plot_axes: instance in order to configure the axes
+        display_settings: override of the display settings in the calendar
+        ax: Optional axes to plot on
+        grid_lines: GridLines instance
+        monday_start: whether to start the week on Monday or Sunday
+
+    Returns:
+        Modified matplotlib axis
+
+    """
+    plot_axes.update_start(monday_start=monday_start)
+
+    if display_settings is not None:
+        plot_axes.update_display_settings(display_settings=display_settings)
+
+    ax = ax if ax is not None else plt.gca()
+
+    plot_axes.configure_axis(ax=ax)
+    grid_lines.configure_grid(ax=ax)
+
+    return ax
 
 
 def plot_calendar(
     calendar_iter: CALENDAR_ITERATION,
     *,
-    plot_axes: Optional[PlotAxes] = None,
+    plot_axes: PlotAxes = PlotAxes(),
     display_settings: Optional[DisplaySettings] = None,
     cmap: Optional[CMAP] = None,
     alpha: Optional[float] = None,
@@ -56,28 +90,67 @@ def plot_calendar(
         Modified matplotlib axis
 
     """
-    if plot_axes is None:
-        plot_axes = PlotAxes()
+    ax = plot_blank_calendar(
+        plot_axes=plot_axes,
+        display_settings=display_settings,
+        ax=ax,
+        grid_lines=grid_lines,
+        monday_start=monday_start,
+    )
 
-    plot_axes.update_start(monday_start=monday_start)
-
-    if display_settings is not None:
-        plot_axes.update_display_settings(display_settings=display_settings)
-
-    cmap = cmap if cmap is not None else lambda x: "lightblue"
-    ax = ax if ax is not None else plt.gca()
+    if cmap is None:
+        cmap = lambda x: "lightblue"
 
     for calendar_data in calendar_iter:
-        event = CalendarEvent.from_calendar_data(
-            calendar_data=calendar_data, cmap=cmap, alpha=alpha
+        event = CalendarEvent.from_calendar_data(calendar_data=calendar_data)
+
+        event.plot(
+            ax=ax,
+            facecolor=cmap(calendar_data.value),
+            alpha=alpha,
+            monday_start=monday_start,
         )
 
-        event.plot_event(ax=ax, monday_start=monday_start)
-
-    plot_axes.configure_axis(ax=ax)
-    grid_lines.configure_grid(ax=ax)
-
     return ax
+
+
+def plot_series_as_calendar(
+    series: pd.Series,
+    *,
+    grid_lines: GridLines = GridLines(),
+    plot_axes: PlotAxes = PlotAxes(),
+    cmap: Optional[CMAP] = None,
+    alpha: Optional[float] = None,
+    ax: Optional[plt.Axes] = None,
+    monday_start: bool = True,
+) -> plt.Axes:
+    """Simple Wrapper about plot_calendar in order to plot Series in various formats
+
+    Args:
+        series: Series in format with index as datetime and values as float
+        grid_lines: GridLines instance
+        plot_axes: instance in order to configure the axes
+        cmap: function that maps floats to string colors
+        alpha: alpha level of each rectangle
+        ax: optional axis to plot on
+        monday_start: whether to start the week on Monday or Sunday
+
+    Returns:
+        new or modified axes
+
+    """
+    if cmap is None:
+        cmap = create_default_cmap(value=series.to_numpy().max())
+
+    return plot_calendar(
+        iterate_series(series),
+        plot_axes=plot_axes,
+        cmap=cmap,
+        alpha=alpha,
+        ax=ax,
+        monday_start=monday_start,
+        grid_lines=grid_lines,
+    )
 
 
 def plot_dataframe_as_calendar(
@@ -85,7 +158,7 @@ def plot_dataframe_as_calendar(
     config: DataFrameConfig,
     *,
     grid_lines: GridLines = GridLines(),
-    plot_axes: Optional[PlotAxes] = None,
+    plot_axes: PlotAxes = PlotAxes(),
     cmap: Optional[CMAP] = None,
     alpha: Optional[float] = None,
     ax: Optional[plt.Axes] = None,

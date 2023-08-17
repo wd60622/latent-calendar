@@ -23,7 +23,6 @@ class CalendarData:
     start: float
     end: float
     value: float
-    lw: Optional[float] = None
 
 
 CALENDAR_ITERATION = Generator[CalendarData, None, None]
@@ -62,9 +61,8 @@ REPEATABLE = Union[pd.Series, Iterable[float]]
 
 
 VALUE_DEFAULT = 1
-LW_DEFAULT = None
 
-FRAME_ITER = Tuple[pd.Series, pd.Series, pd.Series, REPEATABLE, REPEATABLE]
+FRAME_ITER = Tuple[pd.Series, pd.Series, pd.Series, REPEATABLE]
 
 
 class DataFrameConfig:
@@ -96,7 +94,6 @@ class IterConfig(DataFrameConfig):
     start: str = "hour_start"
     end: str = "hour_end"
     value: str = "value"
-    lw: str = "lw"
 
     @property
     def columns(self) -> List[str]:
@@ -109,7 +106,6 @@ class IterConfig(DataFrameConfig):
             df[self.start],
             df[self.end],
             self._default_repeat(df, self.value, VALUE_DEFAULT),
-            self._default_repeat(df, self.lw, LW_DEFAULT),
         )
 
 
@@ -119,7 +115,6 @@ class StartEndConfig(DataFrameConfig):
     end: Optional[str] = None
     minutes: Optional[int] = None
     value: str = "value"
-    lw: str = "lw"
 
     def __post_init__(self) -> None:
         if self.end is not None and self.minutes is not None:
@@ -150,7 +145,6 @@ class StartEndConfig(DataFrameConfig):
             start,
             end,
             self._default_repeat(df, self.value, VALUE_DEFAULT),
-            self._default_repeat(df, self.lw, LW_DEFAULT),
         )
 
 
@@ -160,7 +154,6 @@ class VocabIterConfig(DataFrameConfig):
 
     vocab: str = "vocab"
     value: str = "value"
-    lw: str = "lw"
 
     @property
     def columns(self) -> List[str]:
@@ -177,7 +170,6 @@ class VocabIterConfig(DataFrameConfig):
             start,
             start + 1,
             self._default_repeat(df, self.value, VALUE_DEFAULT),
-            self._default_repeat(df, self.lw, LW_DEFAULT),
         )
 
 
