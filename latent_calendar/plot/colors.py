@@ -3,8 +3,18 @@
 This module provides some helper function and some defaults. However, they might 
 not be the best of all purposes.
 
-TODO: Get a better pallet overall :D
-TODO: Be able to distinguish between counts, probability, and relative numbers
+Color maps here take floats to a color string. Usually a hex string.
+
+Example:
+    Create a color map for count data. 
+
+    ```python
+    cmap = create_default_cmap(max_value=10)
+
+    cmap(0)  # '#ffffe5'
+    cmap(5)  # '#379e54'
+    cmap(10) # '#004529'
+    ```
 
 """
 
@@ -28,8 +38,10 @@ CMAP = Callable[[float], str]
 class ColorMap(ScalarMappable):
     """This supports colorbar for a figure from matplotlib.
 
-    TODO: Add into the selective plots
-    TODO: Consider having the label or even a binning of the colorbar
+    Args:
+        norm: matplotlib.colors.Normalize
+        cmap: matplotlib.cm.ScalarMappable
+        default_cm: matplotlib.cm.ScalarMappable
 
     """
 
@@ -55,9 +67,12 @@ class ColorMap(ScalarMappable):
 def create_cmap(
     max_value: float, min_value: float = 0.0, cm: Optional[CM] = None
 ) -> CMAP:
-    """Create color map function
+    """Create color map function.
 
-    Might be good for values from low to high.
+    Args:
+        max_value: maximum value for the color map
+        min_value: minimum value for the color map
+        cm: function that takes a value and returns a color
 
     """
     norm = Normalize(vmin=min_value, vmax=max_value)

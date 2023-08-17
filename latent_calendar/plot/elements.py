@@ -11,13 +11,18 @@ import matplotlib.pyplot as plt
 
 from latent_calendar.const import HOURS_IN_DAY, DAYS_IN_WEEK
 from latent_calendar.plot.iterate import CalendarData
-from latent_calendar.plot.colors import CMAP
 from latent_calendar.vocab import HourFormatter, get_day_hour
 
 
 @dataclass
 class DisplaySettings:
-    """Small wrapper to hold the display settings in the plots."""
+    """Small wrapper to hold the display settings in the plots.
+
+    Args:
+        x: Whether to x axis the plot.
+        y: Whether to y axis the plot.
+
+    """
 
     x: bool = True
     y: bool = True
@@ -25,9 +30,16 @@ class DisplaySettings:
 
 @dataclass
 class TimeLabeler:
-    """This is the y-axis and all its settings in the plot.
+    """This is time of day and all its settings in the plot.
 
-    Also possible to be an x-axis for other plots as well.
+    This is typically the y-axis.
+
+    Args:
+        hour_formatter: The formatter for the hour labels.
+        start: The hour to start the plot at.
+        stride: The number of hours to skip between ticks.
+        display: Whether to display the hour labels.
+        rotation: The rotation of the hour labels.
 
     """
 
@@ -68,7 +80,17 @@ def create_default_days():
 
 @dataclass
 class DayLabeler:
-    """This is typically the x-axis and all its settings in the plot."""
+    """Day of the week axis.
+
+    This is typically the x-axis.
+
+    Args:
+        day_start: The day to start the plot at.
+        days_of_week: The names of the days of the week.
+        rotation: The rotation of the day labels.
+        display: Whether to display the day labels.
+
+    """
 
     day_start: int = 0
     days_of_week: List[str] = field(default_factory=create_default_days)
@@ -103,7 +125,13 @@ class DayLabeler:
 
 @dataclass
 class PlotAxes:
-    """This configures the x and y axis in the plots."""
+    """This configures the x and y axis in the plots for calendar plots.
+
+    Args:
+        day_labeler: The day labeler for the plot.
+        time_labeler: The time labeler for the plot.
+
+    """
 
     day_labeler: DayLabeler = field(default_factory=DayLabeler)
     time_labeler: TimeLabeler = field(default_factory=TimeLabeler)
@@ -131,7 +159,16 @@ class PlotAxes:
 
 @dataclass
 class GridLines:
-    """Grid lines between the calendar for the plot."""
+    """Grid lines between the calendar for the plot.
+
+    Args:
+        dow: Whether to add day of week grid lines.
+        hour: Whether to add hour grid lines.
+        color: The color of the grid lines.
+        linestyle: The style of the grid lines.
+        alpha: The alpha of the grid lines.
+
+    """
 
     dow: bool = False
     hour: bool = False
@@ -170,11 +207,6 @@ class CalendarEvent:
         start: The start hour of the event.
         end: The end hour of the event.
         duration: The duration of the event. Only used if end is None.
-        fillcolor: The color of the event.
-        fill: Whether to fill the event.
-        alpha: The alpha of the event.
-        lw: The line width of the event.
-        linestyle: The line style of the event.
 
     Examples:
         Plot event from calendar data
@@ -186,9 +218,10 @@ class CalendarEvent:
 
         Plot a single calendar event from vocab
 
-        >>> event = CalendarEvent.from_vocab("00 01")
-        >>> event.plot(ax=ax)
-
+        ```python
+        event = CalendarEvent.from_vocab("00 01")
+        event.plot(ax=ax)
+        ```
 
     """
 
@@ -274,7 +307,19 @@ class CalendarEvent:
         )
 
     def separate_events(self) -> List["CalendarEvent"]:
-        """Return list of events that represent the one event across different days."""
+        """Return list of events that represent the one event across different days.
+
+
+        Examples:
+            A single event that goes from 23:00 to 01:00 will be split into two events.
+
+            ```python
+            event = CalendarEvent(day=0, start=23, duration=2 * 60)
+
+            events = event.separate_events()
+            ```
+
+        """
         events = [replace(self)]
 
         if self.multiday_tour:
@@ -324,9 +369,7 @@ class CalendarEvent:
     ) -> None:
         """Put the CalendarEvent instance onto an axis.
 
-
-        Options for kwargs here:
-            https://matplotlib.org/stable/api/_as_gen/matplotlib.patches.Rectangle.html
+        Options for kwargs [here](https://matplotlib.org/stable/api/_as_gen/matplotlib.patches.Rectangle.html).
 
         Args:
             ax: Axis to plot on

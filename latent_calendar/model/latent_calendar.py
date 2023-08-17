@@ -1,6 +1,15 @@
-"""Model to learn latent calendar meanings.
+"""Models for the joint distribution of weekly calendar data.
 
-Based on [scikit-learn LDA](https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.LatentDirichletAllocation.html).
+```python
+model = LatentCalendar(n_components=3, random_state=42)
+
+X = df_wide.to_numpy()
+model.fit(X)
+
+X_latent = model.transform(X)
+X_pred = model.predict(X)
+```
+
 
 """
 from typing import Optional
@@ -23,9 +32,12 @@ def joint_distribution(X_latent: np.ndarray, components: np.ndarray) -> np.ndarr
 
 
 class LatentCalendar(BaseLDA):
-    """Main latent calendar model.
+    """Model weekly calendar data as a mixture of multinomial distributions.
 
-    Make use of Latent Dirichlet Allocation model from sklearn
+    Adapted from sklearn's [Latent Dirichlet Allocation](https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.LatentDirichletAllocation.html) model.
+
+    Provides a `predict` method that returns the marginal probability of each time slot for a given row and
+    a `transform` method that returns the latent representation of each row.
 
     """
 
@@ -135,6 +147,20 @@ def hourly_prior(X: np.ndarray) -> np.ndarray:
 
 
 class ConjugateModel(BaseEstimator, TransformerMixin):
+    """Conjugate model for the calendar joint distribution.
+
+    This is a wrapper around the conjugate model for the multinomial
+    distribution. It is a wrapper around the Dirichlet distribution.
+
+    This doesn't use dimensionality reduction, but it does use the
+    conjugate model.
+
+    Args:
+        a: (n_times,) prior for each hour of the day. If None, then
+            the prior is the average of the data.
+
+    """
+
     def __init__(self, a: Optional[np.ndarray] = None) -> None:
         self.a = a
 

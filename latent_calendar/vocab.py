@@ -1,4 +1,4 @@
-"""Operations and relationship with the vocab.
+"""Operations and relationship with the "vocab" of the default time slots.
 
 """
 from dataclasses import dataclass
@@ -11,10 +11,20 @@ from latent_calendar.const import HOURS_IN_DAY, format_dow_hour
 
 
 def am_pm_of_hour(hour: int) -> str:
+    """Get the am or pm of the hour.
+
+    Args:
+        hour: hour of the day
+
+    Returns:
+        am or pm
+
+    """
     return "am" if hour < 12 else "pm"
 
 
 def map_to_12_hour(hour: int) -> int:
+    """Map the hour to a 12 hour clock."""
     if hour == 0:
         return 12
 
@@ -35,6 +45,33 @@ HOUR_FORMATTERS: Dict[str, HOUR_FORMATTER] = {
 
 @dataclass
 class HourFormatter:
+    """Class to format the hour that includes midnight and noon.
+
+    Args:
+        midnight: string to use for midnight
+        noon: string to use for noon
+        format_hour: HOUR_FORMATTER to map hour int to string
+
+    Examples:
+        Just return the number and add midnight and noon.
+
+        ```python
+        hour_formatter = HourFormatter(
+            midnight="Midnight",
+            noon="Noon",
+            format_hour=lambda hour: hour
+        )
+
+        hour_formatter(0) # "Midnight"
+        hour_formatter(12) # "Noon"
+        hour_formatter(1) # 1
+        hour_formatter(13) # 13
+        hour_formatter(24) # "Midnight"
+
+        ```
+
+    """
+
     midnight: Optional[str] = "Midnight"
     noon: Optional[str] = "Noon"
     format_hour: HOUR_FORMATTER = HOUR_FORMATTERS["12hr"]
@@ -50,6 +87,7 @@ class HourFormatter:
 
 
 def get_day_hour(vocab: str) -> Tuple[int, int]:
+    """Get the day and hour from the vocab."""
     day_str, hour_str = vocab.split(" ")
 
     return int(day_str), int(hour_str)
@@ -78,11 +116,14 @@ def make_human_readable(
 
 @dataclass
 class DOWHour:
+    """Day of week and hour of day class."""
+
     dow: int
     hour: int
 
     @classmethod
     def from_vocab(cls, vocab: str) -> "DOWHour":
+        """Construct from a vocab string."""
         dow, hour = get_day_hour(vocab=vocab)
 
         return cls(dow=dow, hour=hour)
@@ -96,6 +137,7 @@ class DOWHour:
             raise ValueError(msg)
 
     def is_after(self, other: "DOWHour") -> bool:
+        """Check if self is after other."""
         if self.dow > other.dow:
             return True
 
@@ -106,6 +148,7 @@ class DOWHour:
 
     @property
     def vocab(self) -> str:
+        """Get the vocab string for an instance."""
         return format_dow_hour(self.dow, self.hour)
 
     def __add__(self, hours: int) -> "DOWHour":

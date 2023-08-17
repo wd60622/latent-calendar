@@ -18,3 +18,4 @@ pip install latent-calendar
 - Compatibility with `scikit-learn` pipelines
 - Transform and visualize data on a weekly calendar
 - Model weekly calendar data with a mixture of calendars
+- Create lower dimensional representations of calendar data

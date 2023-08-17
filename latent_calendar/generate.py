@@ -13,7 +13,17 @@ from latent_calendar.const import FULL_VOCAB
 def wide_format_dataframe(
     n_rows: int, rate: float = 1.0, random_state: Optional[int] = None
 ) -> pd.DataFrame:
-    """Generate some data from Poisson distribution."""
+    """Generate some data from Poisson distribution.
+
+    Args:
+        n_rows: number of rows to generate
+        rate: rate parameter for Poisson distribution
+        random_state: random state for reproducibility
+
+    Returns:
+        DataFrame with columns from FULL_VOCAB and n_rows rows
+
+    """
     if random_state is not None:
         np.random.seed(random_state)
 

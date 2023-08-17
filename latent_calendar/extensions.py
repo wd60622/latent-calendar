@@ -1,4 +1,4 @@
-"""Pandas extensions for `latent-calendar`.
+"""Pandas extensions for `latent-calendar` and primary interface for the package.
 
 Provides a `cal` accessor to `DataFrame` and `Series` instances for easy transformation and plotting after import of `latent_calendar`.
 
@@ -176,7 +176,15 @@ class DataFrameAccessor:
         self._obj = pandas_obj
 
     def normalize(self, kind: str) -> pd.DataFrame:
-        """Row-wise operations on DataFrame."""
+        """Row-wise operations on DataFrame.
+
+        Args:
+            kind: one of ['max', 'probs', 'even_rate']
+
+        Returns:
+            DataFrame with row-wise operations applied
+
+        """
         if kind == "max":
             return self._obj.div(self._obj.max(axis=1), axis=0)
         elif kind == "probs":
@@ -218,23 +226,72 @@ class DataFrameAccessor:
         return transformer.fit_transform(self._obj)
 
     def sum_over_vocab(self, aggregation: str = "dow") -> pd.DataFrame:
-        """Sum the wide format to day of week or hour of day."""
+        """Sum the wide format to day of week or hour of day.
+
+        Args:
+            aggregation: one of ['dow', 'hour']
+
+        Returns:
+            DataFrame with summed values
+
+        Examples:
+            Sum to day of week
+
+            ```python
+            df_dow = df_wide.cal.sum_over_vocab(aggregation='dow')
+            ```
+
+        """
         return sum_over_vocab(self._obj, aggregation=aggregation)
 
     def sum_next_hours(self, hours: int) -> pd.DataFrame:
-        """Sum the wide format over next hours."""
+        """Sum the wide format over next hours.
+
+        Args:
+            hours: number of hours to sum over
+
+        Returns:
+            DataFrame with summed values
+
+        """
         return sum_next_hours(self._obj, hours=hours)
 
     def sum_over_segments(self, df_segments: pd.DataFrame) -> pd.DataFrame:
-        """Sum the wide format over user defined segments."""
+        """Sum the wide format over user defined segments.
+
+        Args:
+            df_segments: DataFrame in wide format with segments as index
+
+        Returns:
+            DataFrame with columns as the segments and summed values
+
+        """
         return sum_over_segments(self._obj, df_segments=df_segments)
 
     def transform(self, *, model) -> pd.DataFrame:
-        """Transform DataFrame with model."""
+        """Transform DataFrame with model.
+
+        Applies the dimensionality reduction to each row of the DataFrame.
+
+        Args:
+            model: model to use for transformation
+
+        Returns:
+            DataFrame with transformed values
+
+        """
         return transform_on_dataframe(self._obj, model=model)
 
     def predict(self, *, model) -> pd.DataFrame:
-        """Predict DataFrame with model."""
+        """Predict DataFrame with model.
+
+        Args:
+            model: model to use for prediction
+
+        Returns:
+            DataFrame with predicted values (wide format)
+
+        """
         return predict_on_dataframe(self._obj, model=model)
 
     def plot(
@@ -328,7 +385,6 @@ class DataFrameAccessor:
 
         Returns:
             None
-
 
         """
         return plot_calendar_by_row(

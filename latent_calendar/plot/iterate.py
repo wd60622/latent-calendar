@@ -1,6 +1,48 @@
-"""Generalize the iteration to support different data formats.
+"""Generalize the iteration to support different data formats. Namely, 
 
-Currently supports iteration of a matrix grid (n, m), a long array (n * m, ), and DataFrame instances. 
+- 2d numpy array 
+- 1d numpy array (long format)
+- pandas Series 
+- pandas DataFrame with various columns 
+
+This powers the calendar plot and is passed into the `plot_calendar` function.
+
+Examples: 
+    Plot calendar based on 1d numpy array.
+
+    ```python
+    import numpy as np
+
+    from latent_calendar.plot import plot_calendar
+    from latent_calendar.plot.iterate import iterate_long_array
+
+    data = np.ones(7 * 24)
+    plot_calendar(
+        iterate_long_array(data),
+    )
+    ```
+
+    Plot calendar based on 2d numpy array.
+
+    ```python
+    from latent_calendar.plot import plot_calendar
+
+    data = np.ones((7, 24))
+    plot_calendar(
+        iterate_matrix(data),
+    )
+    ```
+
+    Plot calendar for every half hour instead of every hour. **NOTE:** This happens automatically!
+
+    ```python
+    from latent_calendar.plot import plot_calendar
+
+    data = np.ones((7, 24 * 2))
+    plot_calendar(
+        iterate_matrix(data), 
+    )
+    ```
 
 """
 
