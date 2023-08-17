@@ -22,7 +22,7 @@ Invoice
 By default, a new `cal` attribute will be added to DataFrames given access to module functionality.
 
 ```python
-df_wide = df.cal.to_vocab("Country", "InvoiceDate")
+df_wide = df.cal.aggregate_events("Country", "InvoiceDate")
 
 df_wide.head()
 ```
