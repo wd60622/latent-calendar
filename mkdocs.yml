@@ -39,16 +39,29 @@ extra:
 nav:
   - Overview: index.md
   - Modules: 
-    - modules/datasets.md
     - modules/extensions.md
-    - modules/transformers.md
     - modules/model.md
-    - modules/plot.md
+    - modules/generate.md
+    - modules/transformers.md
+    - modules/datasets.md
     - modules/segments.md
+    - modules/const.md
+    - modules/vocab.md
+    - Plot: 
+      - modules/plot/core.md
+      - modules/plot/elements.md
+      - modules/plot/colors.md
+      - modules/plot/config.md
+      - modules/plot/grid_settings.md
+      - modules/plot/iterate.md
   - methodology.md
   - Examples: 
-    - examples/store-transactions.md
+    - examples/cal-attribute.md
     - examples/add-calendar-events.md
+    - examples/event-frequency.md
+    - examples/create-segments.md
+    - examples/generation-process.md
+    - examples/store-transactions.md
 
 plugins:
 - search
