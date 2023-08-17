@@ -48,6 +48,7 @@ nav:
   - methodology.md
   - Examples: 
     - examples/store-transactions.md
+    - examples/add-calendar-events.md
 
 plugins:
 - search

@@ -4,7 +4,24 @@ version = "0.1.0"
 description = "Analysing and modeling weekly calendar distributions using latent components"
 authors = ["Will Dean <wd60622@gmail.com>"]
 readme = "README.md"
-packages = [{include = "latent_calendar"}]
+homepage = "https://wd60622.github.io/latent-calendar/"
+documentation = "https://wd60622.github.io/latent-calendar/"
+repository = "https://github.com/wd60622/latent-calendar/"
+packages = [
+    {include = "latent_calendar"}, 
+    {include = "latent_calendar/py.typed"}
+]
+classifiers = [
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Scientific/Engineering",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: POSIX",
+    "Operating System :: Unix",
+    "Operating System :: MacOS",
+]
 
 [tool.poetry.dependencies]
 python = ">=3.8,<4.0"
