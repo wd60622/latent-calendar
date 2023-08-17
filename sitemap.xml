@@ -16,7 +16,17 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://wd60622.github.io/latent-calendar/examples/add-calendar-events/</loc>
+         <lastmod>2023-08-17</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://wd60622.github.io/latent-calendar/examples/cal-attribute/</loc>
+         <lastmod>2023-08-17</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://wd60622.github.io/latent-calendar/examples/calendar-customization/</loc>
          <lastmod>2023-08-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
