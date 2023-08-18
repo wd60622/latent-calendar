@@ -1,12 +1,10 @@
-Creating transforming data into a calendar format
-
 ```python 
+import matplotlib.pyplot as plt
+
 from latent_calendar.datasets import load_online_transactions
 
 df = load_online_transactions()
-
 df.head()
-
 ```
 
 ```text
@@ -39,10 +37,12 @@ Bermuda        0      0      0      0      0      0      0      0      0  ...   
 [5 rows x 168 columns]
 ```
 
+We can clearly see the weekly hours of operation for these countries. Even though these are online transactions, these hours affect the transaction times.
+
+The slight shift in hours for the UK might be the difference in time zones between the UK and the other countries. Maybe it could be difference in buying patterns of these populations. Not sure but this visual gives us a good glance at the data and starting point to ask questions
+
 ```python 
 countries = ["United Kingdom", "Germany", "France"]
-
-import matplotlib.pyplot as plt
 
 (
     df_wide
@@ -55,4 +55,4 @@ fig.suptitle("Store Transactions by Country")
 plt.show()
 ```
 
-![Store Transactions by Country](./../images/store-transactions.png)
+![Store Transactions by Country](./../../images/store-transactions.png)

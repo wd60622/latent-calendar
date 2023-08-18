@@ -30,4 +30,4 @@ fig.suptitle("Calendar Plot with Different # Time Slots")
 plt.show()
 ```
 
-![Time Slot Frequency](./../images/time-slot-size.png)
+![Time Slot Frequency](./../../images/time-slot-size.png)

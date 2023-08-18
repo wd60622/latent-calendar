@@ -30,4 +30,4 @@ plt.show()
 ```
 
 
-![Arbitrary Events](./../images/arbitrary-events.png)
+![Arbitrary Events](./../../images/arbitrary-events.png)
