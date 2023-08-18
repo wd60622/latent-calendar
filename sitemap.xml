@@ -16,11 +16,6 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://wd60622.github.io/latent-calendar/examples/add-calendar-events/</loc>
-         <lastmod>2023-08-18</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
          <loc>https://wd60622.github.io/latent-calendar/examples/cal-attribute/</loc>
          <lastmod>2023-08-18</lastmod>
          <changefreq>daily</changefreq>
@@ -36,11 +31,6 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://wd60622.github.io/latent-calendar/examples/event-frequency/</loc>
-         <lastmod>2023-08-18</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
          <loc>https://wd60622.github.io/latent-calendar/examples/generation-process/</loc>
          <lastmod>2023-08-18</lastmod>
          <changefreq>daily</changefreq>
@@ -51,7 +41,27 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://wd60622.github.io/latent-calendar/examples/store-transactions/</loc>
+         <loc>https://wd60622.github.io/latent-calendar/examples/datasets/bikes-in-chicago/</loc>
+         <lastmod>2023-08-18</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://wd60622.github.io/latent-calendar/examples/datasets/store-transactions/</loc>
+         <lastmod>2023-08-18</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://wd60622.github.io/latent-calendar/examples/datasets/ufo-sightings/</loc>
+         <lastmod>2023-08-18</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://wd60622.github.io/latent-calendar/examples/plotting/add-calendar-events/</loc>
+         <lastmod>2023-08-18</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://wd60622.github.io/latent-calendar/examples/plotting/event-frequency/</loc>
          <lastmod>2023-08-18</lastmod>
          <changefreq>daily</changefreq>
     </url>
