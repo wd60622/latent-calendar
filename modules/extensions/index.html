@@ -1853,7 +1853,7 @@
     <tbody>
         <tr>
           <td>
-                <code><span title="pandas">pd</span>.<span title="pandas.DataFrame">DataFrame</span></code>
+                <code><span title="pandas.DataFrame">DataFrame</span></code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -1987,7 +1987,7 @@
     <tbody>
         <tr>
           <td>
-                <code><span title="pandas">pd</span>.<span title="pandas.DataFrame">DataFrame</span></code>
+                <code><span title="pandas.DataFrame">DataFrame</span></code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -2156,7 +2156,7 @@
         <tr>
           <td><code>ax</code></td>
           <td>
-                <code><span title="typing.Optional">Optional</span>[<span title="matplotlib">plt</span>.<span title="matplotlib.Axes">Axes</span>]</code>
+                <code><span title="typing.Optional">Optional</span>[matplotlib.<span title="matplotlib.Axes">Axes</span>]</code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -2183,7 +2183,7 @@
     <tbody>
         <tr>
           <td>
-                <code><span title="matplotlib">plt</span>.<span title="matplotlib.Axes">Axes</span></code>
+                <code><span title="matplotlib.Axes">Axes</span></code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -2684,7 +2684,7 @@
 
 
 <h3 id="latent_calendar.extensions.DataFrameAccessor.plot_model_predictions_by_row" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">plot_model_predictions_by_row</span><span class="p">(</span><span class="n">df_holdout</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">index_func</span><span class="o">=</span><span class="k">lambda</span> <span class="n">idx</span><span class="p">:</span> <span class="n">idx</span><span class="p">,</span> <span class="n">divergent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">plot_model_predictions_by_row</span><span class="p">(</span><span class="n">df_holdout</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">index_func</span><span class="o">=</span><span class="k">lambda</span> <span class="p">:</span> <span class="n">idx</span><span class="p">,</span> <span class="n">divergent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
 
 </h3>
 
@@ -2709,7 +2709,7 @@
         <tr>
           <td><code>df_holdout</code></td>
           <td>
-                <code><span title="pandas">pd</span>.<span title="pandas.DataFrame">DataFrame</span></code>
+                <code><span title="pandas.DataFrame">DataFrame</span></code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -2744,7 +2744,7 @@
             </div>
           </td>
           <td>
-                <code>lambda idx: idx</code>
+                <code>lambda : idx</code>
           </td>
         </tr>
         <tr>
@@ -2777,7 +2777,7 @@
     <tbody>
         <tr>
           <td>
-                <code><span title="numpy">np</span>.<span title="numpy.ndarray">ndarray</span></code>
+                <code><span title="numpy.ndarray">ndarray</span></code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -2855,7 +2855,7 @@
 
 
 <h3 id="latent_calendar.extensions.DataFrameAccessor.plot_profile_by_row" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">plot_profile_by_row</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">index_func</span><span class="o">=</span><span class="k">lambda</span> <span class="n">idx</span><span class="p">:</span> <span class="n">idx</span><span class="p">,</span> <span class="n">include_components</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">plot_profile_by_row</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">index_func</span><span class="o">=</span><span class="k">lambda</span> <span class="p">:</span> <span class="n">idx</span><span class="p">,</span> <span class="n">include_components</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
 
 </h3>
 
@@ -2901,7 +2901,7 @@
             </div>
           </td>
           <td>
-                <code>lambda idx: idx</code>
+                <code>lambda : idx</code>
           </td>
         </tr>
         <tr>
@@ -2934,7 +2934,7 @@
     <tbody>
         <tr>
           <td>
-                <code><span title="numpy">np</span>.<span title="numpy.ndarray">ndarray</span></code>
+                <code><span title="numpy.ndarray">ndarray</span></code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -3006,7 +3006,7 @@
 
 
 <h3 id="latent_calendar.extensions.DataFrameAccessor.plot_raw_and_predicted_by_row" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">plot_raw_and_predicted_by_row</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">index_func</span><span class="o">=</span><span class="k">lambda</span> <span class="n">idx</span><span class="p">:</span> <span class="n">idx</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">plot_raw_and_predicted_by_row</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">index_func</span><span class="o">=</span><span class="k">lambda</span> <span class="p">:</span> <span class="n">idx</span><span class="p">)</span></code>
 
 </h3>
 
@@ -3052,7 +3052,7 @@
             </div>
           </td>
           <td>
-                <code>lambda idx: idx</code>
+                <code>lambda : idx</code>
           </td>
         </tr>
     </tbody>
@@ -3071,7 +3071,7 @@
     <tbody>
         <tr>
           <td>
-                <code><span title="numpy">np</span>.<span title="numpy.ndarray">ndarray</span></code>
+                <code><span title="numpy.ndarray">ndarray</span></code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -3178,7 +3178,7 @@
     <tbody>
         <tr>
           <td>
-                <code><span title="pandas">pd</span>.<span title="pandas.DataFrame">DataFrame</span></code>
+                <code><span title="pandas.DataFrame">DataFrame</span></code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -3276,7 +3276,7 @@
     <tbody>
         <tr>
           <td>
-                <code><span title="pandas">pd</span>.<span title="pandas.DataFrame">DataFrame</span></code>
+                <code><span title="pandas.DataFrame">DataFrame</span></code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -3347,7 +3347,7 @@
         <tr>
           <td><code>df_segments</code></td>
           <td>
-                <code><span title="pandas">pd</span>.<span title="pandas.DataFrame">DataFrame</span></code>
+                <code><span title="pandas.DataFrame">DataFrame</span></code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -3374,7 +3374,7 @@
     <tbody>
         <tr>
           <td>
-                <code><span title="pandas">pd</span>.<span title="pandas.DataFrame">DataFrame</span></code>
+                <code><span title="pandas.DataFrame">DataFrame</span></code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -3472,7 +3472,7 @@
     <tbody>
         <tr>
           <td>
-                <code><span title="pandas">pd</span>.<span title="pandas.DataFrame">DataFrame</span></code>
+                <code><span title="pandas.DataFrame">DataFrame</span></code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -3591,7 +3591,7 @@
     <tbody>
         <tr>
           <td>
-                <code><span title="pandas">pd</span>.<span title="pandas.DataFrame">DataFrame</span></code>
+                <code><span title="pandas.DataFrame">DataFrame</span></code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -3889,7 +3889,7 @@
         <tr>
           <td><code>ax</code></td>
           <td>
-                <code><span title="typing.Optional">Optional</span>[<span title="matplotlib">plt</span>.<span title="matplotlib.Axes">Axes</span>]</code>
+                <code><span title="typing.Optional">Optional</span>[matplotlib.<span title="matplotlib.Axes">Axes</span>]</code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -3916,7 +3916,7 @@
     <tbody>
         <tr>
           <td>
-                <code><span title="matplotlib">plt</span>.<span title="matplotlib.Axes">Axes</span></code>
+                <code><span title="matplotlib.Axes">Axes</span></code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -4072,7 +4072,7 @@
         <tr>
           <td><code>ax</code></td>
           <td>
-                <code><span title="typing.Optional">Optional</span>[<span title="matplotlib">plt</span>.<span title="matplotlib.Axes">Axes</span>]</code>
+                <code><span title="typing.Optional">Optional</span>[matplotlib.<span title="matplotlib.Axes">Axes</span>]</code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -4099,7 +4099,7 @@
     <tbody>
         <tr>
           <td>
-                <code><span title="matplotlib">plt</span>.<span title="matplotlib.Axes">Axes</span></code>
+                <code><span title="matplotlib.Axes">Axes</span></code>
           </td>
           <td>
             <div class="doc-md-description">
