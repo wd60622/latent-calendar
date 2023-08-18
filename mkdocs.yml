@@ -57,11 +57,15 @@ nav:
   - methodology.md
   - Examples: 
     - examples/cal-attribute.md
-    - examples/add-calendar-events.md
-    - examples/event-frequency.md
     - examples/create-segments.md
     - examples/generation-process.md
-    - examples/store-transactions.md
+    - Plotting: 
+      - examples/plotting/add-calendar-events.md
+      - examples/plotting/event-frequency.md
+    - Datasets: 
+      - examples/datasets/bikes-in-chicago.md
+      - examples/datasets/store-transactions.md
+      - examples/datasets/ufo-sightings.md
 
 plugins:
 - search
