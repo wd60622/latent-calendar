@@ -1,6 +1,9 @@
 test: 
 	poetry run pytest 
 
+test.download: 
+	CI=INTEGRATION poetry run pytest -k test_load_func 
+
 cov: 
 	poetry run pytest --cov-report html --cov=latent_calendar tests && open htmlcov/index.html 
 
