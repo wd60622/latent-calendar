@@ -4,9 +4,13 @@ Analyze and model data on a weekly calendar
 
 ## Installation
 
+Install from PyPI: 
+
 ```bash
 pip install latent-calendar
 ```
+
+Or install directly from GitHub for the latest functionality. 
 
 ## Documentation 
 
