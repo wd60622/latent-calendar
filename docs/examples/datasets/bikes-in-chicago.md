@@ -3,6 +3,8 @@
 The Chicago dataset is bike trips in the city of Chicago.
 
 ```python
+import pandas as pd
+
 import matplotlib.pyplot as plt
 
 from latent_calendar.datasets import load_chicago_bikes
@@ -26,19 +28,22 @@ This dataset is two weeks of data starting at the end of June 2023. We can easil
 
 ```python 
 # Map the week number to a human readable label
-df["week_of_year"] = df["started_at"].dt.isocalendar().week
+df["week_number"] = df["started_at"].dt.isocalendar().week
 
 # Bit scary but just trying to make a nice label
+def create_label(df: pd.DataFrame) -> pd.Series:
+    first_date = df["first_date"]
+    last_date = df["last_date"]
+    return first_date.dt.date.astype(str).str.cat(
+        last_date.dt.date.astype(str), sep=" until "
+    )
+
 label = (
-    df.groupby("week_of_year")
+    df.groupby("week_number")
     .agg(first_date=("started_at", "min"), last_date=("started_at", "max"))
-    .assign(
-        label=lambda df: df["first_date"]
-        .dt.date.astype(str)
-        .str.cat(df["last_date"].dt.date.astype(str), sep=" until ")
-    )["label"]
+    .pipe(create_label)
 )
-df["week_of_year"] = df["week_of_year"].map(label.to_dict())
+df["week_of_year"] = df["week_number"].map(label.to_dict())
 
 df_wide = df.cal.aggregate_events("week_of_year", "started_at")
 
@@ -59,9 +64,6 @@ We are able to understand that the data is two weeks of data starting at the end
 Though the holiday effect around the 4th, there seems to be a lower volume the Sunday before and after work the day after. Interestingly enough, there was [a rain storm on the weekend](https://www.wunderground.com/history/daily/us/il/chicago/KMDW/date/2023-7-2) and  [another storm the Wednesday the 4th](https://www.wunderground.com/history/daily/KMDW/date/2023-7-5). We can mark this on the calendar for reference.
 
 ```python
-first_storm = CalendarEvent(day=6, start=7, end=18)
-second_storm = CalendarEvent(day=2, start=17, end=22)
-
 def create_plot_storms_func(first_storm: CalendarEvent, second_storm: CalendarEvent):
     def plot_storms(first_week_ax: plt.Axes, second_week_ax: plt.Axes):
         alpha = 0.15
@@ -72,14 +74,18 @@ def create_plot_storms_func(first_storm: CalendarEvent, second_storm: CalendarEv
 
     return plot_storms
 
+first_storm = CalendarEvent(day=6, start=7, end=18)
+second_storm = CalendarEvent(day=2, start=17, end=22)
+plot_storms = create_plot_storms_func(first_storm, second_storm)
+
 (
     df_wide
     .cal.normalize("max")
     .cal.plot_by_row()
 )
 fig = plt.gcf()
+fig.suptitle("Two week of bike rides in Chicago")
 
-plot_storms = create_plot_storms_func(first_storm, second_storm)
 
 plot_storms(fig.axes[0], fig.axes[1])
 plt.show()
