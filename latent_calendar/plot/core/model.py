@@ -55,7 +55,9 @@ def plot_profile(
 
     # Raw Data
     ax = axes[0]
-    plot_raw_data(array=array, ax=ax, day_labeler=day_labeler, time_labeler=time_labeler)
+    plot_raw_data(
+        array=array, ax=ax, day_labeler=day_labeler, time_labeler=time_labeler
+    )
 
     # Under Model
     ax = axes[1]
@@ -64,7 +66,7 @@ def plot_profile(
         ax=ax,
         display_y_axis=False,
         divergent=divergent,
-        day_labeler=day_labeler, 
+        day_labeler=day_labeler,
         time_labeler=time_labeler,
     )
 
@@ -102,7 +104,7 @@ def plot_profile_by_row(
     index_func,
     divergent: bool = True,
     include_components: bool = True,
-    day_labeler: DayLabeler = DayLabeler(), 
+    day_labeler: DayLabeler = DayLabeler(),
     time_labeler: TimeLabeler = TimeLabeler(),
 ) -> np.ndarray:
     nrows = len(df)
@@ -123,7 +125,7 @@ def plot_profile_by_row(
             divergent=divergent,
             include_components=include_components,
             day_labeler=day_labeler,
-            time_labeler=time_labeler, 
+            time_labeler=time_labeler,
         )
 
         ylabel = index_func(idx)
@@ -165,7 +167,9 @@ def plot_model_predictions(
     X_to_predict_probs = model.predict(X_to_predict)[0]
 
     ax = axes[0]
-    plot_raw_data(array=X_to_predict, ax=ax, day_labeler=day_labeler, time_labeler=time_labeler) 
+    plot_raw_data(
+        array=X_to_predict, ax=ax, day_labeler=day_labeler, time_labeler=time_labeler
+    )
     ax.set_title(f"Raw Data for Prediction")
 
     ax = axes[1]
@@ -174,13 +178,19 @@ def plot_model_predictions(
         ax=ax,
         display_y_axis=False,
         divergent=divergent,
-        day_labeler=day_labeler, 
-        time_labeler=time_labeler
+        day_labeler=day_labeler,
+        time_labeler=time_labeler,
     )
     ax.set_title("Distribution from Prediction")
 
     ax = axes[2]
-    plot_raw_data(array=X_holdout, ax=ax, display_y_axis=False, day_labeler=day_labeler, time_labeler=time_labeler)
+    plot_raw_data(
+        array=X_holdout,
+        ax=ax,
+        display_y_axis=False,
+        day_labeler=day_labeler,
+        time_labeler=time_labeler,
+    )
     ax.set_title("Raw Data in Future")
 
     return axes
@@ -192,8 +202,8 @@ def plot_model_predictions_by_row(
     model: LatentCalendar,
     index_func=lambda idx: idx,
     divergent: bool = True,
-    day_labeler: DayLabeler = DayLabeler(), 
-    time_labeler: TimeLabeler = TimeLabeler(), 
+    day_labeler: DayLabeler = DayLabeler(),
+    time_labeler: TimeLabeler = TimeLabeler(),
 ) -> np.ndarray:
     nrows = len(df)
 
@@ -213,8 +223,8 @@ def plot_model_predictions_by_row(
             model=model,
             axes=axes_row,
             divergent=divergent,
-            day_labeler=day_labeler, 
-            time_labeler=time_labeler, 
+            day_labeler=day_labeler,
+            time_labeler=time_labeler,
         )
 
         ylabel = index_func(idx)

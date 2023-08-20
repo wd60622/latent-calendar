@@ -388,7 +388,11 @@ class DataFrameAccessor:
         config = StartEndConfig(start=start_col, end=end_col, minutes=duration)
 
         plot_dataframe_grid_across_column(
-            self._obj, grid_col=grid_col, config=config, max_cols=max_cols, alpha=alpha, 
+            self._obj,
+            grid_col=grid_col,
+            config=config,
+            max_cols=max_cols,
+            alpha=alpha,
             day_labeler=day_labeler,
             time_labeler=time_labeler,
             grid_lines=grid_lines,
@@ -439,6 +443,8 @@ class DataFrameAccessor:
         model: LatentCalendar,
         index_func=lambda idx: idx,
         include_components: bool = True,
+        day_labeler: DayLabeler = DayLabeler(),
+        time_labeler: TimeLabeler = TimeLabeler(),
     ) -> np.ndarray:
         """Plot each row of the DataFrame as a profile plot. Data must have been transformed to wide format first.
 
@@ -446,6 +452,8 @@ class DataFrameAccessor:
             model: model to use for prediction and transform
             index_func: function to generate title for each row
             include_components: whether to include components in the plot
+            day_labeler: DayLabeler instance to use for day labels
+            time_labeler: TimeLabeler instance to use for time labels
 
         Returns:
             grid of axes
@@ -456,23 +464,37 @@ class DataFrameAccessor:
             model=model,
             index_func=index_func,
             include_components=include_components,
+            day_labeler=day_labeler,
+            time_labeler=time_labeler,
         )
 
     def plot_raw_and_predicted_by_row(
-        self, *, model: LatentCalendar, index_func=lambda idx: idx
+        self,
+        *,
+        model: LatentCalendar,
+        index_func=lambda idx: idx,
+        day_labeler: DayLabeler = DayLabeler(),
+        time_labeler: TimeLabeler = TimeLabeler(),
     ) -> np.ndarray:
         """Plot raw and predicted values for a model. Data must have been transformed to wide format first.
 
         Args:
             model: model to use for prediction
             index_func: function to generate title for each row
+            day_labeler: DayLabeler instance to use for day labels
+            time_labeler: TimeLabeler instance to use for time labels
 
         Returns:
             grid of axes
 
         """
         return plot_profile_by_row(
-            self._obj, model=model, index_func=index_func, include_components=False
+            self._obj,
+            model=model,
+            index_func=index_func,
+            include_components=False,
+            day_labeler=day_labeler,
+            time_labeler=time_labeler,
         )
 
     def plot_model_predictions_by_row(
@@ -482,6 +504,8 @@ class DataFrameAccessor:
         model: LatentCalendar,
         index_func=lambda idx: idx,
         divergent: bool = True,
+        day_labeler: DayLabeler = DayLabeler(),
+        time_labeler: TimeLabeler = TimeLabeler(),
     ) -> np.ndarray:
         """Plot model predictions for each row of the DataFrame. Data must have been transformed to wide format first.
 
@@ -490,6 +514,8 @@ class DataFrameAccessor:
             model: model to use for prediction
             index_func: function to generate title for each row
             divergent: whether to use divergent colormap
+            day_labeler: DayLabeler instance to use for day labels
+            time_labeler: TimeLabeler instance to use for time labels
 
         Returns:
             grid of axes
@@ -501,4 +527,6 @@ class DataFrameAccessor:
             model=model,
             index_func=index_func,
             divergent=divergent,
+            day_labeler=day_labeler,
+            time_labeler=time_labeler,
         )
