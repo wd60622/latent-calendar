@@ -125,3 +125,65 @@ plt.show()
 We can see that the holiday weekend has heavy volume from the casual riders showing on the Monday and Tuesday of the holiday weekend. Not only that, but the members that use the bikes heavily to commute shift their usage with this holiday too. 
 
 ![Member by Week](../../images/member-by-week-w-storm.png)
+
+
+The effect of rain can be investigated by sum the trips that happen during the day time. We can do this by creating a segment for each day of the week between the hours of 7am and 6pm, the time of the Sunday storm. 
+
+```python
+from latent_calendar.vocab import DOWHour
+from latent_calendar.segments.hand_picked import create_series_for_range, stack_segments
+
+all_daytime_rain = stack_segments([
+    create_series_for_range(
+        start=DOWHour(dow=dow, hour=7), end=DOWHour(dow=dow, hour=18)
+    ).rename(f"all_daytime_{dow}")
+    for dow in range(7)
+])
+
+df_volume = df_wide.cal.sum_over_segments(all_daytime_rain)
+```
+
+These are the row totals between the hours of 7am and 6pm for each day of the week at the same index level as before.
+
+
+```text
+                                           all_daytime_0  all_daytime_1  all_daytime_2  all_daytime_3  all_daytime_4  all_daytime_5  all_daytime_6
+member_casual week_of_year
+casual        2023-06-26 until 2023-07-02           3887           4086           4634           4012           6647           8213            481
+              2023-07-03 until 2023-07-09           8946          10868           4523           5616           6920           6802           9643
+member        2023-06-26 until 2023-07-02           7949           8960           9043           7852           9242           7663            822
+              2023-07-03 until 2023-07-09           9105           8239           8511           9989           9873           7846           9573
+```
+
+
+Visualizing this data, we can see the heavy impact of the Sunday weather for casual riders and members alike but not enough to ruin the holiday weekend.
+
+```python
+
+
+
+def replace_index(ser: pd.Series, index: pd.Index) -> pd.Series: 
+    ser.index = index 
+    return ser
+    
+start_date = df["started_at"].min().date()
+end_date = df["started_at"].max().date()
+dates = pd.date_range(start_date, end_date, freq="D")
+
+ax = (
+    df_volume
+    .stack()
+    .unstack(0)
+    .pipe(replace_index, index=dates)
+    .plot()
+)
+ax.set(
+    ylabel="# trips",
+    title="Trips between 7am and 6pm",
+    ylim=(0, None),
+)
+ax.legend(title="customer type")
+plt.show()
+```
+
+![Trip Volume](../../images/trip-volume.png)
