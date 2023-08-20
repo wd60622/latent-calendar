@@ -62,6 +62,7 @@ nav:
     - Plotting: 
       - examples/plotting/add-calendar-events.md
       - examples/plotting/event-frequency.md
+      - examples/plotting/calendar-customization.md
     - Datasets: 
       - examples/datasets/bikes-in-chicago.md
       - examples/datasets/store-transactions.md
