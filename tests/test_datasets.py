@@ -28,7 +28,7 @@ def test_load_func(load_func, local_file):
     file: Path = HERE / local_file
     file.unlink(missing_ok=True)
 
-    df = load_func()
+    df = load_func(local_save=True)
     df_second_time = load_func()
 
     pd.testing.assert_frame_equal(df, df_second_time)
