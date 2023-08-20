@@ -10,7 +10,7 @@ from latent_calendar.model.latent_calendar import LatentCalendar
 
 from latent_calendar.plot.core.calendar import plot_calendar
 from latent_calendar.plot.colors import settle_data_and_cmap, create_default_cmap
-from latent_calendar.plot.elements import PlotAxes, TimeLabeler
+from latent_calendar.plot.elements import DayLabeler, TimeLabeler
 from latent_calendar.plot.grid_settings import default_axes_and_grid_axes
 from latent_calendar.plot.iterate import iterate_long_array
 
@@ -21,7 +21,8 @@ def plot_profile(
     divergent: bool = True,
     axes: Iterable[plt.Axes] = None,
     include_components: bool = True,
-    plot_axes: PlotAxes = PlotAxes(),
+    day_labeler: DayLabeler = DayLabeler(),
+    time_labeler: TimeLabeler = TimeLabeler(),
 ) -> np.ndarray:
     """Create a profile plot with 3 different plots.
 
@@ -33,7 +34,8 @@ def plot_profile(
         divergent: Option to change the data displayed
         axes: list of 3 axes to plot this data
         include_components: If the last component plot should be included
-        plot_axes: PlotAxes instance
+        day_labeler: DayLabeler instance
+        time_labeler: TimeLabeler instance
 
     Returns:
         None
@@ -53,7 +55,7 @@ def plot_profile(
 
     # Raw Data
     ax = axes[0]
-    plot_raw_data(array=array, ax=ax, plot_axes=plot_axes)
+    plot_raw_data(array=array, ax=ax, day_labeler=day_labeler, time_labeler=time_labeler)
 
     # Under Model
     ax = axes[1]
@@ -62,7 +64,8 @@ def plot_profile(
         ax=ax,
         display_y_axis=False,
         divergent=divergent,
-        plot_axes=plot_axes,
+        day_labeler=day_labeler, 
+        time_labeler=time_labeler,
     )
 
     # Component distribution
@@ -99,6 +102,8 @@ def plot_profile_by_row(
     index_func,
     divergent: bool = True,
     include_components: bool = True,
+    day_labeler: DayLabeler = DayLabeler(), 
+    time_labeler: TimeLabeler = TimeLabeler(),
 ) -> np.ndarray:
     nrows = len(df)
 
@@ -108,16 +113,17 @@ def plot_profile_by_row(
         axes_grid = axes_grid[None, :]
 
     default_stride = 2 if nrows <= 2 else 4
-    plot_axes = PlotAxes(time_labeler=TimeLabeler(stride=default_stride))
+    time_labeler.stride = default_stride
 
     for i, ((idx, row), axes_row) in enumerate(zip(df.iterrows(), axes_grid)):
         plot_profile(
             row.to_numpy(),
             model=model,
             axes=axes_row,
-            plot_axes=plot_axes,
             divergent=divergent,
             include_components=include_components,
+            day_labeler=day_labeler,
+            time_labeler=time_labeler, 
         )
 
         ylabel = index_func(idx)
@@ -134,7 +140,8 @@ def plot_model_predictions(
     model: LatentCalendar,
     divergent: bool = True,
     axes: Iterable[plt.Axes] = None,
-    plot_axes: PlotAxes = PlotAxes(),
+    day_labeler: DayLabeler = DayLabeler(),
+    time_labeler: TimeLabeler = TimeLabeler(),
 ) -> Iterable[plt.Axes]:
     """Plot the model predictions compared to the test data.
 
@@ -158,7 +165,7 @@ def plot_model_predictions(
     X_to_predict_probs = model.predict(X_to_predict)[0]
 
     ax = axes[0]
-    plot_raw_data(array=X_to_predict, ax=ax, plot_axes=plot_axes)
+    plot_raw_data(array=X_to_predict, ax=ax, day_labeler=day_labeler, time_labeler=time_labeler) 
     ax.set_title(f"Raw Data for Prediction")
 
     ax = axes[1]
@@ -167,12 +174,13 @@ def plot_model_predictions(
         ax=ax,
         display_y_axis=False,
         divergent=divergent,
-        plot_axes=plot_axes,
+        day_labeler=day_labeler, 
+        time_labeler=time_labeler
     )
     ax.set_title("Distribution from Prediction")
 
     ax = axes[2]
-    plot_raw_data(array=X_holdout, ax=ax, display_y_axis=False, plot_axes=plot_axes)
+    plot_raw_data(array=X_holdout, ax=ax, display_y_axis=False, day_labeler=day_labeler, time_labeler=time_labeler)
     ax.set_title("Raw Data in Future")
 
     return axes
@@ -184,6 +192,8 @@ def plot_model_predictions_by_row(
     model: LatentCalendar,
     index_func=lambda idx: idx,
     divergent: bool = True,
+    day_labeler: DayLabeler = DayLabeler(), 
+    time_labeler: TimeLabeler = TimeLabeler(), 
 ) -> np.ndarray:
     nrows = len(df)
 
@@ -194,7 +204,7 @@ def plot_model_predictions_by_row(
         axes_grid = axes_grid[None, :]
 
     default_stride = 2 if nrows <= 2 else 4
-    plot_axes = PlotAxes(time_labeler=TimeLabeler(stride=default_stride))
+    time_labeler.stride = default_stride
 
     for i, ((idx, row), axes_row) in enumerate(zip(df.iterrows(), axes_grid)):
         plot_model_predictions(
@@ -203,7 +213,8 @@ def plot_model_predictions_by_row(
             model=model,
             axes=axes_row,
             divergent=divergent,
-            plot_axes=plot_axes,
+            day_labeler=day_labeler, 
+            time_labeler=time_labeler, 
         )
 
         ylabel = index_func(idx)
@@ -218,7 +229,8 @@ def plot_raw_data(
     array: np.ndarray,
     ax: plt.Axes,
     display_y_axis: bool = True,
-    plot_axes: PlotAxes = PlotAxes(),
+    day_labeler: DayLabeler = DayLabeler(),
+    time_labeler: TimeLabeler = TimeLabeler(),
 ) -> plt.Axes:
     """First plot of raw data."""
     try:
@@ -226,7 +238,7 @@ def plot_raw_data(
     except IndexError:
         max_value = 1
 
-    plot_axes.time_labeler.display = display_y_axis
+    time_labeler.display = display_y_axis
 
     cmap = create_default_cmap(value=max_value)
 
@@ -234,7 +246,8 @@ def plot_raw_data(
         iterate_long_array(array),
         ax=ax,
         cmap=cmap,
-        plot_axes=plot_axes,
+        time_labeler=time_labeler,
+        day_labeler=day_labeler,
     )
     ax.set_title(f"Raw Data")
 
@@ -246,10 +259,11 @@ def plot_distribution(
     ax: plt.Axes,
     display_y_axis: bool = True,
     divergent: bool = True,
-    plot_axes: PlotAxes = PlotAxes(),
+    day_labeler: DayLabeler = DayLabeler(),
+    time_labeler: TimeLabeler = TimeLabeler(),
 ) -> plt.Axes:
     """Second plot of the profile calendar probability distribution."""
-    plot_axes.time_labeler.display = display_y_axis
+    time_labeler.display = display_y_axis
 
     data, cmap = settle_data_and_cmap(data=X_probs, divergent=divergent)
 
@@ -260,7 +274,8 @@ def plot_distribution(
         iter_data,
         ax=ax,
         cmap=cmap,
-        plot_axes=plot_axes,
+        day_labeler=day_labeler,
+        time_labeler=time_labeler,
     )
     title = f"Predicted Probability Distribution\n{subtext}"
     ax.set_title(title)
@@ -305,6 +320,8 @@ def plot_model_components(
     max_cols: int = 5,
     divergent: bool = True,
     components: Optional[Iterable[int]] = None,
+    day_labeler: DayLabeler = DayLabeler(),
+    time_labeler: TimeLabeler = TimeLabeler(),
 ) -> None:
     """Helper function to create plot of all the components of the LatentCalendar instance.
 
@@ -313,6 +330,8 @@ def plot_model_components(
         max_cols: maximum number of columns in the grid of calendar components.
         divergent: what data to plot
         components: Specific subset of components to plot. Default is all
+        day_labeler: DayLabeler instance
+        time_labeler: TimeLabeler instance
 
     Returns:
         None
@@ -330,19 +349,27 @@ def plot_model_components(
 
     get_title = lambda component_idx: f"Component {component_idx}"
 
+    # TOOD: refactor to just use the plot_calendar_by_row ?
     values = zip(
         components,
-        default_axes_and_grid_axes(total=total, max_cols=max_cols),
+        default_axes_and_grid_axes(
+            total=total,
+            max_cols=max_cols,
+            day_labeler=day_labeler,
+            time_labeler=time_labeler,
+        ),
         normalized_components_to_plot,
     )
     for component_idx, (ax, plot_axes), latent in values:
         data, cmap = settle_data_and_cmap(latent, divergent)
 
+        day_labeler, time_labeler = plot_axes
         plot_calendar(
             iterate_long_array(data),
             cmap=cmap,
             ax=ax,
-            plot_axes=plot_axes,
+            day_labeler=day_labeler,
+            time_labeler=time_labeler,
         )
         title = get_title(component_idx=component_idx)
         ax.set_title(title)

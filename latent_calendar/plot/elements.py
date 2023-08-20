@@ -123,38 +123,20 @@ class DayLabeler:
             ax.invert_yaxis()
 
 
-@dataclass
-class PlotAxes:
-    """This configures the x and y axis in the plots for calendar plots.
+def configure_axis(day_labeler, time_labeler, ax: plt.Axes) -> None:
+    day_labeler.create_labels(ax=ax)
+    time_labeler.create_labels(ax=ax)
 
-    Args:
-        day_labeler: The day labeler for the plot.
-        time_labeler: The time labeler for the plot.
 
-    """
+def update_display_settings(
+    day_labeler, time_labeler, display_settings: DisplaySettings
+) -> None:
+    day_labeler.display = display_settings.x
+    time_labeler.display = display_settings.y
 
-    day_labeler: DayLabeler = field(default_factory=DayLabeler)
-    time_labeler: TimeLabeler = field(default_factory=TimeLabeler)
 
-    @classmethod
-    def axes_to_display(cls, x: bool = True, y: bool = True) -> "PlotAxes":
-        display_settings = DisplaySettings(x=x, y=y)
-
-        plot_axes = cls()
-        plot_axes.update_display_settings(display_settings=display_settings)
-
-        return plot_axes
-
-    def configure_axis(self, ax: plt.Axes) -> None:
-        self.day_labeler.create_labels(ax=ax)
-        self.time_labeler.create_labels(ax=ax)
-
-    def update_display_settings(self, display_settings: DisplaySettings) -> None:
-        self.day_labeler.display = display_settings.x
-        self.time_labeler.display = display_settings.y
-
-    def update_start(self, monday_start: bool) -> None:
-        self.day_labeler.day_start = 0 if monday_start else 6
+def update_start(day_labeler, monday_start: bool) -> None:
+    day_labeler.day_start = 0 if monday_start else 6
 
 
 @dataclass

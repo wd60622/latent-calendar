@@ -34,7 +34,6 @@ from latent_calendar.plot.elements import (
     DisplaySettings,
     GridLines,
     HourFormatter,
-    PlotAxes,
     TimeLabeler,
     create_default_days,
 )

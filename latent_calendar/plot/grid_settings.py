@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 from latent_calendar.plot.elements import (
     DayLabeler,
     DisplaySettings,
-    PlotAxes,
     TimeLabeler,
 )
 
@@ -24,7 +23,6 @@ def row_idx(i: int, ncols: int) -> int:
 
 
 def last_in_column(i: int, nrows: int, ncols: int, total: int) -> bool:
-    """Return if the index i is last row in columns assuming a total number of elements."""
     grid_size = nrows * ncols
     difference = grid_size - total
 
@@ -59,6 +57,9 @@ def display_settings_in_grid(
     )
 
 
+PlotAxes = Tuple[DayLabeler, TimeLabeler]
+
+
 def default_plot_axes_in_grid(
     nrows: int,
     ncols: int,
@@ -84,10 +85,7 @@ def default_plot_axes_in_grid(
         day_labeler.display = display_settings.x
         time_labeler.display = display_settings.y
 
-        yield PlotAxes(
-            day_labeler=day_labeler,
-            time_labeler=time_labeler,
-        )
+        yield day_labeler, time_labeler
 
 
 def grid_axes(nrows: int, ncols: int, total: int) -> Generator[plt.Axes, None, None]:

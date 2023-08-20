@@ -91,8 +91,8 @@ from latent_calendar.plot.core import (
     plot_model_predictions_by_row,
 )
 from latent_calendar.plot.core.calendar import TITLE_FUNC, CMAP_GENERATOR
-from latent_calendar.plot.elements import DayLabeler, TimeLabeler
-from latent_calendar.plot.iterate import StartEndConfig, iterate_series
+from latent_calendar.plot.elements import DayLabeler, TimeLabeler, GridLines
+from latent_calendar.plot.iterate import StartEndConfig
 
 from latent_calendar.segments.convolution import (
     sum_over_segments,
@@ -115,6 +115,9 @@ class SeriesAccessor:
         duration: int = 5,
         alpha: float = None,
         cmap=None,
+        day_labeler: DayLabeler = DayLabeler(),
+        time_labeler: TimeLabeler = TimeLabeler(),
+        grid_lines: GridLines = GridLines(),
         monday_start: bool = True,
         ax: Optional[plt.Axes] = None,
     ) -> plt.Axes:
@@ -124,6 +127,9 @@ class SeriesAccessor:
             duration: duration of each event in minutes
             alpha: alpha value for the color
             cmap: function that maps floats to string colors
+            day_labeler: DayLabeler instance
+            time_labeler: TimeLabeler instance
+            grid_lines: GridLines instance
             monday_start: whether to start the week on Monday or Sunday
             ax: matplotlib axis to plot on
 
@@ -140,6 +146,9 @@ class SeriesAccessor:
             alpha=alpha,
             cmap=cmap,
             monday_start=monday_start,
+            day_labeler=day_labeler,
+            time_labeler=time_labeler,
+            grid_lines=grid_lines,
             ax=ax,
         )
 
@@ -148,6 +157,9 @@ class SeriesAccessor:
         *,
         alpha: float = None,
         cmap=None,
+        day_labeler: DayLabeler = DayLabeler(),
+        time_labeler: TimeLabeler = TimeLabeler(),
+        grid_lines: GridLines = GridLines(),
         monday_start: bool = True,
         ax: Optional[plt.Axes] = None,
     ) -> plt.Axes:
@@ -164,7 +176,14 @@ class SeriesAccessor:
 
         """
         return plot_series_as_calendar(
-            self._obj, alpha=alpha, cmap=cmap, ax=ax, monday_start=monday_start
+            self._obj,
+            alpha=alpha,
+            cmap=cmap,
+            ax=ax,
+            monday_start=monday_start,
+            day_labeler=day_labeler,
+            time_labeler=time_labeler,
+            grid_lines=grid_lines,
         )
 
 
@@ -302,6 +321,9 @@ class DataFrameAccessor:
         duration: Optional[int] = None,
         alpha: float = None,
         cmap=None,
+        day_labeler: DayLabeler = DayLabeler(),
+        time_labeler: TimeLabeler = TimeLabeler(),
+        grid_lines: GridLines = GridLines(),
         monday_start: bool = True,
         ax: Optional[plt.Axes] = None,
     ) -> plt.Axes:
@@ -327,6 +349,9 @@ class DataFrameAccessor:
             config=config,
             alpha=alpha,
             cmap=cmap,
+            day_labeler=day_labeler,
+            time_labeler=time_labeler,
+            grid_lines=grid_lines,
             monday_start=monday_start,
             ax=ax,
         )
@@ -338,6 +363,9 @@ class DataFrameAccessor:
         *,
         end_col: Optional[str] = None,
         duration: Optional[int] = None,
+        day_labeler: DayLabeler = DayLabeler(),
+        time_labeler: TimeLabeler = TimeLabeler(),
+        grid_lines: GridLines = GridLines(),
         max_cols: int = 3,
         alpha: float = None,
     ) -> None:
@@ -360,7 +388,10 @@ class DataFrameAccessor:
         config = StartEndConfig(start=start_col, end=end_col, minutes=duration)
 
         plot_dataframe_grid_across_column(
-            self._obj, grid_col=grid_col, config=config, max_cols=max_cols, alpha=alpha
+            self._obj, grid_col=grid_col, config=config, max_cols=max_cols, alpha=alpha, 
+            day_labeler=day_labeler,
+            time_labeler=time_labeler,
+            grid_lines=grid_lines,
         )
 
     def plot_by_row(
@@ -368,9 +399,11 @@ class DataFrameAccessor:
         *,
         max_cols: int = 3,
         title_func: Optional[TITLE_FUNC] = None,
-        day_labeler: Optional[DayLabeler] = None,
-        time_labeler: Optional[TimeLabeler] = None,
         cmaps: Optional[Union[CMAP, ColorMap, CMAP_GENERATOR]] = None,
+        day_labeler: DayLabeler = DayLabeler(),
+        time_labeler: TimeLabeler = TimeLabeler(),
+        grid_lines: GridLines = GridLines(),
+        monday_start: bool = True,
     ) -> None:
         """Plot each row of the DataFrame as a calendar plot. Data must have been transformed to wide format first.
 
@@ -382,6 +415,8 @@ class DataFrameAccessor:
             day_labeler: function to generate day labels
             time_labeler: function to generate time labels
             cmaps: optional generator of colormaps
+            grid_lines: optional grid lines
+            monday_start: whether to start the week on Monday or Sunday
 
         Returns:
             None
@@ -394,6 +429,8 @@ class DataFrameAccessor:
             day_labeler=day_labeler,
             time_labeler=time_labeler,
             cmaps=cmaps,
+            grid_lines=grid_lines,
+            monday_start=monday_start,
         )
 
     def plot_profile_by_row(

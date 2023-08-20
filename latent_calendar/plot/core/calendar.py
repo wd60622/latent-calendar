@@ -13,7 +13,9 @@ from latent_calendar.plot.colors import (
 )
 from latent_calendar.plot.elements import (
     CalendarEvent,
-    PlotAxes,
+    update_display_settings,
+    update_start,
+    configure_axis,
     DisplaySettings,
     GridLines,
     TimeLabeler,
@@ -30,7 +32,8 @@ from latent_calendar.plot.iterate import (
 
 
 def plot_blank_calendar(
-    plot_axes: PlotAxes = PlotAxes(),
+    day_labeler: DayLabeler = DayLabeler(),
+    time_labeler: TimeLabeler = TimeLabeler(),
     display_settings: Optional[DisplaySettings] = None,
     ax: Optional[plt.Axes] = None,
     grid_lines: GridLines = GridLines(),
@@ -39,7 +42,8 @@ def plot_blank_calendar(
     """Create a blank calendar with no data
 
     Args:
-        plot_axes: instance in order to configure the axes
+        day_labeler: instance in order to configure the day labels
+        time_labeler: instance in order to configure the time labels
         display_settings: override of the display settings in the calendar
         ax: Optional axes to plot on
         grid_lines: GridLines instance
@@ -49,14 +53,18 @@ def plot_blank_calendar(
         Modified matplotlib axis
 
     """
-    plot_axes.update_start(monday_start=monday_start)
+    update_start(day_labeler=day_labeler, monday_start=monday_start)
 
     if display_settings is not None:
-        plot_axes.update_display_settings(display_settings=display_settings)
+        update_display_settings(
+            day_labeler=day_labeler,
+            time_labeler=time_labeler,
+            display_settings=display_settings,
+        )
 
     ax = ax if ax is not None else plt.gca()
 
-    plot_axes.configure_axis(ax=ax)
+    configure_axis(ax=ax, day_labeler=day_labeler, time_labeler=time_labeler)
     grid_lines.configure_grid(ax=ax)
 
     return ax
@@ -65,7 +73,8 @@ def plot_blank_calendar(
 def plot_calendar(
     calendar_iter: CALENDAR_ITERATION,
     *,
-    plot_axes: PlotAxes = PlotAxes(),
+    day_labeler: DayLabeler = DayLabeler(),
+    time_labeler: TimeLabeler = TimeLabeler(),
     display_settings: Optional[DisplaySettings] = None,
     cmap: Optional[CMAP] = None,
     alpha: Optional[float] = None,
@@ -79,7 +88,8 @@ def plot_calendar(
 
     Args:
         calendar_iter: CALENDAR_ITERATION
-        plot_axes: instance in order to configure the axes
+        day_labeler: instance in order to configure the day labels
+        time_labeler: instance in order to configure the time labels
         display_settings: override of the display settings in the calendar
         cmap: function that maps floats to string colors
         ax: Optional axes to plot on
@@ -91,7 +101,8 @@ def plot_calendar(
 
     """
     ax = plot_blank_calendar(
-        plot_axes=plot_axes,
+        day_labeler=day_labeler,
+        time_labeler=time_labeler,
         display_settings=display_settings,
         ax=ax,
         grid_lines=grid_lines,
@@ -118,7 +129,8 @@ def plot_series_as_calendar(
     series: pd.Series,
     *,
     grid_lines: GridLines = GridLines(),
-    plot_axes: PlotAxes = PlotAxes(),
+    day_labeler: DayLabeler = DayLabeler(),
+    time_labeler: TimeLabeler = TimeLabeler(),
     cmap: Optional[CMAP] = None,
     alpha: Optional[float] = None,
     ax: Optional[plt.Axes] = None,
@@ -129,7 +141,8 @@ def plot_series_as_calendar(
     Args:
         series: Series in format with index as datetime and values as float
         grid_lines: GridLines instance
-        plot_axes: instance in order to configure the axes
+        day_labeler: instance in order to configure the day labels
+        time_labeler: instance in order to configure the time labels
         cmap: function that maps floats to string colors
         alpha: alpha level of each rectangle
         ax: optional axis to plot on
@@ -144,7 +157,8 @@ def plot_series_as_calendar(
 
     return plot_calendar(
         iterate_series(series),
-        plot_axes=plot_axes,
+        day_labeler=day_labeler,
+        time_labeler=time_labeler,
         cmap=cmap,
         alpha=alpha,
         ax=ax,
@@ -157,8 +171,9 @@ def plot_dataframe_as_calendar(
     df: pd.DataFrame,
     config: DataFrameConfig,
     *,
+    day_labeler: DayLabeler = DayLabeler(),
+    time_labeler: TimeLabeler = TimeLabeler(),
     grid_lines: GridLines = GridLines(),
-    plot_axes: PlotAxes = PlotAxes(),
     cmap: Optional[CMAP] = None,
     alpha: Optional[float] = None,
     ax: Optional[plt.Axes] = None,
@@ -169,8 +184,9 @@ def plot_dataframe_as_calendar(
     Args:
         df: DataFrame in format with columns in config instance
         config: DataFrameConfig
+        day_labeler: instance in order to configure the day labels
+        time_labeler: instance in order to configure the time labels
         grid_lines: GridLines instance
-        plot_axes: instance in order to configure the axes
         cmap: function that maps floats to string colors
         alpha: alpha level of each rectangle
         ax: optional axis to plot on
@@ -182,7 +198,8 @@ def plot_dataframe_as_calendar(
     """
     return plot_calendar(
         iterate_dataframe(df, config),
-        plot_axes=plot_axes,
+        day_labeler=day_labeler,
+        time_labeler=time_labeler,
         cmap=cmap,
         alpha=alpha,
         ax=ax,
@@ -218,6 +235,7 @@ def plot_calendar_by_row(
     day_labeler: Optional[DayLabeler] = None,
     time_labeler: Optional[TimeLabeler] = None,
     cmaps: Optional[Union[CMAP, ColorMap, CMAP_GENERATOR]] = None,
+    grid_lines: GridLines = GridLines(),
     monday_start: bool = True,
 ) -> None:
     """Iterate a DataFrame by row and plot calendar events.
@@ -229,6 +247,7 @@ def plot_calendar_by_row(
         day_labeler: base day_labeler
         time_labeler: base day_labeler
         cmaps: Colormapping function(s) to use for each row
+        grid_lines: GridLines instance
         monday_start: whether to start the week on Monday or Sunday
 
     Returns:
@@ -264,7 +283,9 @@ def plot_calendar_by_row(
         calendar_data = row.to_numpy()
         plot_calendar(
             iterate_long_array(calendar_data),
-            plot_axes=plot_axes,
+            day_labeler=day_labeler,
+            time_labeler=time_labeler,
+            grid_lines=grid_lines,
             ax=ax,
             cmap=cmap,
             monday_start=monday_start,
@@ -281,6 +302,9 @@ def plot_dataframe_grid_across_column(
     *,
     alpha: Optional[float] = None,
     monday_start: bool = True,
+    day_labeler: DayLabeler = DayLabeler(),
+    time_labeler: TimeLabeler = TimeLabeler(),
+    grid_lines: GridLines = GridLines(),
 ) -> None:
     """Plot the long DataFrame in a grid by some different column.
 
@@ -305,16 +329,25 @@ def plot_dataframe_grid_across_column(
     total = len(values)
 
     for (ax, plot_axes), value in zip(
-        default_axes_and_grid_axes(total=total, max_cols=max_cols), values
+        default_axes_and_grid_axes(
+            total=total,
+            max_cols=max_cols,
+            day_labeler=day_labeler,
+            time_labeler=time_labeler,
+        ),
+        values,
     ):
         idx = df[grid_col] == value
         df_tmp = df.loc[idx, :]
+
+        day_labeler, time_labeler = plot_axes
 
         plot_dataframe_as_calendar(
             df=df_tmp,
             config=config,
             ax=ax,
-            plot_axes=plot_axes,
+            day_labeler=day_labeler,
+            time_labeler=time_labeler,
             alpha=alpha,
             monday_start=monday_start,
         )
