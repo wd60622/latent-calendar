@@ -287,7 +287,7 @@ class DataFrameAccessor:
         """
         return sum_over_segments(self._obj, df_segments=df_segments)
 
-    def transform(self, *, model) -> pd.DataFrame:
+    def transform(self, *, model: LatentCalendar) -> pd.DataFrame:
         """Transform DataFrame with model.
 
         Applies the dimensionality reduction to each row of the DataFrame.
@@ -301,7 +301,7 @@ class DataFrameAccessor:
         """
         return transform_on_dataframe(self._obj, model=model)
 
-    def predict(self, *, model) -> pd.DataFrame:
+    def predict(self, *, model: LatentCalendar) -> pd.DataFrame:
         """Predict DataFrame with model.
 
         Args:
@@ -332,7 +332,7 @@ class DataFrameAccessor:
         Args:
             start_col: column with start timestamp
             end_col: column with end timestamp
-            minutes: length of event in minutes. Alternative to end_col
+            duration: length of event in minutes. Alternative to end_col
             alpha: alpha value for the color
             cmap: function that maps floats to string colors
             monday_start: whether to start the week on Monday or Sunday
@@ -377,7 +377,7 @@ class DataFrameAccessor:
             start_col: column with start timestamp
             grid_col: column of values to use as grid
             end_col: column with end timestamp
-            length: length of event in minutes. Alternative to end_col
+            duration: length of event in minutes. Alternative to end_col
             max_cols: max number of columns per row
             alpha: alpha value for the color
 
