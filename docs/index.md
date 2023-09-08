@@ -18,7 +18,7 @@ Or install directly from GitHub for the latest functionality.
 
 ## Features 
 
-- Integrated automatically into `pandas` with `cal` attribute on DataFrames and Series 
+- Integrated automatically into `pandas` with `cal` attribute on DataFrames and Series
 - Compatibility with `scikit-learn` pipelines
 - Transform and visualize data on a weekly calendar
 - Model weekly calendar data with a mixture of calendars

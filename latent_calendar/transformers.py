@@ -149,12 +149,15 @@ class VocabTransformer(BaseEstimator, TransformerMixin):
 
 def create_timestamp_feature_pipeline(
     timestamp_col: str,
+    minutes: int = 60,
     create_vocab: bool = True,
 ) -> Pipeline:
     """Create a pipeline that creates features from the timestamp column.
 
     Args:
         timestamp_col: The name of the timestamp column.
+        minutes: The number of minutes to discretize by.
+        create_vocab: Whether to create the vocab column.
 
     Returns:
         A pipeline that creates features from the timestamp column.
@@ -179,7 +182,7 @@ def create_timestamp_feature_pipeline(
             "timestamp_features",
             CalandarTimestampFeatures(timestamp_col=timestamp_col),
         ),
-        ("binning", HourDiscretizer(col=vocab_col)),
+        ("binning", HourDiscretizer(col=vocab_col, minutes=minutes)),
     ]
 
     if create_vocab:
@@ -221,6 +224,14 @@ class VocabAggregation(BaseEstimator, TransformerMixin):
 
 
 class LongToWide(BaseEstimator, TransformerMixin):
+    """Unstack the assumed last index as vocab column.
+
+    Args:
+        col: The name of the column to unstack.
+        as_int: Whether to cast the values to int.
+
+    """
+
     def __init__(self, col: str = "num_events", as_int: bool = True) -> None:
         self.col = col
         self.as_int = as_int
@@ -250,11 +261,13 @@ class RawToVocab(BaseEstimator, TransformerMixin):
         self,
         id_col: str,
         timestamp_col: str,
+        minutes: int = 60,
         additional_groups: Optional[List[str]] = None,
         cols: Optional[List[str]] = None,
     ) -> None:
         self.id_col = id_col
         self.timestamp_col = timestamp_col
+        self.minutes = minutes
         self.additional_groups = additional_groups
         self.cols = cols
 
@@ -262,6 +275,8 @@ class RawToVocab(BaseEstimator, TransformerMixin):
         # New features at same index level
         self.features = create_timestamp_feature_pipeline(
             self.timestamp_col,
+            minutes=self.minutes,
+            create_vocab=True,
         )
 
         groups = [self.id_col]
@@ -291,11 +306,24 @@ class RawToVocab(BaseEstimator, TransformerMixin):
 def create_raw_to_vocab_transformer(
     id_col: str,
     timestamp_col: str,
+    minutes: int = 60,
     additional_groups: Optional[List[str]] = None,
 ) -> RawToVocab:
-    """Wrapper to create the transformer from the configuration options."""
+    """Wrapper to create the transformer from the configuration options.
+
+    Args:
+        id_col: The name of the id column.
+        timestamp_col: The name of the timestamp column.
+        minutes: The number of minutes to discretize by.
+        additional_groups: Additional columns to group by.
+
+    Returns:
+        A transformer that transforms timestamp level data into id level data with vocab columns.
+
+    """
     return RawToVocab(
         id_col=id_col,
         timestamp_col=timestamp_col,
+        minutes=minutes,
         additional_groups=additional_groups,
     )
