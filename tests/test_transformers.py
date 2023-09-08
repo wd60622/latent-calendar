@@ -5,6 +5,7 @@ import pandas as pd
 from latent_calendar.transformers import (
     prop_into_day,
     CalandarTimestampFeatures,
+    HourDiscretizer,
     create_timestamp_feature_pipeline,
     create_raw_to_vocab_transformer,
 )
@@ -26,6 +27,15 @@ def sample_timestamp_df() -> pd.DataFrame:
             "another_grouping": [1, 1, 1, 2],
         },
         index=pd.Index(["first", "second", "third", "fourth"]),
+    )
+
+
+@pytest.fixture
+def sample_hour_df() -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "hour": [0, 1.5, 2, 3.25, 4.35],
+        }
     )
 
 
@@ -63,6 +73,26 @@ def test_calendar_timestamp_features(
 
     assert len(df_result.columns) == len(sample_timestamp_df.columns) + len(
         cols_to_check
+    )
+
+
+@pytest.mark.parametrize(
+    "minutes, answer",
+    [
+        (60, [0, 1, 2, 3, 4]),
+        (30, [0, 1.5, 2, 3, 4]),
+        (15, [0, 1.5, 2, 3.25, 4.25]),
+        (120, [0, 0, 2, 2, 4]),
+        (180, [0, 0, 0, 3, 3]),
+    ],
+)
+def test_hour_discretizer(sample_hour_df: pd.DataFrame, minutes, answer) -> None:
+    col = "hour"
+    transformer = HourDiscretizer(col=col, minutes=minutes)
+
+    df_result = transformer.fit_transform(sample_hour_df)
+    pd.testing.assert_series_equal(
+        df_result[col], pd.Series(answer).rename(col), atol=0.001
     )
 
 

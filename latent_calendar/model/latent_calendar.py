@@ -55,7 +55,8 @@ class LatentCalendar(BaseLDA):
         """Return the marginal probabilities for a given row.
 
         Marginalize out the loads via law of total probability
-        P[time=t | Row=r] = sum P[time=t | L=l, Row=r] * P[L=l | Row=r]
+
+        $$P[time=t | Row=r] = \sum_{l=0}^{c} P[time=t | L=l, Row=r] * P[L=l | Row=r]$$
 
         """
         # (n, n_components)

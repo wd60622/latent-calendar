@@ -1,6 +1,8 @@
 import calendar
 from itertools import product
-from typing import Dict
+from typing import Dict, List
+
+import numpy as np
 
 DAYS_IN_WEEK = 7
 
@@ -26,7 +28,20 @@ def format_dow_hour(day_of_week: int, hour: int) -> str:
     return f"{day_of_week:02} {hour:02}"
 
 
-FULL_VOCAB = [
-    format_dow_hour(day_of_week, hour)
-    for day_of_week, hour in product(range(DAYS_IN_WEEK), range(HOURS_IN_DAY))
-]
+def dicretized_hours(minutes: int) -> List[float]:
+    step = minutes / 60
+    hours = np.arange(0, HOURS_IN_DAY, step)
+    if minutes % 60 == 0:
+        return hours.astype(int).tolist()
+
+    return hours.tolist()
+
+
+def create_full_vocab(days_in_week: int, minutes: int) -> List[str]:
+    return [
+        format_dow_hour(day_of_week, hour)
+        for day_of_week, hour in product(range(days_in_week), dicretized_hours(minutes))
+    ]
+
+
+FULL_VOCAB = create_full_vocab(days_in_week=DAYS_IN_WEEK, minutes=60)

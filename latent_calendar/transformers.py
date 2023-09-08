@@ -1,6 +1,5 @@
 """scikit-learn transformers for the data.
 
-
 ```python 
 from latent_calendar.datasets import load_online_transactions
 
@@ -23,7 +22,8 @@ from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.pipeline import Pipeline
 
 from latent_calendar.const import (
-    FULL_VOCAB,
+    create_full_vocab,
+    DAYS_IN_WEEK,
     HOURS_IN_DAY,
     MINUTES_IN_DAY,
     SECONDS_IN_DAY,
@@ -90,16 +90,27 @@ class CalandarTimestampFeatures(BaseEstimator, TransformerMixin):
 
 
 class HourDiscretizer(BaseEstimator, TransformerMixin):
-    """Discretize the hour column."""
+    """Discretize the hour column.
 
-    def __init__(self, col: str = "hour") -> None:
+    Args:
+        col: The name of the column to discretize.
+        minutes: The number of minutes to discretize by.
+
+    """
+
+    def __init__(self, col: str = "hour", minutes: int = 60) -> None:
         self.col = col
+        self.minutes = minutes
 
     def fit(self, X: pd.DataFrame, y=None):
         return self
 
-    def transform(self, X: pd.DataFrame, y=None):
-        X[self.col] = (X[self.col] // 1).astype(int)
+    def transform(self, X: pd.DataFrame, y=None) -> pd.DataFrame:
+        divisor = 1 if self.minutes == 60 else self.minutes / 60
+        X[self.col] = (X[self.col] // divisor) * divisor
+
+        if self.minutes % 60 == 0:
+            X[self.col] = X[self.col].astype(int)
 
         self.columns = list(X.columns)
 
@@ -139,11 +150,15 @@ class VocabTransformer(BaseEstimator, TransformerMixin):
 
 def create_timestamp_feature_pipeline(
     timestamp_col: str,
+    minutes: int = 60,
+    create_vocab: bool = True,
 ) -> Pipeline:
     """Create a pipeline that creates features from the timestamp column.
 
     Args:
         timestamp_col: The name of the timestamp column.
+        minutes: The number of minutes to discretize by.
+        create_vocab: Whether to create the vocab column.
 
     Returns:
         A pipeline that creates features from the timestamp column.
@@ -163,15 +178,21 @@ def create_timestamp_feature_pipeline(
 
     """
     vocab_col = "hour"
-    return Pipeline(
-        [
-            (
-                "timestamp_features",
-                CalandarTimestampFeatures(timestamp_col=timestamp_col),
-            ),
-            ("binning", HourDiscretizer(col=vocab_col)),
+    transformers = [
+        (
+            "timestamp_features",
+            CalandarTimestampFeatures(timestamp_col=timestamp_col),
+        ),
+        ("binning", HourDiscretizer(col=vocab_col, minutes=minutes)),
+    ]
+
+    if create_vocab:
+        transformers.append(
             ("vocab_creation", VocabTransformer(hour_col=vocab_col)),
-        ]
+        )
+
+    return Pipeline(
+        transformers,
     ).set_output(transform="pandas")
 
 
@@ -204,18 +225,33 @@ class VocabAggregation(BaseEstimator, TransformerMixin):
 
 
 class LongToWide(BaseEstimator, TransformerMixin):
-    def __init__(self, col: str = "num_events", as_int: bool = True) -> None:
+    """Unstack the assumed last index as vocab column.
+
+    Args:
+        col: The name of the column to unstack.
+        as_int: Whether to cast the values to int.
+
+    """
+
+    def __init__(
+        self, col: str = "num_events", as_int: bool = True, minutes: int = 60
+    ) -> None:
         self.col = col
         self.as_int = as_int
+        self.minutes = minutes
 
     def fit(self, X: pd.DataFrame, y=None):
         return self
+
+    @property
+    def columns(self) -> List[str]:
+        return create_full_vocab(days_in_week=DAYS_IN_WEEK, minutes=self.minutes)
 
     def transform(self, X: pd.DataFrame, y=None) -> pd.DataFrame:
         """Unstack the assumed last index as vocab column."""
         X_T = X.loc[:, self.col].unstack().T
         X_T.index = X_T.index.get_level_values(-1)
-        X_T = X_T.reindex(FULL_VOCAB)
+        X_T = X_T.reindex(self.columns)
         X_res = X_T.T.fillna(value=0)
         if self.as_int:
             X_res = X_res.astype(int)
@@ -223,7 +259,7 @@ class LongToWide(BaseEstimator, TransformerMixin):
         return X_res
 
     def get_feature_names_out(self, input_features=None):
-        return FULL_VOCAB
+        return self.columns
 
 
 class RawToVocab(BaseEstimator, TransformerMixin):
@@ -233,11 +269,13 @@ class RawToVocab(BaseEstimator, TransformerMixin):
         self,
         id_col: str,
         timestamp_col: str,
+        minutes: int = 60,
         additional_groups: Optional[List[str]] = None,
         cols: Optional[List[str]] = None,
     ) -> None:
         self.id_col = id_col
         self.timestamp_col = timestamp_col
+        self.minutes = minutes
         self.additional_groups = additional_groups
         self.cols = cols
 
@@ -245,6 +283,8 @@ class RawToVocab(BaseEstimator, TransformerMixin):
         # New features at same index level
         self.features = create_timestamp_feature_pipeline(
             self.timestamp_col,
+            minutes=self.minutes,
+            create_vocab=True,
         )
 
         groups = [self.id_col]
@@ -260,7 +300,7 @@ class RawToVocab(BaseEstimator, TransformerMixin):
         # Reaggregation
         self.aggregation = VocabAggregation(groups=groups, cols=self.cols)
         # Unstacking
-        self.widden = LongToWide(col="num_events")
+        self.widden = LongToWide(col="num_events", minutes=self.minutes)
         # Since nothing needs to be "fit"
         return self
 
@@ -274,11 +314,24 @@ class RawToVocab(BaseEstimator, TransformerMixin):
 def create_raw_to_vocab_transformer(
     id_col: str,
     timestamp_col: str,
+    minutes: int = 60,
     additional_groups: Optional[List[str]] = None,
 ) -> RawToVocab:
-    """Wrapper to create the transformer from the configuration options."""
+    """Wrapper to create the transformer from the configuration options.
+
+    Args:
+        id_col: The name of the id column.
+        timestamp_col: The name of the timestamp column.
+        minutes: The number of minutes to discretize by.
+        additional_groups: Additional columns to group by.
+
+    Returns:
+        A transformer that transforms timestamp level data into id level data with vocab columns.
+
+    """
     return RawToVocab(
         id_col=id_col,
         timestamp_col=timestamp_col,
+        minutes=minutes,
         additional_groups=additional_groups,
     )

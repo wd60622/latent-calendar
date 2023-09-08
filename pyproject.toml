@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "latent-calendar"
-version = "0.0.9"
-description = "Analysing and modeling weekly calendar distributions using latent components"
+version = "0.0.10"
+description = "Analyzing and modeling weekly calendar distributions using latent components"
 authors = ["Will Dean <wd60622@gmail.com>"]
 readme = "README.md"
 homepage = "https://wd60622.github.io/latent-calendar/"

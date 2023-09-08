@@ -99,7 +99,10 @@ from latent_calendar.segments.convolution import (
     sum_over_vocab,
     sum_next_hours,
 )
-from latent_calendar.transformers import create_raw_to_vocab_transformer
+from latent_calendar.transformers import (
+    create_raw_to_vocab_transformer,
+    CalandarTimestampFeatures,
+)
 
 
 @pd.api.extensions.register_series_accessor("cal")
@@ -108,6 +111,46 @@ class SeriesAccessor:
 
     def __init__(self, pandas_obj: pd.Series):
         self._obj = pandas_obj
+
+    def timestamp_features(self) -> pd.DataFrame:
+        """Create day of week and proportion into day columns.
+
+        Exposed as a method on Series for convenience.
+
+        Returns:
+            DataFrame with features
+
+        Examples:
+            Create the features for some dates
+
+            ```python
+            ser = pd.Series(pd.date_range("2023-01-01", "2023-01-14", freq="H"))
+
+            ser.cal.timestamp_features()
+            ```
+
+            ```text
+                        timestamp  day_of_week  hour
+            0   2023-01-01 00:00:00            6   0.0
+            1   2023-01-01 01:00:00            6   1.0
+            2   2023-01-01 02:00:00            6   2.0
+            3   2023-01-01 03:00:00            6   3.0
+            4   2023-01-01 04:00:00            6   4.0
+            ..                  ...          ...   ...
+            308 2023-01-13 20:00:00            4  20.0
+            309 2023-01-13 21:00:00            4  21.0
+            310 2023-01-13 22:00:00            4  22.0
+            311 2023-01-13 23:00:00            4  23.0
+            312 2023-01-14 00:00:00            5   0.0
+
+            [313 rows x 3 columns]
+            ```
+
+        """
+        name = self._obj.name or "timestamp"
+        transformer = CalandarTimestampFeatures(timestamp_col=name)
+
+        return transformer.fit_transform(self._obj.rename(name).to_frame())
 
     def plot(
         self,
@@ -218,6 +261,7 @@ class DataFrameAccessor:
         self,
         by: Union[str, List[str]],
         timestamp_col: str,
+        minutes: int = 60,
     ) -> pd.DataFrame:
         """Transform DataFrame to wide format with groups as index.
 
@@ -226,6 +270,7 @@ class DataFrameAccessor:
         Args:
             by: column(s) to use as index
             timestamp_col: column to use as timestamp
+            minutes: The number of minutes to discretize by.
 
         Returns:
             DataFrame in wide format
@@ -240,6 +285,7 @@ class DataFrameAccessor:
         transformer = create_raw_to_vocab_transformer(
             id_col=id_col,
             timestamp_col=timestamp_col,
+            minutes=minutes,
             additional_groups=additional_groups,
         )
         return transformer.fit_transform(self._obj)
