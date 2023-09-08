@@ -80,7 +80,6 @@ def load_online_transactions(local_save: bool = False) -> pd.DataFrame:
     name = "online_retail_II"
     read_kwargs = {
         "parse_dates": ["InvoiceDate"],
-        "index_col": ["Invoice"],
     }
 
     return _load_data(name, read_kwargs=read_kwargs, local_save=local_save)

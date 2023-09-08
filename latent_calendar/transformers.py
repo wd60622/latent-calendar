@@ -1,6 +1,5 @@
 """scikit-learn transformers for the data.
 
-
 ```python 
 from latent_calendar.datasets import load_online_transactions
 
@@ -90,16 +89,27 @@ class CalandarTimestampFeatures(BaseEstimator, TransformerMixin):
 
 
 class HourDiscretizer(BaseEstimator, TransformerMixin):
-    """Discretize the hour column."""
+    """Discretize the hour column.
 
-    def __init__(self, col: str = "hour") -> None:
+    Args:
+        col: The name of the column to discretize.
+        minutes: The number of minutes to discretize by.
+
+    """
+
+    def __init__(self, col: str = "hour", minutes: int = 60) -> None:
         self.col = col
+        self.minutes = minutes
 
     def fit(self, X: pd.DataFrame, y=None):
         return self
 
-    def transform(self, X: pd.DataFrame, y=None):
-        X[self.col] = (X[self.col] // 1).astype(int)
+    def transform(self, X: pd.DataFrame, y=None) -> pd.DataFrame:
+        divisor = 1 if self.minutes == 60 else self.minutes / 60
+        X[self.col] = (X[self.col] // divisor) * divisor
+
+        if self.minutes % 60 == 0:
+            X[self.col] = X[self.col].astype(int)
 
         self.columns = list(X.columns)
 
@@ -139,6 +149,7 @@ class VocabTransformer(BaseEstimator, TransformerMixin):
 
 def create_timestamp_feature_pipeline(
     timestamp_col: str,
+    create_vocab: bool = True,
 ) -> Pipeline:
     """Create a pipeline that creates features from the timestamp column.
 
@@ -163,15 +174,21 @@ def create_timestamp_feature_pipeline(
 
     """
     vocab_col = "hour"
-    return Pipeline(
-        [
-            (
-                "timestamp_features",
-                CalandarTimestampFeatures(timestamp_col=timestamp_col),
-            ),
-            ("binning", HourDiscretizer(col=vocab_col)),
+    transformers = [
+        (
+            "timestamp_features",
+            CalandarTimestampFeatures(timestamp_col=timestamp_col),
+        ),
+        ("binning", HourDiscretizer(col=vocab_col)),
+    ]
+
+    if create_vocab:
+        transformers.append(
             ("vocab_creation", VocabTransformer(hour_col=vocab_col)),
-        ]
+        )
+
+    return Pipeline(
+        transformers,
     ).set_output(transform="pandas")
 
 
