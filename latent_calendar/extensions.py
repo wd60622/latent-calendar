@@ -261,6 +261,7 @@ class DataFrameAccessor:
         self,
         by: Union[str, List[str]],
         timestamp_col: str,
+        minutes: int = 60,
     ) -> pd.DataFrame:
         """Transform DataFrame to wide format with groups as index.
 
@@ -269,6 +270,7 @@ class DataFrameAccessor:
         Args:
             by: column(s) to use as index
             timestamp_col: column to use as timestamp
+            minutes: The number of minutes to discretize by.
 
         Returns:
             DataFrame in wide format
@@ -283,6 +285,7 @@ class DataFrameAccessor:
         transformer = create_raw_to_vocab_transformer(
             id_col=id_col,
             timestamp_col=timestamp_col,
+            minutes=minutes,
             additional_groups=additional_groups,
         )
         return transformer.fit_transform(self._obj)

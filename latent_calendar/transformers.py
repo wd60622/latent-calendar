@@ -22,7 +22,8 @@ from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.pipeline import Pipeline
 
 from latent_calendar.const import (
-    FULL_VOCAB,
+    create_full_vocab,
+    DAYS_IN_WEEK,
     HOURS_IN_DAY,
     MINUTES_IN_DAY,
     SECONDS_IN_DAY,
@@ -232,18 +233,25 @@ class LongToWide(BaseEstimator, TransformerMixin):
 
     """
 
-    def __init__(self, col: str = "num_events", as_int: bool = True) -> None:
+    def __init__(
+        self, col: str = "num_events", as_int: bool = True, minutes: int = 60
+    ) -> None:
         self.col = col
         self.as_int = as_int
+        self.minutes = minutes
 
     def fit(self, X: pd.DataFrame, y=None):
         return self
+
+    @property
+    def columns(self) -> List[str]:
+        return create_full_vocab(days_in_week=DAYS_IN_WEEK, minutes=self.minutes)
 
     def transform(self, X: pd.DataFrame, y=None) -> pd.DataFrame:
         """Unstack the assumed last index as vocab column."""
         X_T = X.loc[:, self.col].unstack().T
         X_T.index = X_T.index.get_level_values(-1)
-        X_T = X_T.reindex(FULL_VOCAB)
+        X_T = X_T.reindex(self.columns)
         X_res = X_T.T.fillna(value=0)
         if self.as_int:
             X_res = X_res.astype(int)
@@ -251,7 +259,7 @@ class LongToWide(BaseEstimator, TransformerMixin):
         return X_res
 
     def get_feature_names_out(self, input_features=None):
-        return FULL_VOCAB
+        return self.columns
 
 
 class RawToVocab(BaseEstimator, TransformerMixin):
@@ -292,7 +300,7 @@ class RawToVocab(BaseEstimator, TransformerMixin):
         # Reaggregation
         self.aggregation = VocabAggregation(groups=groups, cols=self.cols)
         # Unstacking
-        self.widden = LongToWide(col="num_events")
+        self.widden = LongToWide(col="num_events", minutes=self.minutes)
         # Since nothing needs to be "fit"
         return self
 
