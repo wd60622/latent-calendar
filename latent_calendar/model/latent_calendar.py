@@ -23,8 +23,6 @@ from sklearn.decomposition import LatentDirichletAllocation as BaseLDA
 from conjugate.distributions import Dirichlet
 from conjugate.models import multinomial_dirichlet
 
-from latent_calendar.const import TIME_SLOTS, EVEN_PROBABILITY
-
 
 def joint_distribution(X_latent: np.ndarray, components: np.ndarray) -> np.ndarray:
     """Marginalize out the components."""
@@ -76,6 +74,8 @@ class DummyModel(LatentCalendar):
         """All components are equal probabilty of every hour."""
         # Even probabilty for every thing
         self.n_components = 1
+        TIME_SLOTS = X.shape[1]
+        EVEN_PROBABILITY = 1 / TIME_SLOTS
         self.components_ = np.ones((self.n_components, TIME_SLOTS)) * EVEN_PROBABILITY
 
         return self

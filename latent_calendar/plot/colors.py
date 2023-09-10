@@ -26,8 +26,6 @@ from matplotlib.cm import ScalarMappable
 
 import numpy as np
 
-from latent_calendar.const import EVEN_PROBABILITY
-
 from latent_calendar.plot.config import CONFIG
 
 
@@ -114,6 +112,7 @@ def settle_data_and_cmap(data, divergent: bool) -> Tuple[np.ndarray, CMAP]:
     """Return a tuple of transformed data and cmap for displaying that data."""
     if divergent:
         # Comparing the values to random rate
+        EVEN_PROBABILITY = 1 / data.shape[0]
         data = data / EVEN_PROBABILITY
         return data, create_default_divergent_cmap()
 
