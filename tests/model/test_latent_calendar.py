@@ -42,11 +42,11 @@ def dummy_model() -> DummyModel:
 
 
 def test_default_probabilities(dummy_model) -> None:
-    dummy_model.fit(None)
+    nrows = 10
+    X = np.ones((nrows, TIME_SLOTS))
+    dummy_model.fit(X)
     assert dummy_model.components_.shape == (dummy_model.n_components, TIME_SLOTS)
     np.testing.assert_allclose(dummy_model.normalized_components_.sum(axis=1), 1.0)
 
-    nrows = 10
-    X = np.ones((nrows, TIME_SLOTS))
     assert dummy_model.transform(X).shape == (nrows, dummy_model.n_components)
     assert dummy_model.predict(X).shape == (nrows, TIME_SLOTS)
