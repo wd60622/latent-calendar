@@ -1,6 +1,8 @@
 .DS_Store
 latent_calendar/datasets/*.csv
 
+scripts/pymc-slides/data/*.pkl
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
