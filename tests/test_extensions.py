@@ -121,6 +121,31 @@ def test_long_dataframe_extensions(df_long) -> None:
 
 
 @pytest.fixture
+def df_agg(df_long) -> pd.DataFrame:
+    return (
+        df_long.cal.timestamp_features("timestamp")
+        .groupby(["group", "vocab"])
+        .size()
+        .rename("num_events")
+        .to_frame()
+    )
+
+
+def test_agg_dataframe_extensions(df_agg) -> None:
+    assert hasattr(df_agg, "cal")
+
+    df_wide = df_agg.cal.widen("num_events")
+    assert df_wide.shape == (3, TIME_SLOTS)
+
+    with pytest.raises(ValueError):
+        df_agg.reset_index(0).cal.widen("num_events")
+
+    df_false_order = df_agg.reorder_levels([1, 0]).cal.widen("num_events")
+    assert isinstance(df_false_order, pd.DataFrame)
+    assert df_false_order.sum().sum() == 0
+
+
+@pytest.fixture
 def df_wide() -> pd.DataFrame:
     nrows = 25
     data = np.ones((nrows, TIME_SLOTS))

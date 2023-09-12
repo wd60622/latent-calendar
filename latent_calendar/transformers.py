@@ -150,6 +150,7 @@ class VocabTransformer(BaseEstimator, TransformerMixin):
 
 def create_timestamp_feature_pipeline(
     timestamp_col: str,
+    discretize: bool = True,
     minutes: int = 60,
     create_vocab: bool = True,
 ) -> Pipeline:
@@ -157,7 +158,8 @@ def create_timestamp_feature_pipeline(
 
     Args:
         timestamp_col: The name of the timestamp column.
-        minutes: The number of minutes to discretize by.
+        discretize: Whether to discretize the hour column.
+        minutes: The number of minutes to discretize by. Ignored if discretize is False.
         create_vocab: Whether to create the vocab column.
 
     Returns:
@@ -177,14 +179,21 @@ def create_timestamp_feature_pipeline(
         ```
 
     """
+    if create_vocab and not discretize:
+        raise ValueError("Cannot create vocab without discretizing.")
+
     vocab_col = "hour"
     transformers = [
         (
             "timestamp_features",
             CalandarTimestampFeatures(timestamp_col=timestamp_col),
         ),
-        ("binning", HourDiscretizer(col=vocab_col, minutes=minutes)),
     ]
+
+    if discretize:
+        transformers.append(
+            ("binning", HourDiscretizer(col=vocab_col, minutes=minutes))
+        )
 
     if create_vocab:
         transformers.append(
