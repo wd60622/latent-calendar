@@ -1,3 +1,6 @@
+---
+comments: true
+---
 # Pandas Extensions
 
 Transform and visualize data on a weekly calendar with the [`cal` attribute of DataFrames](./../modules/extensions.md).
