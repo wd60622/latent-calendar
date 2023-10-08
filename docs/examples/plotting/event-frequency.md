@@ -1,4 +1,6 @@
-
+---
+comments: true
+---
 All number of time slots divisible by 7 (days of the week) are supported for plotting. This is thanks to the `plot_calendar` function taking an iterable. 
 
 ```python

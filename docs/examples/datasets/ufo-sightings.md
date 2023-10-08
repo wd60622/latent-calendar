@@ -1,3 +1,7 @@
+---
+comments: true
+---
+
 # UFO Sightings
 
 ```python

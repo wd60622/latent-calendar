@@ -1,3 +1,6 @@
+---
+comments: true
+---
 Each calendar plot is made up of the following components:
 
 - X axis (Day of week)
