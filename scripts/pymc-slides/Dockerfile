@@ -1,5 +1,6 @@
-FROM python:3.9-slim-buster
+FROM python:3.10
 
+# TODO: Pin the latent-calendar version
 RUN pip install --upgrade pip && pip install latent-calendar rich lyft-bikes IPython qrcode
 
 WORKDIR /app
