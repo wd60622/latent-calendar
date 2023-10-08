@@ -1,3 +1,7 @@
+---
+comments: true
+---
+
 The `LatentCalendar` class is `sklearn` compatible, so we can use it in a pipeline. 
 
 ```python

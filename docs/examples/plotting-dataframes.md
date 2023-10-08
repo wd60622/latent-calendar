@@ -1,3 +1,6 @@
+---
+comments: true
+---
 DataFrames can be plotted in various ways with the `cal` attribute. 
 
 

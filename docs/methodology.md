@@ -1,6 +1,7 @@
 ---
 hide: 
     - navigation
+comments: true
 ---
 
 ## Multinomial Distribution from Events on Calendar

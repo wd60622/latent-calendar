@@ -1,3 +1,6 @@
+---
+comments: true 
+---
 # Bikes in Chicago
 
 The Chicago dataset is bike trips in the city of Chicago.
