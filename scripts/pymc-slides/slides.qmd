@@ -1,0 +1,31 @@
+---
+title: Latent Calendar 
+subtitle: Using Latent Components to model User Behavior
+author: 
+  - name: Will Dean
+    url: https://wd60622.github.io/
+    affiliations:
+      - name: Data Scientist
+format:
+  revealjs:
+    transition: none
+    slide-number: true
+    chalkboard: 
+      buttons: false
+    preview-links: auto
+    theme:
+        - white
+    highlight-style: github-dark
+---
+
+# About Me
+
+Some information about me!
+
+# Model Code
+
+
+```{.python code-line-numbers="6-8"}
+class LatentCalendar(ScikitLDA): 
+  pass
+```
