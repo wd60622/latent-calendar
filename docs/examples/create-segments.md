@@ -1,3 +1,6 @@
+---
+comments: true
+---
 Create some segments for a calendar: 
 
 ```python
