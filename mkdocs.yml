@@ -2,6 +2,7 @@ site_name: Latent Calendar
 
 theme:
   name: "material"
+  custom_dir: docs/overrides
   features:
     # - navigation.indexes
     - navigation.sections
@@ -69,12 +70,12 @@ nav:
       - examples/datasets/ufo-sightings.md
 
 plugins:
-- search
-- mkdocstrings:
-    handlers:
-      python:
-        options:
-          docstring_style: google
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: google
 
 
 markdown_extensions:

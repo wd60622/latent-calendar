@@ -101,7 +101,8 @@ from latent_calendar.segments.convolution import (
 )
 from latent_calendar.transformers import (
     create_raw_to_vocab_transformer,
-    CalandarTimestampFeatures,
+    create_timestamp_feature_pipeline,
+    LongToWide,
 )
 
 
@@ -112,10 +113,17 @@ class SeriesAccessor:
     def __init__(self, pandas_obj: pd.Series):
         self._obj = pandas_obj
 
-    def timestamp_features(self) -> pd.DataFrame:
+    def timestamp_features(
+        self, discretize: bool = True, minutes: int = 60, create_vocab: bool = True
+    ) -> pd.DataFrame:
         """Create day of week and proportion into day columns.
 
         Exposed as a method on Series for convenience.
+
+        Args:
+            discretize: Whether to discretize the hour column.
+            minutes: The number of minutes to discretize by. Ingored if `discretize` is False.
+            create_vocab: Whether to create the vocab column.
 
         Returns:
             DataFrame with features
@@ -148,7 +156,12 @@ class SeriesAccessor:
 
         """
         name = self._obj.name or "timestamp"
-        transformer = CalandarTimestampFeatures(timestamp_col=name)
+        transformer = create_timestamp_feature_pipeline(
+            timestamp_col=name,
+            discretize=discretize,
+            minutes=minutes,
+            create_vocab=create_vocab,
+        )
 
         return transformer.fit_transform(self._obj.rename(name).to_frame())
 
@@ -257,13 +270,68 @@ class DataFrameAccessor:
 
         raise ValueError(f"kind must be one of ['max', 'probs'], got {kind}")
 
+    def timestamp_features(
+        self,
+        column: str,
+        discretize: bool = True,
+        minutes: int = 60,
+        create_vocab: bool = True,
+    ) -> pd.DataFrame:
+        """Create day of week and proportion into day columns for event level DataFrame
+
+        Exposed as a method on DataFrame for convenience. Use `cal.aggregate_events` instead to create the wide format DataFrame.
+
+        Args:
+            column: The name of the timestamp column.
+            discretize: Whether to discretize the hour column.
+            minutes: The number of minutes to discretize by. Ingored if `discretize` is False.
+            create_vocab: Whether to create the vocab column.
+
+        Returns:
+            DataFrame with features added
+
+        """
+        transformer = create_timestamp_feature_pipeline(
+            timestamp_col=column,
+            discretize=discretize,
+            create_vocab=create_vocab,
+            minutes=minutes,
+        )
+
+        return transformer.fit_transform(self._obj)
+
+    def widen(
+        self, column: str, as_int: bool = True, minutes: int = 60
+    ) -> pd.DataFrame:
+        """Transform an aggregated DataFrame to wide calendar format.
+
+        Wrapper around `LongToWide` transformer to transform to wide format.
+
+        Args:
+            column: column to widen
+            as_int: whether to cast the column to int
+            minutes: number of minutes to
+
+        Returns:
+            DataFrame in wide format
+
+        """
+        if not isinstance(self._obj.index, pd.MultiIndex):
+            raise ValueError(
+                "DataFrame is expected to have a MultiIndex with the last column as the vocab."
+            )
+
+        transformer = LongToWide(col=column, as_int=as_int, minutes=minutes)
+
+        return transformer.fit_transform(self._obj)
+
     def aggregate_events(
         self,
         by: Union[str, List[str]],
         timestamp_col: str,
         minutes: int = 60,
     ) -> pd.DataFrame:
-        """Transform DataFrame to wide format with groups as index.
+        """Transform event level DataFrame to wide format with groups as index.
 
         Wrapper around `create_raw_to_vocab_transformer` to transform to wide format.
 

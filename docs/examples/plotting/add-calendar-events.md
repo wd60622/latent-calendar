@@ -1,3 +1,6 @@
+---
+comments: true
+---
 Can use the `CalendarEvent` class to add arbitrary events to calendar. 
 
 The constructor takes a day of week, start time, and an end time or duration.
