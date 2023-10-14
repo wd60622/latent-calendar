@@ -38,7 +38,7 @@ import matplotlib.pyplot as plt
 df_trips = load_chicago_bikes()
 df_stations = df_trips.cal.aggregate_events("start_station_name", "started_at", minutes=60)
 
-model = LatentCalendar(random_state=42)
+model = LatentCalendar(n_components=10, random_state=42)
 model.fit(df_stations)
 
 order = model.component_distribution_.argsort()[::-1]
