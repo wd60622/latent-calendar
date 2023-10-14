@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "latent-calendar"
-version = "0.0.12"
+version = "1.0.0"
 description = "Analyzing and modeling weekly calendar distributions using latent components"
 authors = ["Will Dean <wd60622@gmail.com>"]
 readme = "README.md"
@@ -25,7 +25,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = ">=3.8,<4.0"
-pandas = "*"
+pandas = ">=1.0.0"
 scikit-learn = ">=1.0.0"
 matplotlib = "*"
 conjugate-models = "^0.1.2"
