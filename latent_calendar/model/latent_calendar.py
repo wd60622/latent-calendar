@@ -41,6 +41,7 @@ class LatentCalendar(BaseLDA):
 
     @property
     def normalized_components_(self) -> np.ndarray:
+        """Components that each sum to 1."""
         return self.components_ / self.components_.sum(axis=1)[:, np.newaxis]
 
     def joint_distribution(self, X_latent: np.ndarray) -> np.ndarray:
@@ -61,6 +62,11 @@ class LatentCalendar(BaseLDA):
         X_latent = self.transform(X)
 
         return self.joint_distribution(X_latent=X_latent)
+
+    @property
+    def component_distribution_(self) -> np.ndarray:
+        """Population frequency of each component."""
+        return self.components_.sum(axis=1) / self.components_.sum()
 
 
 class DummyModel(LatentCalendar):
@@ -129,6 +135,7 @@ def constant_prior(X: np.ndarray, value: float = 1.0) -> np.ndarray:
     Args:
         X: (nrows, n_times)
     """
+    TIME_SLOTS = X.shape[1]
     return np.repeat(value, TIME_SLOTS)
 
 
