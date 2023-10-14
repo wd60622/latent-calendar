@@ -43,7 +43,7 @@ class TimeLabeler:
 
     """
 
-    hour_formatter: HourFormatter = HourFormatter()
+    hour_formatter: HourFormatter = field(default_factory=HourFormatter)
     start: int = 0
     stride: int = 2
     display: bool = True
