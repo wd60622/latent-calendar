@@ -34,6 +34,9 @@ def test_latent_calendar(mock_latent_calendar) -> None:
         mock_latent_calendar.n_components,
     )
     assert mock_latent_calendar.predict(X).shape == (nrows, TIME_SLOTS)
+    assert mock_latent_calendar.component_distribution_.shape == (
+        mock_latent_calendar.n_components,
+    )
 
 
 @pytest.fixture
