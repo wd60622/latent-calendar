@@ -19,7 +19,7 @@ format:
     highlight-style: github-dark
 ---
 
-## About Me
+## About me
 
 :::: {.columns}
 
@@ -49,9 +49,11 @@ format:
 
 ## About this talk 
 
-- Modeling weekly behavior with latent components
-- Reapply Latent Dirichlet Allocation (LDA) to weekly data set
-- `latent-calendar` package 
+- Motivate Latent Dirichlet Allocation (LDA) for weekly calendar data
+- Various insights from the model
+  - Bayesian goodies
+- Toy around with it yourself
+  - `latent-calendar` package 
 
 ## Case study dataset
 
@@ -79,7 +81,7 @@ Streeter Dr & Grand Ave 1990701 2023-07-15 09:42:29
                         2002205 2023-07-09 16:10:19
 ```
 
-## Timestamps provide more information!
+## Timestamps provide more info
 
 Day of week and hour of day come for free!
 
@@ -180,13 +182,13 @@ sample_time_slot = pm.draw(time_slot, random_seed=42)
 from latent_calendar.segments.hand_picked import create_box_segment, stack_segments
 
 mornings = create_box_segment(
-    day_start=0, day_end=5, hour_start=6, hour_end=10, name="mornings"
+    day_start=0, day_end=5, hour_start=7, hour_end=9, name="mornings"
 )
 afternoons = create_box_segment(
-    day_start=0, day_end=5, hour_start=15, hour_end=19, name="afternoons"
+    day_start=0, day_end=5, hour_start=16, hour_end=19, name="afternoons"
 )
 weekends = create_box_segment(
-    day_start=5, day_end=7, hour_start=6, hour_end=19, name="weekends"
+    day_start=5, day_end=7, hour_start=10, hour_end=20, name="weekends"
 )
 
 df_behaviors = stack_segments([
@@ -207,21 +209,19 @@ df_behaviors = stack_segments([
 ```python
 # (n_behaviors, )
 n_behaviors = len(df_behaviors)
-behavior_a = np.ones(n_behaviors)
+behavior_a = np.ones(n_behaviors) * ...
 behavior_p = pm.Dirichlet.dist(a=behavior_a)
 # (N, )
 cluster = pm.Categorical.dist(p=behavior_p, size=N)
 
 # (n_behaviors, n_time_slots)
-prior_a = df_prior.to_numpy()
+prior_a = df_prior.to_numpy() * ... + ...
 prior = pm.Dirichlet.dist(a=prior_a)
 
 # (N, n_time_slots) summed to (n_time_slots, )
 time_slot = pm.Multinomial.dist(p=prior[cluster], n=1).sum(axis=0)
-
-# If desired
-calendar = time_slot.reshape((DAYS_IN_WEEK, HOURS_IN_DAY))
 ```
+
 
 ## Data Generation Process (Fourth Attempt)
 
@@ -234,6 +234,8 @@ calendar = time_slot.reshape((DAYS_IN_WEEK, HOURS_IN_DAY))
 - Just that! a mixture of Multinomial distributions
 - Many implementations available! 
   - Including ones that scale to large data sets
+
+![Generative Process from [Wikipedia](https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation#Generative_process)](./data/generative-process.png){fig-align="center" width="100%"}
 
 ## Use what is available
 
@@ -261,7 +263,7 @@ class LatentCalendar(LatentDirichletAllocation):
 
 ```
 
-## "vocab" comes from timestamps
+## 1. Define "vocab" from timestamps
 
 ```text
                                          started_at  day_of_week  hour  vocab
@@ -277,7 +279,7 @@ Streeter Dr & Grand Ave 1990701 2023-07-15 09:42:29            5     9  05 09
 [36166 rows x 4 columns]
 ```
 
-## Aggregate to "documents"
+## 2. Aggregate to "documents"
 
 ```python
 import latent_calendar
@@ -288,8 +290,6 @@ df_stations = df_trips.cal.aggregate_events(
     minutes=60
 )
 ```
-
-     
 
 ```text
 vocab                         00 00  00 01  00 02  ...  06 21  06 22  06 23
@@ -305,7 +305,7 @@ Yates Blvd & 93rd St              0      0      0  ...      0      0      0
 [1439 rows x 168 columns]
 ```
 
-## Learn the "topics"
+## 3. Learn the "topics"
 
 ```python
 from latent_calendar import LatentCalendar
@@ -318,19 +318,15 @@ plot_model_components(model)
 
 ![](./images/model-components.png){fig-align="center" width="100%"}
 
-## Learn the "topics"
+## "topic" insights
 
-How often each topic happens
+How often each "topic" happens
 
-```python
-plt.bar(range(model.n_components), model.component_distribution_)
-plt.xticks(range(model.n_components))
-plt.axhline(1 / model.n_components, color="black", linestyle="--")
-plt.xlabel("Latent Component")
-plt.ylabel("Probability")
-```
+![](./images/component-distribution.png){fig-align="center" width="100%"}
 
 ## Predict and transform
+
+At the "document" level
 
 ![](./images/station-profiles.png){fig-align="center" width="100%"}
 
@@ -342,16 +338,54 @@ plt.ylabel("Probability")
 
 ## Prior impact
 
+The `doc-topic` prior influences the topic breakdown of a new document
+
 ![](./images/prior-sensitivity-doc-topic.png){fig-align="center"}
 
 ## Prior impact
 
-How the topic-word prior changes things
+The `topic-word` prior is chance of timeslot being part of a topic
 
-## Missing items
+![](./images/different-priors.png){fig-align="center"}
+
+## Next steps for `latent-calendar` project
 
 - Fully Bayesian model for population level inference
-- In corporation of priors into current `sklearn` implementation
+- Incorporate priors into current `sklearn` implementation
+- Recovering conditional probabilities
+
+## Where it fits into marketing
+
+:::: {.columns}
+
+Timestamp data with identifiers
+
+::: {.column width="50%"}
+
+How often and will it happen again?
+
+$$P[N(t) = n]$$ 
+
+Models: 
+
+- CLV models via `pymc-marketing`
+- Conjugate models 
+
+::: 
+
+::: {.column width="50%"}
+
+When (during the week) will something happen?
+
+$$P[\text{Day}, \text{Hour} | N(t) = n]$$
+
+Models: 
+
+- `latent-calendar`
+
+:::
+
+::::
 
 # Thanks
 :::: {.columns}

@@ -3,4 +3,4 @@ rm -rf images && mkdir images
 
 # Create slide material
 docker build -t pymc-slides .
-docker run --rm -it -v $(pwd):/app pymc-slides
+docker run --rm -it -v $(pwd):/app pymc-slides python pymc-slides.py

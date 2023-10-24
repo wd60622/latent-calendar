@@ -8,6 +8,7 @@ import pandas as pd
 import numpy as np
 
 import pymc as pm
+from pytensor import tensor as pt
 
 from rich.console import Console
 
@@ -23,12 +24,6 @@ matplotlib.rc("font", **font)
 
 
 console = Console()
-
-
-def component_distribution_(self) -> np.ndarray: 
-    return self.components_.sum(axis=1) / self.components_.sum()
-
-LatentCalendar.component_distribution_ = property(component_distribution_)
 
 
 HERE = Path(__file__).parent
@@ -62,7 +57,7 @@ def print_bold(text):
     console.print(f"[bold]{text}[/bold]")
 
 
-def savefig(name: str, fig=None, height: float = 12, width: float = 20) -> None:
+def savefig(name: str, fig=None, height: float = 12, width: float = 20, **kwargs) -> None:
     if fig is None:
         fig = plt.gcf()
 
@@ -70,7 +65,7 @@ def savefig(name: str, fig=None, height: float = 12, width: float = 20) -> None:
     fig.set_figheight(height)
 
     file = IMAGE_DIR / f"{name}.png"
-    plt.savefig(file)
+    plt.savefig(file, **kwargs)
     plt.close()
 
 
@@ -165,14 +160,15 @@ if __name__ == "__main__":
     day_of_week = pm.Categorical.dist(p=np.ones(DAYS_IN_WEEK) / DAYS_IN_WEEK)
     time_of_day = pm.Uniform.dist(lower=0, upper=HOURS_IN_DAY)
 
-    kwargs = {"draws": 250, "random_seed": 42}
+    N = 5_000
+    kwargs = {"draws": N, "random_seed": 42}
     sample_dow, sample_tod = pm.draw(
         [day_of_week, time_of_day], 
         **kwargs
     )
 
     df_events = pd.DataFrame({"day_of_week": sample_dow, "hour_start": sample_tod})
-    df_events["hour_end"] = df_events["hour_start"] + (1 / (24 * 60))
+    df_events["hour_end"] = df_events["hour_start"] + (5 / (24 * 60))
 
     from latent_calendar.plot import plot_dataframe_as_calendar
     from latent_calendar.plot.iterate import IterConfig
@@ -226,9 +222,9 @@ if __name__ == "__main__":
 
     from latent_calendar.segments.hand_picked import create_box_segment, stack_segments
 
-    mornings = create_box_segment(day_start=0, day_end=5, hour_start=6, hour_end=10, name="mornings")
-    afternoons = create_box_segment(day_start=0, day_end=5, hour_start=15, hour_end=19, name="afternoons")
-    weekends = create_box_segment(day_start=5, day_end=7, hour_start=6, hour_end=19, name="weekends")
+    mornings = create_box_segment(day_start=0, day_end=5, hour_start=7, hour_end=9, name="mornings")
+    afternoons = create_box_segment(day_start=0, day_end=5, hour_start=16, hour_end=19, name="afternoons")
+    weekends = create_box_segment(day_start=5, day_end=7, hour_start=10, hour_end=20, name="weekends")
 
     df_prior = stack_segments([mornings, afternoons, weekends])
     df_prior.cal.plot_by_row()
@@ -258,25 +254,61 @@ if __name__ == "__main__":
     ax.set_title("Discrete day of week and time of day")
     savefig("attempt-3")
 
-    N = 5_000
+    def create_lda_sampler(df_behavior: pd.DataFrame, N: int, behavior_prior: float, timeslot_prior: float, timeslot_intercept: float) -> pt.TensorVariable: 
+        n_behaviors = len(df_behaviors)
+        behavior_a = np.ones(n_behaviors) * behavior_prior
+        behavior_p = pm.Dirichlet.dist(a=behavior_a)
+        cluster = pm.Categorical.dist(p=behavior_p, size=N)
+
+        prior_a = df_prior.to_numpy() * timeslot_prior + timeslot_intercept
+        prior = pm.Dirichlet.dist(a=prior_a)
+
+        return pm.Multinomial.dist(p=prior[cluster], n=1).sum(axis=0)
 
     df_behaviors = df_prior
-    n_behaviors = len(df_behaviors)
-    behavior_a = np.ones(n_behaviors)
-    behavior_p = pm.Dirichlet.dist(a=behavior_a)
-    cluster = pm.Categorical.dist(p=behavior_p, size=N)
-
-    prior_a = df_prior.to_numpy()
-    prior = pm.Dirichlet.dist(a=prior_a)
-
-    time_slot = pm.Multinomial.dist(p=prior[cluster], n=1).sum(axis=0)
-
+    N = 5_000
+    time_slot = create_lda_sampler(df_behavior=df_behaviors, N=N, behavior_prior=0.5, timeslot_prior=5, timeslot_intercept=0.5)
     
     title_func = lambda idx, row: f"Sample {idx + 1}"
     pd.DataFrame(pm.draw(time_slot, draws=6, random_seed=42)).cal.plot_by_row(title_func=title_func)
     fig = plt.gcf()
-    fig.suptitle("Random samples from the Mixture Multinomial")
-    savefig("attempt-4")
+    fig.suptitle(f"Random samples from the Mixture Multinomial ({N = })")
+    savefig("attempt-4", fig=fig)
+
+
+    partial_sampler = partial(create_lda_sampler, df_behavior=df_behaviors, N=N)
+    samplers = [
+        ("low and low", partial_sampler(behavior_prior=0.01, timeslot_prior=0.01, timeslot_intercept=0.01)),
+        ("high and low", partial_sampler(behavior_prior=10, timeslot_prior=0.01, timeslot_intercept=0.01)), 
+        ("low and concentrated", partial_sampler(behavior_prior=0.01, timeslot_prior=10, timeslot_intercept=0.01)),
+        ("low and spread", partial_sampler(behavior_prior=0.01, timeslot_prior=0.01, timeslot_intercept=10)), 
+        ("high and concentrated", partial_sampler(behavior_prior=10, timeslot_prior=10, timeslot_intercept=0.01)), 
+    ]
+    names = [
+        "Low and low", 
+        "High and low", 
+        "Low and concentrated",
+        "Low and spread",
+        "High and concentrated",
+    ]
+    n_samples = 3
+    dfs = []
+    for (name, sampler) in samplers:
+        df_tmp = pd.DataFrame(pm.draw(sampler, draws=n_samples, random_seed=42))
+        dfs.append(df_tmp)
+
+    df = pd.concat(dfs)
+    time_labeler = TimeLabeler(stride=4)
+    df.cal.normalize("max").cal.plot_by_row(title_func=lambda idx, row: "", max_cols=n_samples, time_labeler=time_labeler)
+    fig = plt.gcf()
+    fig.suptitle("Random samples from different LDA priors\nacross different behavior and timeslot priors")
+    for ax, name in zip(np.array(fig.axes).reshape(len(dfs), -1)[:, 0], names):
+        ax.set_ylabel(name)
+
+    savefig("different-priors", fig=fig, height=15, width=15, pad_inches=0)
+
+
+    
 
     MINUTES = 60
     df_wide = df.cal.aggregate_events("start_station_name", "started_at", minutes=MINUTES)
@@ -287,6 +319,15 @@ if __name__ == "__main__":
 
     model = LatentCalendar(n_components=3, random_state=42, n_jobs=-1)
     model.fit(df_wide.to_numpy())
+
+
+    fig, ax = plt.subplots()
+    ax.bar(range(model.n_components), model.component_distribution_)
+    ax.set_xticks(range(model.n_components))
+    ax.axhline(1 / model.n_components, color="black", linestyle="--")
+    ax.set_xlabel("Latent Component")
+    ax.set_ylabel("Probability")
+    savefig("component-distribution", fig=fig)
 
     plot_model_components(model)
     savefig("model-components")
