@@ -2,6 +2,9 @@
 latent_calendar/datasets/*.csv
 
 scripts/pymc-slides/data/*.pkl
+scripts/pymc-slides/slides.html
+scripts/pymc-slides/slides_files/*
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -60,10 +60,13 @@ nav:
     - examples/cal-attribute.md
     - examples/create-segments.md
     - examples/generation-process.md
+    - Model: 
+      - examples/model/sklearn-compat.md
     - Plotting: 
       - examples/plotting/add-calendar-events.md
       - examples/plotting/event-frequency.md
       - examples/plotting/calendar-customization.md
+      - examples/plotting/pandas-methods.md
     - Datasets: 
       - examples/datasets/bikes-in-chicago.md
       - examples/datasets/store-transactions.md
