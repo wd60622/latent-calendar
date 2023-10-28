@@ -41,4 +41,3 @@ $$P[D=d, H=h | N=n] = \sum_{l=1}^c P[L=l | N=n] \times P[D=d, H=h | L=l, N=n]$$
 2. $P[D=d, H=h | L=l, N=n]$ is the calendar from latent component $l$
 
 By introducing latent calendar distributions, we introduce correlations between the time slots. 
-
