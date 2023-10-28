@@ -1,0 +1,406 @@
+---
+title: Latent Calendar 
+subtitle: Modeling Weekly Behavior with Latent Components
+author: 
+  - name: Will Dean
+    url: https://wd60622.github.io/
+    affiliations:
+      - name: Data Scientist
+format:
+  revealjs:
+    code-line-numbers: false
+    transition: none
+    slide-number: true
+    chalkboard: 
+      buttons: false
+    preview-links: auto
+    theme:
+        - white
+    highlight-style: github-dark
+---
+
+## About me
+
+:::: {.columns}
+
+::: {.column width="70%"}
+
+### Background: 
+
+- Mathematics and Statistics
+- Data Scientist in various industries
+  - Marketing at FREENOW in Europe
+
+### Interests: 
+
+- Bayesian Statistics
+- Tinkering with data and software
+  - `PyMC` fits the bill!
+
+:::
+
+::: {.column width="30%"}
+
+![](./data/me.jpeg){fig-align="center" width="100%"}
+
+:::
+
+::::
+
+## About this talk 
+
+- Motivate Latent Dirichlet Allocation (LDA) for weekly calendar data
+- Various insights from the model
+  - Bayesian goodies
+- Toy around with it yourself
+  - `latent-calendar` package 
+- How it fits into marketing
+
+## Case study dataset
+
+- 2.06 million bike rides from May 1st until July 30th, 2023
+
+![](./data/stations.png){fig-align="center" width="100%"}
+
+## Data in mind
+
+Timestamps with identifiers
+
+```text
+                                         started_at
+start_station_name      ride_id
+Canal St & Adams St     1416    2023-05-16 17:31:21
+                        1678    2023-05-02 15:15:08
+                        1679    2023-05-23 17:39:12
+                        3335    2023-05-08 13:00:04
+                        4043    2023-05-09 08:42:11
+...                                             ...
+Streeter Dr & Grand Ave 1990701 2023-07-15 09:42:29
+                        1990702 2023-07-01 11:22:50
+                        1991075 2023-07-06 18:19:00
+                        1991076 2023-07-17 22:12:12
+                        2002205 2023-07-09 16:10:19
+```
+
+## Timestamps provide more info
+
+Day of week and hour of day come for free!
+
+```text
+                                         started_at  day_of_week       hour
+start_station_name      ride_id
+Canal St & Adams St     1416    2023-05-16 17:31:21            1  17.522500
+                        1678    2023-05-02 15:15:08            1  15.252222
+                        1679    2023-05-23 17:39:12            1  17.653333
+                        3335    2023-05-08 13:00:04            0  13.001111
+                        4043    2023-05-09 08:42:11            1   8.703056
+...                                             ...          ...        ...
+Streeter Dr & Grand Ave 1990701 2023-07-15 09:42:29            5   9.708056
+                        1990702 2023-07-01 11:22:50            5  11.380556
+                        1991075 2023-07-06 18:19:00            3  18.316667
+                        1991076 2023-07-17 22:12:12            0  22.203333
+                        2002205 2023-07-09 16:10:19            6  16.171944
+```
+
+## Calendar Visualization
+
+![](./images/across-stations.png){fig-align="center" width="100%"}
+
+## Data Generation Process (First Attempt)
+
+- Joint distribution of day of the week and time of the day
+
+```python
+import numpy as np
+import pymc as pm 
+
+DAYS_IN_WEEK = 7
+HOURS_IN_DAY = 24
+
+day_of_week = pm.Categorical.dist(p=np.ones(DAYS_IN_WEEK) / DAYS_IN_WEEK)
+time_of_day = pm.Uniform.dist(lower=0, upper=HOURS_IN_DAY)
+
+N = 5_000
+kwargs = {"draws": N, "random_seed": 42}
+sample_dow, sample_tod = pm.draw(
+  [day_of_week, time_of_day], 
+  **kwargs
+)
+```
+
+## Data Generation Process (First Attempt)
+
+- Nothing like the data
+
+![](./images/attempt-1.png){fig-align="center" width="100%"}
+
+
+## Data Generation Process (Second Attempt)
+
+```python
+# day_of_week = pm.Categorical.dist(p=np.ones(DAYS_IN_WEEK) / DAYS_IN_WEEK)
+# time_of_day = pm.Categorical.dist(p=np.ones(HOURS_IN_DAY) / HOUR_IN_DAY)
+
+total_time_slots = DAYS_IN_WEEK * HOURS_IN_DAY
+p = np.ones(total_time_slots) / total_time_slots
+time_slot = pm.Categorical.dist(p=p)
+
+day_of_week = time_slot // HOURS_IN_DAY
+time_of_day = time_slot % HOURS_IN_DAY
+
+sample_dow, sample_tod = pm.draw(
+  [day_of_week, time_of_day], 
+  **kwargs
+)
+```
+
+## Discrete Approximation
+
+- Discrete time of day to have full discrete distribution
+
+![](./images/case-for-discrete.png){fig-align="center" width="100%"}
+
+## Data Generation Process (Third Attempt)
+
+- Condition on the number of events
+- Just use Multinomial distribution
+
+```python
+time_slot = pm.Multinomial.dist(p=p, n=N)
+
+# If desired
+calendar = time_slot.reshape((DAYS_IN_WEEK, HOURS_IN_DAY))
+
+sample_time_slot = pm.draw(time_slot, random_seed=42)
+```
+
+## How to people get around?
+
+- A person has many behaviors
+  - Work commuter, tourist, weekend explorer, etc.
+
+```python
+from latent_calendar.segments.hand_picked import create_box_segment, stack_segments
+
+mornings = create_box_segment(
+    day_start=0, day_end=5, hour_start=7, hour_end=9, name="mornings"
+)
+afternoons = create_box_segment(
+    day_start=0, day_end=5, hour_start=16, hour_end=19, name="afternoons"
+)
+weekends = create_box_segment(
+    day_start=5, day_end=7, hour_start=10, hour_end=20, name="weekends"
+)
+
+df_behaviors = stack_segments([
+    mornings, afternoons, weekends
+])
+```
+
+## How to people get around?
+
+- A person can be one of them, some of them, or all of them
+
+![`df_behaviors.cal.plot_by_row()`](./images/timeslot-prior.png){fig-align="center" width="100%"}
+
+## Data Generation Process (Fourth Attempt)
+
+- Mixture of Multinomial distributions
+
+```python
+# (n_behaviors, )
+n_behaviors = len(df_behaviors)
+behavior_a = np.ones(n_behaviors) * ...
+behavior_p = pm.Dirichlet.dist(a=behavior_a)
+# (N, )
+cluster = pm.Categorical.dist(p=behavior_p, size=N)
+
+# (n_behaviors, n_time_slots)
+prior_a = df_behaviors.to_numpy() * ... + ...
+prior = pm.Dirichlet.dist(a=prior_a)
+
+# (N, n_time_slots) summed to (n_time_slots, )
+time_slot = pm.Multinomial.dist(p=prior[cluster], n=1).sum(axis=0)
+```
+
+
+## Data Generation Process (Fourth Attempt)
+
+- Could be plausible!
+
+![](./images/attempt-4.png){fig-align="center" width="100%"}
+
+## Latent Dirichlet Allocation
+
+- Just that! a mixture of Multinomial distributions
+- Many implementations available! 
+  - Including ones that scale to large data sets
+
+![Generative Process from [Wikipedia](https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation#Generative_process)](./data/generative-process.png){fig-align="center" width="100%"}
+
+## Use what is available
+
+```python 
+import numpy as np
+import pandas as pd
+
+from sklearn.decomposition import LatentDirichletAllocation
+
+class LatentCalendar(LatentDirichletAllocation): 
+  @property
+  def normalized_components_(self) -> np.ndarray:
+      """Normalize each component to sum to 1."""
+      return self.components_ / self.components_.sum(axis=1)[:, np.newaxis]
+
+  def predict(self, X: np.ndarray | pd.DataFrame) -> np.ndarray | pd.DataFrame:
+      """Marginalize over the latent topics to get the probability of each timeslot."""
+      X_latent = self.transform(X)
+      return X_latent @ self.normalized_components_
+
+  @property 
+  def component_distribution_(self) -> np.ndarray: 
+      """How often does each component occur."""
+      return self.components_.sum(axis=1) / self.components_.sum()
+
+```
+
+## 1. Define "vocab" from timestamps
+
+```text
+                                         started_at  day_of_week  hour  vocab
+start_station_name      ride_id
+Canal St & Adams St     1416    2023-05-16 17:31:21            1    17  01 17
+                        1678    2023-05-02 15:15:08            1    15  01 15
+                        1679    2023-05-23 17:39:12            1    17  01 17
+...                                             ...          ...   ...    ...
+Streeter Dr & Grand Ave 1990701 2023-07-15 09:42:29            5     9  05 09
+                        1991076 2023-07-17 22:12:12            0    22  00 22
+                        2002205 2023-07-09 16:10:19            6    16  06 16
+
+[36166 rows x 4 columns]
+```
+
+## 2. Aggregate to "documents"
+
+```python
+import latent_calendar
+
+df_stations = df_trips.cal.aggregate_events(
+    by="start_station_name", 
+    timestamp_col="started_at", 
+    minutes=60
+)
+```
+
+```text
+vocab                         00 00  00 01  00 02  ...  06 21  06 22  06 23
+start_station_name                                 ...
+Canal St & Adams St               2      0      0  ...     22     12     12
+Streeter Dr & Grand Ave          10      4      1  ...    155     49     34
+2112 W Peterson Ave               0      0      0  ...      0      1      0
+...                             ...    ...    ...  ...    ...    ...    ...
+Woodlawn Ave & Lake Park Ave      1      0      0  ...      1      0      0
+Yates Blvd & 75th St              0      0      1  ...      0      0      0
+Yates Blvd & 93rd St              0      0      0  ...      0      0      0
+
+[1439 rows x 168 columns]
+```
+
+## 3. Learn the "topics"
+
+```python
+from latent_calendar import LatentCalendar
+from latent_calendar.plot import plot_model_components
+
+model = LatentCalendar(n_components=3)
+model.fit(df_stations)
+plot_model_components(model)
+```
+
+![](./images/model-components.png){fig-align="center" width="100%"}
+
+## "topic" insights
+
+How often each "topic" happens
+
+![](./images/component-distribution.png){fig-align="center" width="100%"}
+
+## Predict and transform
+
+At the "document" level
+
+![](./images/station-profiles.png){fig-align="center" width="100%"}
+
+## Low data support
+
+![](./images/mock-data.png){fig-align="center"}
+
+![](./images/mock-data-2.png){fig-align="center"}
+
+## Prior impact
+
+The `doc-topic` prior influences the topic breakdown of a new document
+
+![](./images/prior-sensitivity-doc-topic.png){fig-align="center"}
+
+## Prior impact
+
+The `topic-word` prior is chance of timeslot being part of a topic
+
+![](./images/different-priors.png){fig-align="center"}
+
+## Next steps for `latent-calendar` project
+
+- Fully Bayesian model for population level inference
+- Incorporate priors into current `sklearn` implementation
+- Recovering conditional probabilities
+
+## Where it fits into marketing
+
+:::: {.columns}
+
+Timestamp data with identifiers
+
+::: {.column width="50%"}
+
+How often and will it happen again?
+
+$$P[N(t) = n]$$ 
+
+Models: 
+
+- CLV models via `pymc-marketing`
+- Conjugate models 
+
+::: 
+
+::: {.column width="50%"}
+
+When (during the week) will something happen?
+
+$$P[\text{Day}, \text{Hour} | N(t) = n]$$
+
+Models: 
+
+- `latent-calendar`
+
+:::
+
+::::
+
+# Thanks
+:::: {.columns}
+
+::: {.column width="50%"}
+- PyMC Labs and Dr. Thomas Wiecki for invitation
+- Dr. Juan Camilo Orduz for slide inspiration
+
+:::
+
+::: {.column width="50%"}
+
+![`latent-calendar` Documentation](./qr-codes/documentation.png)
+
+:::
+
+:::: 

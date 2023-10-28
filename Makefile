@@ -8,7 +8,7 @@ cov:
 	poetry run pytest --cov-report html --cov=latent_calendar tests && open htmlcov/index.html 
 
 format: 
-	poetry run black tests latent_calendar
+	poetry run black tests latent_calendar scripts
 
 html: 
 	open http://localhost:8000/
