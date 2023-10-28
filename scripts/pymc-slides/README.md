@@ -1,23 +1,32 @@
 # PyMC Slides
 
-Slides for PyMC Labs talk in October 2023
+Slides for PyMC Labs talk in October 2023. Listen to the talk on YouTube: https://www.youtube.com/watch?v=k0CN-cuq724
 
 ## Usage
 
-**Create the slides**
-
-Run from scripts/pymc-slides/ directory
+Build the docker image
 
 ```bash
-source create-slide-material.sh
+docker build -t pymc-slides . 
+```
+
+Create the slide material
+
+```bash
+docker run --rm -it -v $(pwd):/app -w /app pymc-slides python pymc-slides.py
+```
+
+Create the slide deck 
+
+```bash
+quarto render pymc-slides.qmd
 ```
 
 **Interactive use**
 
+To play around with the environment used. 
+
 ```bash
-docker build -t pymc-slides . 
-
 docker run --rm -it --entrypoint bash -v $(pwd):/app -w /app pymc-slides
-
 ```
 

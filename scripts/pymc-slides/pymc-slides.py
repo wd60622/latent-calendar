@@ -15,7 +15,15 @@ from rich.console import Console
 from lyft_bikes import read_historical_trips
 
 from latent_calendar import datasets, LatentCalendar
-from latent_calendar.plot import plot_model_components, TimeLabeler, CalendarEvent, DayLabeler, create_default_divergent_cmap, plot_blank_calendar, GridLines
+from latent_calendar.plot import (
+    plot_model_components,
+    TimeLabeler,
+    CalendarEvent,
+    DayLabeler,
+    create_default_divergent_cmap,
+    plot_blank_calendar,
+    GridLines,
+)
 from latent_calendar.vocab import make_human_readable
 
 font = {"size": 15}
@@ -57,7 +65,9 @@ def print_bold(text):
     console.print(f"[bold]{text}[/bold]")
 
 
-def savefig(name: str, fig=None, height: float = 12, width: float = 20, **kwargs) -> None:
+def savefig(
+    name: str, fig=None, height: float = 12, width: float = 20, **kwargs
+) -> None:
     if fig is None:
         fig = plt.gcf()
 
@@ -71,13 +81,16 @@ def savefig(name: str, fig=None, height: float = 12, width: float = 20, **kwargs
 
 def create_df_mock(n_events, vocab, time_slot: str) -> pd.DataFrame:
     ncols = len(vocab)
-    df_mock = pd.DataFrame(np.zeros((len(n_events), ncols)), columns=vocab, index=n_events)
+    df_mock = pd.DataFrame(
+        np.zeros((len(n_events), ncols)), columns=vocab, index=n_events
+    )
 
     df_mock.loc[:, time_slot] = n_events
 
     return df_mock
 
-def plot_mock_data(time_slot: str, vocab, model: LatentCalendar) -> plt.Figure: 
+
+def plot_mock_data(time_slot: str, vocab, model: LatentCalendar) -> plt.Figure:
     n_events = np.array([0, 1, 2, 5, 7, 10, 20])
     df_mock = create_df_mock(n_events, vocab, time_slot)
 
@@ -87,18 +100,16 @@ def plot_mock_data(time_slot: str, vocab, model: LatentCalendar) -> plt.Figure:
     df_mock_predictions = df_mock.cal.predict(model=model)
     event = CalendarEvent.from_vocab(time_slot)
     cmap = create_default_divergent_cmap()
-    for idx, (ax, n_events_idx) in enumerate(zip(axes, [0, 1, -1])): 
+    for idx, (ax, n_events_idx) in enumerate(zip(axes, [0, 1, -1])):
         n = n_events[n_events_idx]
         label = "events" if n != 1 else "event"
         ax.set(
             title=f"{n} {label}",
         )
         ncols = len(vocab)
-        time_labeler = TimeLabeler(display= idx == 0)
+        time_labeler = TimeLabeler(display=idx == 0)
         df_mock_predictions.mul(ncols).iloc[n_events_idx].cal.plot_row(
-            ax=ax, 
-            time_labeler=time_labeler, 
-            cmap=cmap
+            ax=ax, time_labeler=time_labeler, cmap=cmap
         )
         event.plot(ax=ax, fill=False, edgecolor="black", lw=2, linestyle="--")
 
@@ -106,7 +117,7 @@ def plot_mock_data(time_slot: str, vocab, model: LatentCalendar) -> plt.Figure:
     df_mock.cal.transform(model=model).plot(ax=ax)
     ax.set(
         title="Component probabilities",
-        ylim=(0, 1), 
+        ylim=(0, 1),
         xlabel="# of events",
     )
     # Add a name to the legend
@@ -140,19 +151,29 @@ if __name__ == "__main__":
     print_bold("Series")
     spaced_print(ser.loc[stations].to_frame())
 
-    print(len(df) / 1_000_000, "trips from", df["started_at"].min(), "to", df["started_at"].max())
-    
-    print_bold("Series with calendar features")
-    spaced_print(ser.loc[stations].cal.timestamp_features(discretize=False, create_vocab=False))
+    print(
+        len(df) / 1_000_000,
+        "trips from",
+        df["started_at"].min(),
+        "to",
+        df["started_at"].max(),
+    )
 
-    ser.loc[stations].reset_index().sample(n=5_000, random_state=42).cal.plot_across_column("started_at", "start_station_name", alpha=0.15)
+    print_bold("Series with calendar features")
+    spaced_print(
+        ser.loc[stations].cal.timestamp_features(discretize=False, create_vocab=False)
+    )
+
+    ser.loc[stations].reset_index().sample(
+        n=5_000, random_state=42
+    ).cal.plot_across_column("started_at", "start_station_name", alpha=0.15)
     savefig("across-stations")
 
     print_bold("Series with calendar features")
     spaced_print(ser.loc[stations].cal.timestamp_features().groupby(level=0).head(3))
-    
+
     import numpy as np
-    import pymc as pm 
+    import pymc as pm
 
     DAYS_IN_WEEK = 7
     HOURS_IN_DAY = 24
@@ -162,16 +183,14 @@ if __name__ == "__main__":
 
     N = 5_000
     kwargs = {"draws": N, "random_seed": 42}
-    sample_dow, sample_tod = pm.draw(
-        [day_of_week, time_of_day], 
-        **kwargs
-    )
+    sample_dow, sample_tod = pm.draw([day_of_week, time_of_day], **kwargs)
 
     df_events = pd.DataFrame({"day_of_week": sample_dow, "hour_start": sample_tod})
     df_events["hour_end"] = df_events["hour_start"] + (5 / (24 * 60))
 
     from latent_calendar.plot import plot_dataframe_as_calendar
     from latent_calendar.plot.iterate import IterConfig
+
     config = IterConfig(start="hour_start", end="hour_end", day="day_of_week")
     ax = plot_dataframe_as_calendar(df_events, config=config, alpha=1)
     ax.set_title("Discrete day of week and continuous time of day")
@@ -184,27 +203,27 @@ if __name__ == "__main__":
     day_of_week = time_slot // HOURS_IN_DAY
     time_of_day = time_slot % HOURS_IN_DAY
 
-    sample_dow, sample_tod = pm.draw(
-        [day_of_week, time_of_day], 
-        **kwargs
-    )
+    sample_dow, sample_tod = pm.draw([day_of_week, time_of_day], **kwargs)
 
     fig, axes = plt.subplots(nrows=2, ncols=2)
     time_labeler = TimeLabeler(display=False)
     day_labeler = DayLabeler(display=False)
-    for i, (station, ax) in enumerate(zip(stations, axes[0, :].ravel())): 
-        time_labeler = TimeLabeler(display= i == 0)
-        ser.loc[station].cal.plot(ax=ax, day_labeler=day_labeler, time_labeler=time_labeler, alpha=0.05)
+    for i, (station, ax) in enumerate(zip(stations, axes[0, :].ravel())):
+        time_labeler = TimeLabeler(display=i == 0)
+        ser.loc[station].cal.plot(
+            ax=ax, day_labeler=day_labeler, time_labeler=time_labeler, alpha=0.05
+        )
         ax.set_title(station)
 
     axes[0, 0].set_ylabel("Continuous")
 
     df_agg = (
-        ser.loc[stations].reset_index()
+        ser.loc[stations]
+        .reset_index()
         .cal.aggregate_events("start_station_name", "started_at")
     )
     for i, (station, ax) in enumerate(zip(stations, axes[1, :].ravel())):
-        time_labeler = TimeLabeler(display= i == 0)
+        time_labeler = TimeLabeler(display=i == 0)
         df_agg.loc[station].cal.plot_row(ax=ax, time_labeler=time_labeler)
 
     axes[1, 0].set_ylabel("Discrete")
@@ -215,6 +234,7 @@ if __name__ == "__main__":
 
     from latent_calendar.plot import plot_dataframe_as_calendar
     from latent_calendar.plot.iterate import IterConfig
+
     config = IterConfig(start="hour_start", end="hour_end", day="day_of_week")
     ax = plot_dataframe_as_calendar(df_events, config=config, alpha=0.15)
     ax.set_title("Discrete day of week and time of day")
@@ -222,9 +242,15 @@ if __name__ == "__main__":
 
     from latent_calendar.segments.hand_picked import create_box_segment, stack_segments
 
-    mornings = create_box_segment(day_start=0, day_end=5, hour_start=7, hour_end=9, name="mornings")
-    afternoons = create_box_segment(day_start=0, day_end=5, hour_start=16, hour_end=19, name="afternoons")
-    weekends = create_box_segment(day_start=5, day_end=7, hour_start=10, hour_end=20, name="weekends")
+    mornings = create_box_segment(
+        day_start=0, day_end=5, hour_start=7, hour_end=9, name="mornings"
+    )
+    afternoons = create_box_segment(
+        day_start=0, day_end=5, hour_start=16, hour_end=19, name="afternoons"
+    )
+    weekends = create_box_segment(
+        day_start=5, day_end=7, hour_start=10, hour_end=20, name="weekends"
+    )
 
     df_prior = stack_segments([mornings, afternoons, weekends])
     df_prior.cal.plot_by_row()
@@ -242,10 +268,7 @@ if __name__ == "__main__":
     day_of_week = time_slot // HOURS_IN_DAY
     time_of_day = time_slot % HOURS_IN_DAY
 
-    sample_dow, sample_tod = pm.draw(
-        [day_of_week, time_of_day], 
-        random_seed=42
-    )
+    sample_dow, sample_tod = pm.draw([day_of_week, time_of_day], random_seed=42)
     df_events = pd.DataFrame({"day_of_week": sample_dow, "hour_start": sample_tod})
     df_events["hour_end"] = df_events["hour_start"] + 1
 
@@ -254,7 +277,13 @@ if __name__ == "__main__":
     ax.set_title("Discrete day of week and time of day")
     savefig("attempt-3")
 
-    def create_lda_sampler(df_behavior: pd.DataFrame, N: int, behavior_prior: float, timeslot_prior: float, timeslot_intercept: float) -> pt.TensorVariable: 
+    def create_lda_sampler(
+        df_behavior: pd.DataFrame,
+        N: int,
+        behavior_prior: float,
+        timeslot_prior: float,
+        timeslot_intercept: float,
+    ) -> pt.TensorVariable:
         n_behaviors = len(df_behaviors)
         behavior_a = np.ones(n_behaviors) * behavior_prior
         behavior_p = pm.Dirichlet.dist(a=behavior_a)
@@ -267,59 +296,92 @@ if __name__ == "__main__":
 
     df_behaviors = df_prior
     N = 5_000
-    time_slot = create_lda_sampler(df_behavior=df_behaviors, N=N, behavior_prior=0.5, timeslot_prior=5, timeslot_intercept=0.5)
-    
+    time_slot = create_lda_sampler(
+        df_behavior=df_behaviors,
+        N=N,
+        behavior_prior=0.5,
+        timeslot_prior=5,
+        timeslot_intercept=0.5,
+    )
+
     title_func = lambda idx, row: f"Sample {idx + 1}"
-    pd.DataFrame(pm.draw(time_slot, draws=6, random_seed=42)).cal.plot_by_row(title_func=title_func)
+    pd.DataFrame(pm.draw(time_slot, draws=6, random_seed=42)).cal.plot_by_row(
+        title_func=title_func
+    )
     fig = plt.gcf()
     fig.suptitle(f"Random samples from the Mixture Multinomial ({N = })")
     savefig("attempt-4", fig=fig)
 
-
     partial_sampler = partial(create_lda_sampler, df_behavior=df_behaviors, N=N)
     samplers = [
-        ("low and low", partial_sampler(behavior_prior=0.01, timeslot_prior=0.01, timeslot_intercept=0.01)),
-        ("high and low", partial_sampler(behavior_prior=10, timeslot_prior=0.01, timeslot_intercept=0.01)), 
-        ("low and concentrated", partial_sampler(behavior_prior=0.01, timeslot_prior=10, timeslot_intercept=0.01)),
-        ("low and spread", partial_sampler(behavior_prior=0.01, timeslot_prior=0.01, timeslot_intercept=10)), 
-        ("high and concentrated", partial_sampler(behavior_prior=10, timeslot_prior=10, timeslot_intercept=0.01)), 
+        (
+            "low and low",
+            partial_sampler(
+                behavior_prior=0.01, timeslot_prior=0.01, timeslot_intercept=0.01
+            ),
+        ),
+        (
+            "high and low",
+            partial_sampler(
+                behavior_prior=10, timeslot_prior=0.01, timeslot_intercept=0.01
+            ),
+        ),
+        (
+            "low and concentrated",
+            partial_sampler(
+                behavior_prior=0.01, timeslot_prior=10, timeslot_intercept=0.01
+            ),
+        ),
+        (
+            "low and spread",
+            partial_sampler(
+                behavior_prior=0.01, timeslot_prior=0.01, timeslot_intercept=10
+            ),
+        ),
+        (
+            "high and concentrated",
+            partial_sampler(
+                behavior_prior=10, timeslot_prior=10, timeslot_intercept=0.01
+            ),
+        ),
     ]
     names = [
-        "Low and low", 
-        "High and low", 
+        "Low and low",
+        "High and low",
         "Low and concentrated",
         "Low and spread",
         "High and concentrated",
     ]
     n_samples = 3
     dfs = []
-    for (name, sampler) in samplers:
+    for name, sampler in samplers:
         df_tmp = pd.DataFrame(pm.draw(sampler, draws=n_samples, random_seed=42))
         dfs.append(df_tmp)
 
-    df = pd.concat(dfs)
+    df_samples = pd.concat(dfs)
     time_labeler = TimeLabeler(stride=4)
-    df.cal.normalize("max").cal.plot_by_row(title_func=lambda idx, row: "", max_cols=n_samples, time_labeler=time_labeler)
+    df_samples.cal.normalize("max").cal.plot_by_row(
+        title_func=lambda idx, row: "", max_cols=n_samples, time_labeler=time_labeler
+    )
     fig = plt.gcf()
-    fig.suptitle("Random samples from different LDA priors\nacross different behavior and timeslot priors")
+    fig.suptitle(
+        "Random samples from different LDA priors\nacross different behavior and timeslot priors"
+    )
     for ax, name in zip(np.array(fig.axes).reshape(len(dfs), -1)[:, 0], names):
         ax.set_ylabel(name)
 
     savefig("different-priors", fig=fig, height=15, width=15, pad_inches=0)
 
-
-    
-
     MINUTES = 60
-    df_wide = df.cal.aggregate_events("start_station_name", "started_at", minutes=MINUTES)
-    df_wide = pd.concat([
-        df_wide.loc[stations], 
-        df_wide.loc[~df_wide.index.isin(stations)]
-    ])
+    df_wide = df.cal.aggregate_events(
+        "start_station_name", "started_at", minutes=MINUTES
+    )
+    df_wide = pd.concat(
+        [df_wide.loc[stations], df_wide.loc[~df_wide.index.isin(stations)]]
+    )
 
     model = LatentCalendar(n_components=3, random_state=42, n_jobs=-1)
     model.fit(df_wide.to_numpy())
-
 
     fig, ax = plt.subplots()
     ax.bar(range(model.n_components), model.component_distribution_)
@@ -376,7 +438,6 @@ if __name__ == "__main__":
     fig.set_figwidth(20)
     plt.savefig("images/different-stations-predictions.png")
 
-
     # Small amount of data and sensitivity to hyperparameters
     time_slot = "05 14"
     fig = plot_mock_data(time_slot, df_wide.columns, model=model)
@@ -394,7 +455,7 @@ if __name__ == "__main__":
     fig = plot_mock_data(time_slot, df_wide.columns, model=model_8)
     savefig("mock-data-2-model-2", fig=fig, height=5, width=20)
 
-    def largest_component(df: pd.DataFrame) -> pd.Series: 
+    def largest_component(df: pd.DataFrame) -> pd.Series:
         largest_idx = df.iloc[-1].argmax()
 
         return df.iloc[:, largest_idx].rename("largest_component")
@@ -402,23 +463,25 @@ if __name__ == "__main__":
     n_events = np.array([0, 1, 2, 5, 7, 10, 20])
     df_mock = create_df_mock(n_events, df_wide.columns, time_slot)
     # Think this only has an impact on the training data
-    topic_word_priors = [
-        0.00001, 0.0001, 0.01, 0.1, 0.5, 1 
-    ]
+    topic_word_priors = [0.00001, 0.0001, 0.01, 0.1, 0.5, 1]
     dfs = []
     models = []
     for topic_word_prior in topic_word_priors:
-        model = LatentCalendar(n_components=20, random_state=42, topic_word_prior=topic_word_prior, n_jobs=-1)
+        model = LatentCalendar(
+            n_components=20,
+            random_state=42,
+            topic_word_prior=topic_word_prior,
+            n_jobs=-1,
+        )
         model.fit(df_wide.to_numpy())
         models.append(model)
 
         dfs.append(
-            df_mock
-            .cal.transform(model=model)
+            df_mock.cal.transform(model=model)
             .assign(largest_component=largest_component)
             .assign(topic_word_prior=topic_word_prior)
         )
-    
+
     fig, axes = plt.subplots(ncols=2)
 
     ax = axes[0]
@@ -426,17 +489,16 @@ if __name__ == "__main__":
     CalendarEvent.from_vocab(time_slot).plot(ax=ax)
 
     df_compare = pd.concat(dfs).set_index("topic_word_prior", append=True)
-    
+
     ax = axes[1]
     df_compare["largest_component"].unstack().plot(ax=ax)
     ax.set(
-        ylim=(0, 1), 
-        xlabel="# of events", 
+        ylim=(0, 1),
+        xlabel="# of events",
         title="Prior regularization sensitivity",
     )
     ax.get_legend().set_title("Topic-Word prior")
     savefig("test-sensitivity-priors-topic-word")
-
 
     for model, topic_word_prior in zip(models, topic_word_priors):
         plot_model_components(model)
@@ -445,25 +507,28 @@ if __name__ == "__main__":
         fig.set_figwidth(20)
         plt.savefig(f"images/model-components-topic-word-prior-{topic_word_prior}.png")
 
-
     # This has the impact on the predictions
     doc_topic_priors = [
-        0.001, 0.1, 0.5, 1,
+        0.001,
+        0.1,
+        0.5,
+        1,
     ]
     dfs = []
     models = []
     for doc_topic_prior in doc_topic_priors:
-        model = LatentCalendar(n_components=3, random_state=42, doc_topic_prior=doc_topic_prior, n_jobs=-1)
+        model = LatentCalendar(
+            n_components=3, random_state=42, doc_topic_prior=doc_topic_prior, n_jobs=-1
+        )
         model.fit(df_wide.to_numpy())
         models.append(model)
 
         dfs.append(
-            df_mock
-            .cal.transform(model=model)
+            df_mock.cal.transform(model=model)
             .assign(largest_component=largest_component)
             .assign(doc_topic_prior=doc_topic_prior)
         )
-    
+
     df_compare = pd.concat(dfs).set_index("doc_topic_prior", append=True)
 
     fig, axes = plt.subplots(ncols=2)
@@ -472,7 +537,9 @@ if __name__ == "__main__":
     ax.set_title("Event time slot")
     grid_lines = GridLines(dow=True, hour=True)
     plot_blank_calendar(ax=ax, grid_lines=grid_lines)
-    CalendarEvent.from_vocab(time_slot).plot(ax=ax, fill=False, edgecolor="black", lw=2, linestyle="--")
+    CalendarEvent.from_vocab(time_slot).plot(
+        ax=ax, fill=False, edgecolor="black", lw=2, linestyle="--"
+    )
 
     ax = axes[1]
 
@@ -480,8 +547,8 @@ if __name__ == "__main__":
     # Make x axis labels all integers
     ax.xaxis.set_major_locator(matplotlib.ticker.MaxNLocator(integer=True))
     ax.set(
-        ylim=(0, 1), 
-        xlabel="# of events", 
+        ylim=(0, 1),
+        xlabel="# of events",
         ylabel="Probability of largest component",
         title="Prior regularization sensitivity",
     )

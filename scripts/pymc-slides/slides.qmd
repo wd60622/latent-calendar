@@ -54,6 +54,7 @@ format:
   - Bayesian goodies
 - Toy around with it yourself
   - `latent-calendar` package 
+- How it fits into marketing
 
 ## Case study dataset
 
@@ -119,7 +120,7 @@ HOURS_IN_DAY = 24
 day_of_week = pm.Categorical.dist(p=np.ones(DAYS_IN_WEEK) / DAYS_IN_WEEK)
 time_of_day = pm.Uniform.dist(lower=0, upper=HOURS_IN_DAY)
 
-N = 1_000
+N = 5_000
 kwargs = {"draws": N, "random_seed": 42}
 sample_dow, sample_tod = pm.draw(
   [day_of_week, time_of_day], 
@@ -215,7 +216,7 @@ behavior_p = pm.Dirichlet.dist(a=behavior_a)
 cluster = pm.Categorical.dist(p=behavior_p, size=N)
 
 # (n_behaviors, n_time_slots)
-prior_a = df_prior.to_numpy() * ... + ...
+prior_a = df_behaviors.to_numpy() * ... + ...
 prior = pm.Dirichlet.dist(a=prior_a)
 
 # (N, n_time_slots) summed to (n_time_slots, )
@@ -403,10 +404,3 @@ Models:
 :::
 
 :::: 
-
-
-## Extras
-
-- Fitting with more components
-- Fitting with more "vocab"
-- Different input, different output
