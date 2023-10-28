@@ -16,7 +16,7 @@ Create the slide material
 docker run --rm -it -v $(pwd):/app -w /app pymc-slides python pymc-slides.py
 ```
 
-Create the slide deck 
+Create the slide deck with [Quarto](https://quarto.org/)
 
 ```bash
 quarto render pymc-slides.qmd
