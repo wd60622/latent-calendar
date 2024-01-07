@@ -5,6 +5,11 @@ comments: false
 ---
 # Latent Calendar
 
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![Tests](https://github.com/wd60622/latent-calendar/actions/workflows/tests.yml/badge.svg)](https://github.com/wd60622/latent-calendar/actions/workflows/tests.yml)
+[![PyPI version](https://badge.fury.io/py/latent-calendar.svg)](https://badge.fury.io/py/latent-calendar)
+[![docs](https://github.com/wd60622/latent-calendar/actions/workflows/docs.yml/badge.svg)](https://wd60622.github.io/latent-calendar/)
+
 Analyze and model data on a weekly calendar
 
 ## Installation

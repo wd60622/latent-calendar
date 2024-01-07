@@ -170,7 +170,7 @@ def plot_model_predictions(
     plot_raw_data(
         array=X_to_predict, ax=ax, day_labeler=day_labeler, time_labeler=time_labeler
     )
-    ax.set_title(f"Raw Data for Prediction")
+    ax.set_title("Raw Data for Prediction")
 
     ax = axes[1]
     plot_distribution(
@@ -259,7 +259,7 @@ def plot_raw_data(
         time_labeler=time_labeler,
         day_labeler=day_labeler,
     )
-    ax.set_title(f"Raw Data")
+    ax.set_title("Raw Data")
 
     return ax
 
@@ -357,7 +357,8 @@ def plot_model_components(
     total = len(components)
     normalized_components_to_plot = model.normalized_components_[components]
 
-    get_title = lambda component_idx: f"Component {component_idx}"
+    def get_title(component_idx: int) -> str:
+        return f"Component {component_idx}"
 
     # TOOD: refactor to just use the plot_calendar_by_row ?
     values = zip(

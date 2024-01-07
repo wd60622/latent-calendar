@@ -1,5 +1,5 @@
-import latent_calendar.extensions
-from latent_calendar.model.latent_calendar import (
+import latent_calendar.extensions  # noqa
+from latent_calendar.model.latent_calendar import (  # noqa
     LatentCalendar,
     ConjugateModel,
     DummyModel,
