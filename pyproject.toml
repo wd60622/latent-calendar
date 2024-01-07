@@ -28,7 +28,7 @@ python = ">=3.8,<4.0"
 pandas = ">=1.0.0"
 scikit-learn = ">=1.0.0"
 matplotlib = "*"
-conjugate-models = "^0.1.2"
+conjugate-models = "^0.3.0"
 pymc = ">=5.0.0"
 
 
@@ -43,6 +43,26 @@ pytest = "^7.4.0"
 pytest-cov = "^4.1.0"
 ipython = "8.8.0"
 black = "^23.7.0"
+tox = "^4.11.4"
+
+[tool.tox]
+legacy_tox_ini = """
+    [tox]
+    min_version = 4.0
+    isolated_build = true
+    env_list =
+        # tox and distutils
+        # py312
+        py311
+        py310
+        py39
+        py38
+
+    [testenv]
+    deps = 
+        pytest 
+    commands = pytest tests
+"""
 
 [build-system]
 requires = ["poetry-core"]
