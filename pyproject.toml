@@ -28,7 +28,7 @@ python = ">=3.8,<4.0"
 pandas = ">=1.0.0"
 scikit-learn = ">=1.0.0"
 matplotlib = "*"
-conjugate-models = "^0.1.2"
+conjugate-models = "^0.3.0"
 pymc = ">=5.0.0"
 
 

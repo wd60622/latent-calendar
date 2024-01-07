@@ -298,20 +298,20 @@ files = [
 
 [[package]]
 name = "conjugate-models"
-version = "0.1.5"
+version = "0.3.0"
 description = "Bayesian Conjugate Models in Python"
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "conjugate_models-0.1.5-py3-none-any.whl", hash = "sha256:8a90ed5fc5ee90f8bb3ea436fc70dd44b36ba99db88093906c5498886e9f07d3"},
-    {file = "conjugate_models-0.1.5.tar.gz", hash = "sha256:47001b90fbe03cf5bd07106a53cbf1ee20aaf65a70a8478197072bbc29630608"},
+    {file = "conjugate_models-0.3.0-py3-none-any.whl", hash = "sha256:2250ec6fbcc390d333820d65cb1fc9fa150efcaf6cd992a1b43cd865c7e3af85"},
+    {file = "conjugate_models-0.3.0.tar.gz", hash = "sha256:f100786f55884440150f1c3c583490122abf5f47ec03a11d9d14d9d280c82028"},
 ]
 
 [package.dependencies]
-matplotlib = ">=3.6.2,<4.0.0"
-numpy = ">=1.24.3,<2.0.0"
+matplotlib = "*"
+numpy = "*"
 pandas = "*"
-scipy = "<1.10.0"
+scipy = "*"
 
 [[package]]
 name = "cons"
@@ -2504,4 +2504,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<4.0"
-content-hash = "26a12507ba70e3dbc41642422fd27821582ce96b12b850e509c05717e3b93952"
+content-hash = "76fbae7d87803bfec5fe606cb0ee17867744a2dcd9381aad77a40014c6d20bd9"
