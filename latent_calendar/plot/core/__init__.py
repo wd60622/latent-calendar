@@ -1,4 +1,4 @@
-from latent_calendar.plot.core.calendar import (
+from latent_calendar.plot.core.calendar import (  # noqa
     plot_blank_calendar,
     plot_calendar,
     plot_calendar_by_row,
@@ -6,7 +6,7 @@ from latent_calendar.plot.core.calendar import (
     plot_series_as_calendar,
     plot_dataframe_grid_across_column,
 )
-from latent_calendar.plot.core.model import (
+from latent_calendar.plot.core.model import (  # noqa
     plot_model_components,
     plot_profile,
     plot_profile_by_row,

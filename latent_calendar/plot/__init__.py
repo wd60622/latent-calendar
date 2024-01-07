@@ -3,7 +3,7 @@
 These functions and classes build every calendar plot.
 
 """
-from latent_calendar.plot.colors import (
+from latent_calendar.plot.colors import (  # noqa
     create_cmap,
     create_diverge_cmap,
     create_relative_cmap,
@@ -11,7 +11,7 @@ from latent_calendar.plot.colors import (
     create_default_divergent_cmap,
     settle_data_and_cmap,
 )
-from latent_calendar.plot.core import (
+from latent_calendar.plot.core import (  # noqa
     plot_blank_calendar,
     plot_calendar,
     plot_dataframe_as_calendar,
@@ -28,7 +28,7 @@ from latent_calendar.plot.core import (
     plot_model_components,
     plot_component_sensitivity,
 )
-from latent_calendar.plot.elements import (
+from latent_calendar.plot.elements import (  # noqa
     CalendarEvent,
     DayLabeler,
     DisplaySettings,
@@ -37,11 +37,11 @@ from latent_calendar.plot.elements import (
     TimeLabeler,
     create_default_days,
 )
-from latent_calendar.plot.grid_settings import (
+from latent_calendar.plot.grid_settings import (  # noqa
     default_plot_axes_in_grid,
     display_settings_in_grid,
 )
-from latent_calendar.plot.iterate import (
+from latent_calendar.plot.iterate import (  # noqa
     iterate_dataframe,
     iterate_series,
     iterate_long_array,

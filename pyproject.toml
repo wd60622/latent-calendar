@@ -42,7 +42,6 @@ mkdocs-material = "^9.1.18"
 pytest = "^7.4.0"
 pytest-cov = "^4.1.0"
 ipython = "8.8.0"
-black = "^23.7.0"
 tox = "^4.11.4"
 
 [tool.tox]
@@ -68,5 +67,6 @@ legacy_tox_ini = """
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.black]
+[tool.ruff]
 line-length = 88
+exclude = ["scripts"]

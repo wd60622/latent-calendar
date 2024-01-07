@@ -99,7 +99,7 @@ class DayLabeler:
 
     def __post_init__(self) -> None:
         if self.day_start not in range(DAYS_IN_WEEK):
-            msg = f"'day_start' value must be 0: Monday or 6: Sunday"
+            msg = "'day_start' value must be 0: Monday or 6: Sunday"
             raise ValueError(msg)
 
     @property
