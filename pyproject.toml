@@ -43,6 +43,25 @@ pytest = "^7.4.0"
 pytest-cov = "^4.1.0"
 ipython = "8.8.0"
 black = "^23.7.0"
+tox = "^4.11.4"
+
+[tool.tox]
+legacy_tox_ini = """
+    [tox]
+    min_version = 4.0
+    isolated_build = true
+    env_list =
+        py312
+        py311
+        py310
+        py39
+        py38
+
+    [testenv]
+    deps = 
+        pytest 
+    commands = pytest tests
+"""
 
 [build-system]
 requires = ["poetry-core"]

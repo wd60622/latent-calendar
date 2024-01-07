@@ -1,5 +1,11 @@
 # Latent Calendar
 
+![Tests](https://github.com/wd60622/latent-calendar/actions/workflows/tests.yml/badge.svg) [![PyPI version](https://badge.fury.io/py/latent-calendar.svg)](https://badge.fury.io/py/latent-calendar) [![docs](https://github.com/wd60622/latent-calendar/actions/workflows/docs.yml/badge.svg)](https://github.com/wd60622/latent-calendar/actions/workflows/docs.yml)
+
+
+
+https://github.com/pymc-devs/pymc/issues?q=is%3Aissue+author%3Awd60622+
+
 Analyze and model data on a weekly calendar
 
 ## Installation
