@@ -30,7 +30,9 @@ def ser_row(ser) -> pd.Series:
     "level, axis",
     [
         ("day_of_week", 1),
+        (0, 1),
         ("hour", 0),
+        (1, 0),
     ],
 )
 def test_series_conditional_probabilities(ser_row, level, axis) -> None:
