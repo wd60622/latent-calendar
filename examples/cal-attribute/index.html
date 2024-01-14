@@ -1352,12 +1352,13 @@
 <p>Aggregate event level data into wide format calendar data with the <a href="../../modules/extensions/#latent_calendar.extensions.DataFrameAccessor.aggregate_events"><code>cal.aggregate_events</code></a> method. This results in 7 * 24 = 168 columns, one for each hour of the week.</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">df_member_casual</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">cal</span><span class="o">.</span><span class="n">aggregate_events</span><span class="p">(</span><span class="s2">&quot;member_casual&quot;</span><span class="p">,</span> <span class="s2">&quot;started_at&quot;</span><span class="p">)</span>
 </span></code></pre></div>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>vocab          00 00  00 01  00 02  00 03  00 04  00 05  ...  06 18  06 19  06 20  06 21  06 22  06 23
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>member_casual                                            ...
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>casual           250    137    102     55     47     99  ...   1195   1165    980    774    488    331
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>member           165     89     74     52     59    273  ...   1355   1251   1137    800    505    294
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>[2 rows x 168 columns]
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>day_of_week      0                              ...     6
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>hour            0    1    2   3   4    5    6   ...    17    18    19    20   21   22   23
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>member_casual                                   ...
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>casual         250  137  102  55  47   99  231  ...  1287  1195  1165   980  774  488  331
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>member         165   89   74  52  59  273  838  ...  1307  1355  1251  1137  800  505  294
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>[2 rows x 168 columns]
 </span></code></pre></div>
 <h2 id="visualize-calendar-data">Visualize Calendar Data</h2>
 <p>Various plot methods are available on the <code>cal</code> attribute of DataFrames. For instance, the <a href="../../modules/extensions/#latent_calendar.extensions.DataFrameAccessor.plot_by_row"><code>plot_by_row</code></a> plots each row of the wide format calendar data as a separate calendar.</p>
