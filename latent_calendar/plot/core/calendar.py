@@ -110,7 +110,9 @@ def plot_calendar(
     )
 
     if cmap is None:
-        cmap = lambda x: "lightblue"
+
+        def cmap(x: float) -> str:
+            return "lightblue"
 
     for calendar_data in calendar_iter:
         event = CalendarEvent.from_calendar_data(calendar_data=calendar_data)

@@ -7,7 +7,6 @@ import matplotlib.pyplot as plt
 
 import latent_calendar  # noqa
 from latent_calendar.const import TIME_SLOTS, FULL_VOCAB, DAYS_IN_WEEK, HOURS_IN_DAY
-from latent_calendar.segments.convolution import day_of_week_column_name_func
 
 
 @pytest.fixture
@@ -124,7 +123,7 @@ def test_long_dataframe_extensions(df_long) -> None:
 def df_agg(df_long) -> pd.DataFrame:
     return (
         df_long.cal.timestamp_features("timestamp")
-        .groupby(["group", "vocab"])
+        .groupby(["group", "day_of_week", "hour"])
         .size()
         .rename("num_events")
         .to_frame()
@@ -140,7 +139,7 @@ def test_agg_dataframe_extensions(df_agg) -> None:
     with pytest.raises(ValueError):
         df_agg.reset_index(0).cal.widen("num_events")
 
-    df_false_order = df_agg.reorder_levels([1, 0]).cal.widen("num_events")
+    df_false_order = df_agg.swaplevel(1, 0).cal.widen("num_events")
     assert isinstance(df_false_order, pd.DataFrame)
     assert df_false_order.sum().sum() == 0
 
@@ -171,7 +170,7 @@ def test_wide_dataframe_extensions(df_wide: pd.DataFrame) -> None:
     df_dow_answer = pd.DataFrame(
         np.ones((nrows, DAYS_IN_WEEK)) * HOURS_IN_DAY,
         index=df_wide.index,
-        columns=[day_of_week_column_name_func(i) for i in range(DAYS_IN_WEEK)],
+        columns=pd.Index(range(DAYS_IN_WEEK), name="day_of_week"),
     )
 
     pd.testing.assert_frame_equal(df_dow, df_dow_answer)
@@ -181,6 +180,7 @@ def test_wide_dataframe_extensions(df_wide: pd.DataFrame) -> None:
     df_hour_answer = pd.DataFrame(
         np.ones((nrows, HOURS_IN_DAY)) * DAYS_IN_WEEK,
         index=df_wide.index,
+        columns=pd.Index(range(HOURS_IN_DAY), name="hour"),
     )
 
     pd.testing.assert_frame_equal(df_hour, df_hour_answer)

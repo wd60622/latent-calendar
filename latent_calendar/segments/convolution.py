@@ -1,10 +1,7 @@
 """Processing off calendar distribution."""
-import calendar
 
 import pandas as pd
 import numpy as np
-
-from latent_calendar.const import HOURS_IN_DAY, DAYS_IN_WEEK
 
 
 def _reverse_columns(df: pd.DataFrame) -> pd.DataFrame:
@@ -91,18 +88,6 @@ def sum_over_segments(df: pd.DataFrame, df_segments: pd.DataFrame) -> pd.DataFra
     )
 
 
-def _hour_regex(i) -> str:
-    return f" {str(i).zfill(2)}"
-
-
-def _dow_regex(i) -> str:
-    return f"{str(i).zfill(2)} "
-
-
-def day_of_week_column_name_func(i: int) -> str:
-    return f"{str(i).zfill(2)} {calendar.day_abbr[i]}"
-
-
 def sum_over_vocab(df: pd.DataFrame, aggregation: str = "dow") -> pd.DataFrame:
     """Sum the wide DataFrame columns to hours or dow.
 
@@ -118,19 +103,8 @@ def sum_over_vocab(df: pd.DataFrame, aggregation: str = "dow") -> pd.DataFrame:
         msg = "The aggregation must be hour or dow"
         raise ValueError(msg)
 
-    if aggregation == "hour":
-        regex_func = _hour_regex
-        total_values = HOURS_IN_DAY
-        column_name_func = lambda i: i
-    else:
-        regex_func = _dow_regex
-        total_values = DAYS_IN_WEEK
-        column_name_func = day_of_week_column_name_func
+    if not isinstance(df.columns, pd.MultiIndex):
+        raise ValueError("The columns must be a MultiIndex of day_of_week and hour.")
 
-    return pd.concat(
-        [
-            df.filter(regex=regex_func(i)).sum(axis=1).rename(column_name_func(i))
-            for i in range(total_values)
-        ],
-        axis=1,
-    )
+    level = 1 if aggregation == "hour" else 0
+    return df.groupby(level=level, axis=1).sum()

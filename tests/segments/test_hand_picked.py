@@ -24,8 +24,8 @@ def test_create_empty_template() -> None:
 @pytest.mark.parametrize(
     "start, end, answer",
     [
-        (DOWHour(dow=0, hour=0), DOWHour(dow=0, hour=1), ["00 00"]),
-        (DOWHour(dow=0, hour=0), DOWHour(dow=0, hour=2), ["00 00", "00 01"]),
+        (DOWHour(dow=0, hour=0), DOWHour(dow=0, hour=1), [(0, 0)]),
+        (DOWHour(dow=0, hour=0), DOWHour(dow=0, hour=2), [(0, 0), (0, 1)]),
     ],
 )
 def test_get_vocab_for_range(start, end, answer) -> None:

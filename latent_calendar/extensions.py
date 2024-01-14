@@ -301,7 +301,11 @@ class DataFrameAccessor:
         return transformer.fit_transform(self._obj)
 
     def widen(
-        self, column: str, as_int: bool = True, minutes: int = 60
+        self,
+        column: str,
+        as_int: bool = True,
+        minutes: int = 60,
+        multiindex: bool = True,
     ) -> pd.DataFrame:
         """Transform an aggregated DataFrame to wide calendar format.
 
@@ -311,6 +315,7 @@ class DataFrameAccessor:
             column: column to widen
             as_int: whether to cast the column to int
             minutes: number of minutes to
+            multiindex: whether to use a MultiIndex
 
         Returns:
             DataFrame in wide format
@@ -321,7 +326,9 @@ class DataFrameAccessor:
                 "DataFrame is expected to have a MultiIndex with the last column as the vocab."
             )
 
-        transformer = LongToWide(col=column, as_int=as_int, minutes=minutes)
+        transformer = LongToWide(
+            col=column, as_int=as_int, minutes=minutes, multiindex=multiindex
+        )
 
         return transformer.fit_transform(self._obj)
 
@@ -330,6 +337,7 @@ class DataFrameAccessor:
         by: Union[str, List[str]],
         timestamp_col: str,
         minutes: int = 60,
+        as_multiindex: bool = True,
     ) -> pd.DataFrame:
         """Transform event level DataFrame to wide format with groups as index.
 
@@ -339,6 +347,7 @@ class DataFrameAccessor:
             by: column(s) to use as index
             timestamp_col: column to use as timestamp
             minutes: The number of minutes to discretize by.
+            as_multiindex: whether to use MultiIndex columns
 
         Returns:
             DataFrame in wide format
@@ -355,6 +364,7 @@ class DataFrameAccessor:
             timestamp_col=timestamp_col,
             minutes=minutes,
             additional_groups=additional_groups,
+            as_multiindex=as_multiindex,
         )
         return transformer.fit_transform(self._obj)
 

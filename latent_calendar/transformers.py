@@ -14,6 +14,7 @@ df_wide = transformers.fit_transform(df)
 """
 from typing import List, Optional, Union
 from datetime import datetime
+import warnings
 
 import pandas as pd
 from pandas.core.indexes.accessors import DatetimeProperties
@@ -206,7 +207,13 @@ def create_timestamp_feature_pipeline(
 
 
 class VocabAggregation(BaseEstimator, TransformerMixin):
-    """NOTE: The index of the grouping stays."""
+    """NOTE: The index of the grouping stays.
+
+    Args:
+        groups: The columns to group by.
+        cols: Additional columns to sum.
+
+    """
 
     def __init__(self, groups: List[str], cols: Optional[List[str]] = None) -> None:
         self.groups = groups
@@ -239,29 +246,45 @@ class LongToWide(BaseEstimator, TransformerMixin):
     Args:
         col: The name of the column to unstack.
         as_int: Whether to cast the values to int.
+        minutes: The number of minutes to discretize by.
+        multiindex: Whether the columns are a multiindex.
 
     """
 
     def __init__(
-        self, col: str = "num_events", as_int: bool = True, minutes: int = 60
+        self,
+        col: str = "num_events",
+        as_int: bool = True,
+        minutes: int = 60,
+        multiindex: bool = True,
     ) -> None:
         self.col = col
         self.as_int = as_int
         self.minutes = minutes
+        self.multiindex = multiindex
 
     def fit(self, X: pd.DataFrame, y=None):
         return self
 
     @property
     def columns(self) -> List[str]:
-        return create_full_vocab(days_in_week=DAYS_IN_WEEK, minutes=self.minutes)
+        return create_full_vocab(
+            days_in_week=DAYS_IN_WEEK,
+            minutes=self.minutes,
+            as_multiindex=self.multiindex,
+        )
 
     def transform(self, X: pd.DataFrame, y=None) -> pd.DataFrame:
         """Unstack the assumed last index as vocab column."""
-        X_T = X.loc[:, self.col].unstack().T
-        X_T.index = X_T.index.get_level_values(-1)
-        X_T = X_T.reindex(self.columns)
-        X_res = X_T.T.fillna(value=0)
+        X_res = X.loc[:, self.col]
+
+        if self.multiindex:
+            X_res = X_res.unstack(-2).unstack(-1)
+        else:
+            X_res = X_res.unstack()
+
+        X_res = X_res.reindex(self.columns, axis=1)
+        X_res = X_res.fillna(value=0)
         if self.as_int:
             X_res = X_res.astype(int)
 
@@ -272,7 +295,17 @@ class LongToWide(BaseEstimator, TransformerMixin):
 
 
 class RawToVocab(BaseEstimator, TransformerMixin):
-    """Transformer timestamp level data into id level data with vocab columns."""
+    """Transformer timestamp level data into id level data with vocab columns.
+
+    Args:
+        id_col: The name of the id column.
+        timestamp_col: The name of the timestamp column.
+        minutes: The number of minutes to discretize by.
+        additional_groups: Additional columns to group by.
+        cols: Additional columns to sum.
+        as_multiindex: Whether to return columns as a multiindex.
+
+    """
 
     def __init__(
         self,
@@ -281,19 +314,21 @@ class RawToVocab(BaseEstimator, TransformerMixin):
         minutes: int = 60,
         additional_groups: Optional[List[str]] = None,
         cols: Optional[List[str]] = None,
+        as_multiindex: bool = True,
     ) -> None:
         self.id_col = id_col
         self.timestamp_col = timestamp_col
         self.minutes = minutes
         self.additional_groups = additional_groups
         self.cols = cols
+        self.as_multiindex = as_multiindex
 
     def fit(self, X: pd.DataFrame, y=None):
         # New features at same index level
         self.features = create_timestamp_feature_pipeline(
             self.timestamp_col,
             minutes=self.minutes,
-            create_vocab=True,
+            create_vocab=not self.as_multiindex,
         )
 
         groups = [self.id_col]
@@ -304,12 +339,18 @@ class RawToVocab(BaseEstimator, TransformerMixin):
                 )
 
             groups.extend(self.additional_groups)
-        groups.append("vocab")
+
+        if self.as_multiindex:
+            groups.extend(["day_of_week", "hour"])
+        else:
+            groups.append("vocab")
 
         # Reaggregation
         self.aggregation = VocabAggregation(groups=groups, cols=self.cols)
         # Unstacking
-        self.widden = LongToWide(col="num_events", minutes=self.minutes)
+        self.widden = LongToWide(
+            col="num_events", minutes=self.minutes, multiindex=self.as_multiindex
+        )
         # Since nothing needs to be "fit"
         return self
 
@@ -325,6 +366,7 @@ def create_raw_to_vocab_transformer(
     timestamp_col: str,
     minutes: int = 60,
     additional_groups: Optional[List[str]] = None,
+    as_multiindex: bool = True,
 ) -> RawToVocab:
     """Wrapper to create the transformer from the configuration options.
 
@@ -333,11 +375,19 @@ def create_raw_to_vocab_transformer(
         timestamp_col: The name of the timestamp column.
         minutes: The number of minutes to discretize by.
         additional_groups: Additional columns to group by.
+        as_multiindex: Whether to return columns as a multiindex.
 
     Returns:
         A transformer that transforms timestamp level data into id level data with vocab columns.
 
     """
+    if not as_multiindex:
+        msg = (
+            "columns will be returned as a MultiIndex by default and will "
+            "be behavior in future. Use as_multiindex=False for previous behavior"
+        )
+        warnings.warn(msg, DeprecationWarning, stacklevel=2)
+
     return RawToVocab(
         id_col=id_col,
         timestamp_col=timestamp_col,
