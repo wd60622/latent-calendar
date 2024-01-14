@@ -148,8 +148,8 @@ def plot_model_predictions(
     """Plot the model predictions compared to the test data.
 
     Args:
-        X_to_predict: Training data for the model
-        X_test: Testing data for the model
+        X_to_predict: Data for the model
+        X_holdout: Holdout data for the model
         model: LatentCalendar model instance
         divergent: Option to change the data displayed
         axes: list of 3 axes to plot this data

@@ -165,6 +165,29 @@ class SeriesAccessor:
 
         return transformer.fit_transform(self._obj.rename(name).to_frame())
 
+    def conditional_probabilities(
+        self,
+        *,
+        level: Union[int, str] = 0,
+    ) -> pd.Series:
+        """Calculate conditional probabilities for each the row over the level.
+
+        Args:
+            level: level of the column MultiIndex.
+                Default 0 or day_of_week
+
+        Returns:
+            Series with conditional probabilities
+
+        """
+
+        if not isinstance(self._obj.index, pd.MultiIndex):
+            raise ValueError(
+                "Series is expected to have a MultiIndex with the last column as the vocab."
+            )
+
+        return self._obj.div(self._obj.groupby(level=level).sum(), level=level)
+
     def plot(
         self,
         *,
@@ -269,6 +292,30 @@ class DataFrameAccessor:
             return self._obj.div(value)
 
         raise ValueError(f"kind must be one of ['max', 'probs'], got {kind}")
+
+    def conditional_probabilities(
+        self,
+        *,
+        level: Union[int, str] = 0,
+    ) -> pd.DataFrame:
+        """Calculate conditional probabilities for each row over the level.
+
+        Args:
+            level: level of the columns MultiIndex.
+                Default 0 or day_of_week
+
+        Returns:
+            DataFrame with conditional probabilities
+
+        """
+        if not isinstance(self._obj.columns, pd.MultiIndex):
+            raise ValueError(
+                "DataFrame is expected to have a MultiIndex with the last column as the vocab."
+            )
+
+        return self._obj.div(
+            self._obj.groupby(level=level, axis=1).sum(), level=level, axis=1
+        )
 
     def timestamp_features(
         self,

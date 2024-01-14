@@ -22,6 +22,25 @@ def test_series_extensions(ser) -> None:
 
 
 @pytest.fixture
+def ser_row(ser) -> pd.Series:
+    return pd.Series(1, index=FULL_VOCAB)
+
+
+@pytest.mark.parametrize(
+    "level, axis",
+    [
+        ("day_of_week", 1),
+        ("hour", 0),
+    ],
+)
+def test_series_conditional_probabilities(ser_row, level, axis) -> None:
+    result = ser_row.cal.conditional_probabilities(level=level).unstack().sum(axis=axis)
+    # All the probabilities should sum to 1
+
+    assert (result.round() == 1).all()
+
+
+@pytest.fixture
 def df() -> pd.DataFrame:
     """Generate some fake data."""
     return pd.DataFrame(
@@ -212,3 +231,40 @@ def test_wide_dataframe_extensions(df_wide: pd.DataFrame) -> None:
         pd.testing.assert_frame_equal(
             df_wide.cal.sum_next_hours(hours=next_hours), df_answer
         )
+
+
+@pytest.fixture
+def df_wide_subset() -> pd.DataFrame:
+    columns = pd.MultiIndex.from_tuples(
+        [
+            (0, 0),
+            (0, 1),
+            (0, 2),
+            (1, 0),
+            (1, 1),
+            (1, 2),
+        ],
+        names=["day_of_week", "hour"],
+    )
+
+    data = np.ones((3, 6))
+    return pd.DataFrame(data, columns=columns).sort_index(axis=1)
+
+
+@pytest.mark.parametrize(
+    "level, answer",
+    [
+        ("day_of_week", 1 / 3),
+        (0, 1 / 3),
+        ("hour", 1 / 2),
+        (1, 1 / 2),
+    ],
+)
+def test_dataframe_conditional_probabilities(
+    df_wide_subset: pd.DataFrame, level, answer
+) -> None:
+    result = df_wide_subset.cal.conditional_probabilities(level=level)
+    expected = pd.DataFrame(
+        answer, index=df_wide_subset.index, columns=df_wide_subset.columns
+    )
+    pd.testing.assert_frame_equal(result, expected)
