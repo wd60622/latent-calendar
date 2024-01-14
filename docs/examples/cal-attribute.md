@@ -36,10 +36,11 @@ df_member_casual = df.cal.aggregate_events("member_casual", "started_at")
 ```
 
 ```text
-vocab          00 00  00 01  00 02  00 03  00 04  00 05  ...  06 18  06 19  06 20  06 21  06 22  06 23
-member_casual                                            ...
-casual           250    137    102     55     47     99  ...   1195   1165    980    774    488    331
-member           165     89     74     52     59    273  ...   1355   1251   1137    800    505    294
+day_of_week      0                              ...     6
+hour            0    1    2   3   4    5    6   ...    17    18    19    20   21   22   23
+member_casual                                   ...
+casual         250  137  102  55  47   99  231  ...  1287  1195  1165   980  774  488  331
+member         165   89   74  52  59  273  838  ...  1307  1355  1251  1137  800  505  294
 
 [2 rows x 168 columns]
 ```
