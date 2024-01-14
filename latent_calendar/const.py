@@ -1,8 +1,9 @@
 import calendar
 from itertools import product
-from typing import Dict, List
+from typing import Dict, List, Union
 
 import numpy as np
+import pandas as pd
 
 DAYS_IN_WEEK = 7
 
@@ -37,11 +38,20 @@ def dicretized_hours(minutes: int) -> List[float]:
     return hours.tolist()
 
 
-def create_full_vocab(days_in_week: int, minutes: int) -> List[str]:
-    return [
-        format_dow_hour(day_of_week, hour)
-        for day_of_week, hour in product(range(days_in_week), dicretized_hours(minutes))
-    ]
+def create_full_vocab(
+    days_in_week: int, minutes: int, as_multiindex: bool = True
+) -> Union[pd.MultiIndex, List[str]]:
+    if not as_multiindex:
+        return [
+            format_dow_hour(day_of_week, hour)
+            for day_of_week, hour in product(
+                range(days_in_week), dicretized_hours(minutes)
+            )
+        ]
+
+    return pd.MultiIndex.from_product(
+        [range(days_in_week), dicretized_hours(minutes)], names=["day_of_week", "hour"]
+    )
 
 
 FULL_VOCAB = create_full_vocab(days_in_week=DAYS_IN_WEEK, minutes=60)
