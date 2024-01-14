@@ -279,7 +279,7 @@ class LongToWide(BaseEstimator, TransformerMixin):
         X_res = X.loc[:, self.col]
 
         if self.multiindex:
-            X_res = X_res.unstack().unstack()
+            X_res = X_res.unstack(-2).unstack(-1)
         else:
             X_res = X_res.unstack()
 
