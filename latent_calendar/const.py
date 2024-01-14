@@ -1,3 +1,4 @@
+"""Constants used to create the full vocabulary of the dataset."""
 import calendar
 from itertools import product
 from typing import Dict, List, Union
@@ -41,6 +42,19 @@ def dicretized_hours(minutes: int) -> List[float]:
 def create_full_vocab(
     days_in_week: int, minutes: int, as_multiindex: bool = True
 ) -> Union[pd.MultiIndex, List[str]]:
+    """Create the full vocabulary of the dataset.
+
+    Args:
+        days_in_week: Number of days in the week.
+        minutes: Number of minutes to discretize the hours by.
+        as_multiindex: Whether to return a multiindex or a list of strings.
+
+    Returns:
+        The full vocabulary of the dataset.
+            Either a MultiIndex or a list of strings.
+
+    """
+
     if not as_multiindex:
         return [
             format_dow_hour(day_of_week, hour)

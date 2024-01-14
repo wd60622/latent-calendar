@@ -19,7 +19,6 @@ Or install directly from GitHub for the latest functionality.
 
 ## Features 
 
-https://wd60622.github.io/latent-calendar
 - Integrated automatically into `pandas` with [`cal` attribute on DataFrames and Series](https://wd60622.github.io/latent-calendar/modules/extensions)
 - Compatible with [`scikit-learn` pipelines and transformers](https://wd60622.github.io/latent-calendar/examples/model/sklearn-compat)
 - [Transform and visualize data on a weekly calendar](https://wd60622.github.io/latent-calendar/examples/cal-attribute)
