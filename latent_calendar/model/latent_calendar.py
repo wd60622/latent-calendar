@@ -177,11 +177,11 @@ class ConjugateModel(BaseEstimator, TransformerMixin):
         if self.a is None:
             self.a = hourly_prior(X)
 
-        self.prior = Dirichlet(alpha=self.a)
+        self.prior_ = Dirichlet(alpha=self.a)
         return self
 
     def transform(self, X, y=None) -> np.ndarray:
-        return multinomial_dirichlet(X, self.prior).dist.mean()
+        return multinomial_dirichlet(X, self.prior_).dist.mean()
 
     def predict(self, X, y=None) -> np.ndarray:
         return self.transform(X, y=y)
