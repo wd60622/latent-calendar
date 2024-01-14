@@ -68,8 +68,12 @@ def create_series_for_range(start: DOWHour, end: DOWHour) -> pd.Series:
     else:
         negate = False
 
-    start_idx = format_dow_hour(start.dow, start.hour)
-    end_idx = format_dow_hour(end.dow, end.hour - 1)
+    if isinstance(ser.index, pd.MultiIndex):
+        start_idx = pd.IndexSlice[start.dow, start.hour]
+        end_idx = pd.IndexSlice[end.dow, end.hour - 1]
+    else:
+        start_idx = format_dow_hour(start.dow, start.hour)
+        end_idx = format_dow_hour(end.dow, end.hour - 1)
 
     ser.loc[start_idx:end_idx] = 1
 
