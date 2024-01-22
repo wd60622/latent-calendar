@@ -4,10 +4,26 @@ from typing import Optional, Tuple, Union
 import numpy as np
 import pandas as pd
 
-import pymc as pm
-from pytensor.tensor import TensorVariable
-
 from latent_calendar.const import FULL_VOCAB
+
+try:
+    import pymc as pm
+    from pytensor.tensor import TensorVariable
+except ImportError:
+
+    class TensorVariable:
+        pass
+
+    class PyMC:
+        def __getattr__(self, name):
+            msg = (
+                "PyMC is not installed."
+                " Please install it directly or"
+                " with extra installs: pip install 'latent-calendar[pymc]'"
+            )
+            raise ImportError(msg)
+
+    pm = PyMC()
 
 
 def wide_format_dataframe(
