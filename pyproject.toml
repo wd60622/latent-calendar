@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "latent-calendar"
-version = "1.1.1"
+version = "1.2.0"
 description = "Analyzing and modeling weekly calendar distributions using latent components"
 authors = ["Will Dean <wd60622@gmail.com>"]
 readme = "README.md"
@@ -64,6 +64,7 @@ legacy_tox_ini = """
     [testenv]
     deps = 
         pytest 
+        pymc
     commands = pytest tests
 """
 
