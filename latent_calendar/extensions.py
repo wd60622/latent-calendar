@@ -113,6 +113,58 @@ class SeriesAccessor:
     def __init__(self, pandas_obj: pd.Series):
         self._obj = pandas_obj
 
+    def aggregate_events(
+        self,
+        minutes: int = 60,
+        as_multiindex: bool = True,
+    ) -> pd.Series:
+        """Transform event level Series to row of wide format.
+
+        Args:
+            minutes: The number of minutes to discretize by.
+            as_multiindex: whether to use MultiIndex columns
+
+        Returns:
+            Series that would be row of wide format
+
+        Examples:
+            Discretize datetime Series to 30 minutes
+
+            ```python
+            import pandas as pd
+
+            import matplotlib.pyplot as plt
+
+            from latent_calendar.datasets import load_chicago_bikes
+
+            df_trips = load_chicago_bikes()
+
+            start_times = df_trips["started_at"]
+
+            agg_start_times = start_times.cal.aggregate_events(minutes=30)
+            agg_start_times.cal.plot_row()
+            plt.show()
+
+
+            ```
+
+
+        """
+        name = self._obj.name or "timestamp"
+        return (
+            self._obj.rename(name)
+            .to_frame()
+            .assign(tmp=1)
+            .cal.aggregate_events(
+                by="tmp",
+                timestamp_col=name,
+                minutes=minutes,
+                as_multiindex=as_multiindex,
+            )
+            .iloc[0]
+            .rename(name)
+        )
+
     def timestamp_features(
         self, discretize: bool = True, minutes: int = 60, create_vocab: bool = True
     ) -> pd.DataFrame:
