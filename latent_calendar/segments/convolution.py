@@ -16,6 +16,7 @@ def sum_next_hours(df: pd.DataFrame, hours: int) -> pd.DataFrame:
     00 00 column would be 06 06 23
 
     TODO: Consider if negative hours should be allowed
+    TODO: Handle when minutes are not 60
 
     Arguments:
         df: DataFrame of probabilities or counts in wide format
@@ -35,8 +36,10 @@ def sum_next_hours(df: pd.DataFrame, hours: int) -> pd.DataFrame:
     return (
         pd.concat([df, df.iloc[:, :hours]], axis=1)
         .pipe(_reverse_columns)
-        .rolling(hours + 1, axis=1)
+        .T
+        .rolling(hours + 1)
         .sum()
+        .T
         .iloc[:, hours:]
         .pipe(_reverse_columns)
     )
