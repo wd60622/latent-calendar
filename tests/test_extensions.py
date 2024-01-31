@@ -6,7 +6,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import latent_calendar  # noqa
-from latent_calendar.const import TIME_SLOTS, FULL_VOCAB, DAYS_IN_WEEK, HOURS_IN_DAY, create_full_vocab
+from latent_calendar.const import (
+    TIME_SLOTS,
+    FULL_VOCAB,
+    DAYS_IN_WEEK,
+    HOURS_IN_DAY,
+    create_full_vocab,
+)
 
 
 @pytest.fixture
@@ -272,29 +278,30 @@ def test_dataframe_conditional_probabilities(
     pd.testing.assert_frame_equal(result, expected)
 
 
-def test_series_aggregate_events() -> None: 
+def test_series_aggregate_events() -> None:
     name = "events"
     ser = pd.Series(
-        pd.to_datetime([
-            # 2021-01-01 is a Friday
-            "2021-01-01 00:00:00",
-            "2021-01-01 00:30:00",
-            "2021-01-01 01:00:00",
-            "2021-01-01 01:30:00",
-            "2021-01-01 01:45:00",
-            "2021-01-01 01:50:00",
-        ]), 
-        name=name, 
+        pd.to_datetime(
+            [
+                # 2021-01-01 is a Friday
+                "2021-01-01 00:00:00",
+                "2021-01-01 00:30:00",
+                "2021-01-01 01:00:00",
+                "2021-01-01 01:30:00",
+                "2021-01-01 01:45:00",
+                "2021-01-01 01:50:00",
+            ]
+        ),
+        name=name,
     )
-
 
     result = ser.cal.aggregate_events(minutes=30)
 
     expected = pd.Series(
-        0, 
-        index=create_full_vocab(days_in_week=7, minutes=30), 
-        name=name, 
-        dtype=result.dtype, 
+        0,
+        index=create_full_vocab(days_in_week=7, minutes=30),
+        name=name,
+        dtype=result.dtype,
     )
     expected.loc[(4, 0)] = 1
     expected.loc[(4, 0.5)] = 1

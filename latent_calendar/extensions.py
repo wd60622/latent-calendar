@@ -120,18 +120,18 @@ class SeriesAccessor:
     ) -> pd.Series:
         """Transform event level Series to row of wide format.
 
-        Args: 
+        Args:
             minutes: The number of minutes to discretize by.
             as_multiindex: whether to use MultiIndex columns
 
         Returns:
             Series that would be row of wide format
 
-        Examples: 
+        Examples:
             Discretize datetime Series to 30 minutes
 
             ```python
-            import pandas as pd 
+            import pandas as pd
 
             import matplotlib.pyplot as plt
 
@@ -145,18 +145,22 @@ class SeriesAccessor:
             agg_start_times.cal.plot_row()
             plt.show()
 
-            
+
             ```
 
 
         """
         name = self._obj.name or "timestamp"
         return (
-            self._obj
-            .rename(name)
+            self._obj.rename(name)
             .to_frame()
             .assign(tmp=1)
-            .cal.aggregate_events(by="tmp", timestamp_col=name, minutes=minutes, as_multiindex=as_multiindex)
+            .cal.aggregate_events(
+                by="tmp",
+                timestamp_col=name,
+                minutes=minutes,
+                as_multiindex=as_multiindex,
+            )
             .iloc[0]
             .rename(name)
         )

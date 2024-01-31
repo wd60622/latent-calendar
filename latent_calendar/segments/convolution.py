@@ -36,11 +36,9 @@ def sum_next_hours(df: pd.DataFrame, hours: int) -> pd.DataFrame:
     return (
         pd.concat([df, df.iloc[:, :hours]], axis=1)
         .pipe(_reverse_columns)
-        .T
-        .rolling(hours + 1)
+        .T.rolling(hours + 1)
         .sum()
-        .T
-        .iloc[:, hours:]
+        .T.iloc[:, hours:]
         .pipe(_reverse_columns)
     )
 
