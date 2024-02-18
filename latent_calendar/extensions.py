@@ -72,7 +72,7 @@ Examples:
 
 
 """
-from typing import List, Optional, Union
+from typing import List, Optional, Union, Literal
 
 import pandas as pd
 import numpy as np
@@ -325,25 +325,63 @@ class DataFrameAccessor:
     def __init__(self, pandas_obj: pd.DataFrame):
         self._obj = pandas_obj
 
-    def normalize(self, kind: str) -> pd.DataFrame:
-        """Row-wise operations on DataFrame.
-
-        Args:
-            kind: one of ['max', 'probs', 'even_rate']
+    def divide_by_max(self) -> pd.DataFrame:
+        """Divide each row by the max value.
 
         Returns:
             DataFrame with row-wise operations applied
 
         """
-        if kind == "max":
-            return self._obj.div(self._obj.max(axis=1), axis=0)
-        elif kind == "probs":
-            return self._obj.div(self._obj.sum(axis=1), axis=0)
-        elif kind == "even_rate":
-            value = self._obj.shape[1]
-            return self._obj.div(value)
+        return self._obj.div(self._obj.max(axis=1), axis=0)
 
-        raise ValueError(f"kind must be one of ['max', 'probs'], got {kind}")
+    def divide_by_sum(self) -> pd.DataFrame:
+        """Divide each row by the sum of the row.
+
+        Returns:
+            DataFrame with row-wise operations applied
+
+        """
+        return self._obj.div(self._obj.sum(axis=1), axis=0)
+
+    def divide_by_even_rate(self) -> pd.DataFrame:
+        """Divide each row by the number of columns.
+
+        Returns:
+            DataFrame with row-wise operations applied
+
+        """
+        value = self._obj.shape[1]
+        return self._obj.div(value)
+
+    def normalize(self, kind: Literal["max", "probs", "even_rate"]) -> pd.DataFrame:
+        """Row-wise operations on DataFrame.
+
+        Args:
+            kind: The normalization to apply.
+
+        Returns:
+            DataFrame with row-wise operations applied
+
+        """
+        import warnings
+
+        warnings.warn(
+            "This method will be deprecated in future versions. Use the specific methods instead.",
+            DeprecationWarning,
+        )
+
+        funcs = {
+            "max": self.divide_by_max,
+            "probs": self.divide_by_sum,
+            "even_rate": self.divide_by_even_rate,
+        }
+
+        if kind not in funcs:
+            raise ValueError(
+                f"kind must be one of ['max', 'probs', 'even_rate'], got {kind}"
+            )
+
+        return funcs[kind]()
 
     def conditional_probabilities(
         self,
