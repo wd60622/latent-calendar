@@ -365,10 +365,10 @@ class DataFrameAccessor:
         """
         import warnings
 
-        warnings.warn(
-            "This method will be deprecated in future versions. Use the specific methods instead.",
-            DeprecationWarning,
-        )
+        def warn(message):
+            warnings.warn(message, DeprecationWarning, stacklevel=3)
+
+        warning_message = "This method will be deprecated in future versions"
 
         funcs = {
             "max": self.divide_by_max,
@@ -377,11 +377,17 @@ class DataFrameAccessor:
         }
 
         if kind not in funcs:
+            warn(warning_message)
             raise ValueError(
                 f"kind must be one of ['max', 'probs', 'even_rate'], got {kind}"
             )
 
-        return funcs[kind]()
+        func = funcs[kind]
+
+        warning_message = f"{warning_message} in favor of df.cal.{func.__name__}()"
+        warn(warning_message)
+
+        return func()
 
     def conditional_probabilities(
         self,
