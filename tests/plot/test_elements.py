@@ -83,3 +83,35 @@ def test_separate_events(start: float, end: float, answer: List[CalendarEvent]):
 def test_vocab_contructor(vocab: str) -> None:
     event = CalendarEvent.from_vocab(vocab)
     assert isinstance(event, CalendarEvent)
+
+
+def test_week_overlap() -> None:
+    event = CalendarEvent(day=6, start=5, end=7, days=2)
+
+    assert event.multiweek_tour
+
+    events = event.separate_events()
+    assert events == [
+        CalendarEvent(day=6, start=5, end=7, days=1),
+        CalendarEvent(day=0, start=5, end=7, days=1),
+    ]
+
+
+def test_day_and_week_overlap() -> None:
+    event = CalendarEvent(day=6, start=23, duration=2 * 60, days=3)
+
+    assert event.multiweek_tour
+    assert event.multiday_tour
+
+    assert event.separate_events() == [
+        CalendarEvent(day=6, start=23, end=24, days=1),
+        CalendarEvent(day=0, start=0, end=1, days=3),
+        CalendarEvent(day=0, start=23, end=24, days=2),
+    ]
+
+
+@pytest.mark.parametrize("day", [-1, 7, 8])
+@pytest.mark.parametrize("days", [-1, 0, 8, 9])
+def test_calendar_event_init_errors(day, days) -> None:
+    with pytest.raises(ValueError):
+        CalendarEvent(day=day, start=0, end=1, days=days)

@@ -189,6 +189,7 @@ class CalendarEvent:
         start: The start hour of the event.
         end: The end hour of the event.
         duration: The duration of the event. Only used if end is None.
+        days: The number of days the event spans. Default is 1.
 
     Examples:
         Plot event from calendar data
@@ -212,8 +213,12 @@ class CalendarEvent:
     start: float
     end: Optional[float] = None
     duration: Optional[float] = None
+    days: int = 1
 
     def __post_init__(self) -> None:
+        if self.day not in range(DAYS_IN_WEEK):
+            raise ValueError("Day must be between 0 and 6")
+
         if self.end is None and self.duration is None:
             raise ValueError("Either end or duration must be provided")
 
@@ -223,6 +228,9 @@ class CalendarEvent:
         if self.end is None:
             self.end = self.start + (self.duration / 60)
             self.duration = None
+
+        if self.days not in range(1, DAYS_IN_WEEK + 1):
+            raise ValueError("Days must be between 1 and 7")
 
     @classmethod
     def from_calendar_data(
@@ -278,7 +286,22 @@ class CalendarEvent:
 
         return self.end % HOURS_IN_DAY < self.start
 
-    def _cap_event_at_midnight(self) -> "CalendarEvent":
+    @property
+    def multiweek_tour(self) -> bool:
+        return self.day + self.days > DAYS_IN_WEEK
+
+    def _cap_event_at_week_end(self) -> None:
+        self.days = DAYS_IN_WEEK - self.day
+
+    def _create_next_week_event(self) -> "CalendarEvent":
+        return CalendarEvent(
+            day=0,
+            start=self.start,
+            end=self.end,
+            days=self.days - DAYS_IN_WEEK + self.day,
+        )
+
+    def _cap_event_at_midnight(self) -> None:
         self.end = min(HOURS_IN_DAY, self.end)
 
     def _create_next_day_event(self) -> "CalendarEvent":
@@ -287,11 +310,11 @@ class CalendarEvent:
             day=(self.day + 1) % DAYS_IN_WEEK,
             start=0,
             end=self.end % HOURS_IN_DAY,
+            days=self.days,
         )
 
     def separate_events(self) -> List["CalendarEvent"]:
         """Return list of events that represent the one event across different days.
-
 
         Examples:
             A single event that goes from 23:00 to 01:00 will be split into two events.
@@ -303,12 +326,19 @@ class CalendarEvent:
             ```
 
         """
-        events = [replace(self)]
+        event = replace(self)
+        events = [event]
 
-        if self.multiday_tour:
-            events.append(self._create_next_day_event())
-            # Cap the initial rectangle at 24 hours
-            events[0]._cap_event_at_midnight()
+        if event.multiday_tour:
+            events.append(event._create_next_day_event())
+            event._cap_event_at_midnight()
+
+        for event in events:
+            if not event.multiweek_tour:
+                continue
+
+            events.append(event._create_next_week_event())
+            event._cap_event_at_week_end()
 
         return events
 
@@ -324,7 +354,7 @@ class CalendarEvent:
         x = self.day if monday_start else (self.day + 1) % DAYS_IN_WEEK
         rect_kwargs = {
             "xy": [x, self.start],
-            "width": 1,
+            "width": self.days,
             "height": height,
         }
 
@@ -365,8 +395,7 @@ class CalendarEvent:
             kwargs: Addtional kwargs for the Patch instances or to override.
 
         """
-        separated_events = self.separate_events()
-        for event in separated_events:
+        for event in self.separate_events():
             rectangle = event._create_matplotlib_rectangle(
                 monday_start=monday_start,
                 lw=lw,
