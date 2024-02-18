@@ -129,8 +129,9 @@ def test_even_rate_normalize(df) -> None:
 
 
 def test_unknown_normalize(df) -> None:
-    with pytest.raises(ValueError):
-        df.cal.normalize("unknown")
+    with pytest.warns(DeprecationWarning):
+        with pytest.raises(ValueError):
+            df.cal.normalize("unknown")
 
 
 def test_all_dataframe_extensions(df, df_segments) -> None:
