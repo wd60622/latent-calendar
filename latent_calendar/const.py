@@ -1,4 +1,5 @@
-"""Constants used to create the full vocabulary of the dataset."""
+"""Constants used to create the full vocabulary of the dataset.
+"""
 import calendar
 from itertools import product
 from typing import Dict, List, Union
