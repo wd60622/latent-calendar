@@ -108,4 +108,4 @@ def sum_over_vocab(df: pd.DataFrame, aggregation: str = "dow") -> pd.DataFrame:
         raise ValueError("The columns must be a MultiIndex of day_of_week and hour.")
 
     level = 1 if aggregation == "hour" else 0
-    return df.groupby(level=level, axis=1).sum()
+    return df.T.groupby(level=level).sum().T
