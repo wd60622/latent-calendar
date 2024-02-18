@@ -108,3 +108,10 @@ def test_day_and_week_overlap() -> None:
         CalendarEvent(day=0, start=0, end=1, days=3),
         CalendarEvent(day=0, start=23, end=24, days=2),
     ]
+
+
+@pytest.mark.parametrize("day", [-1, 7, 8])
+@pytest.mark.parametrize("days", [-1, 0, 8, 9])
+def test_calendar_event_init_errors(day, days) -> None:
+    with pytest.raises(ValueError):
+        CalendarEvent(day=day, start=0, end=1, days=days)

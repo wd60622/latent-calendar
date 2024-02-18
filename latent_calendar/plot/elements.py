@@ -216,6 +216,9 @@ class CalendarEvent:
     days: int = 1
 
     def __post_init__(self) -> None:
+        if self.day not in range(DAYS_IN_WEEK):
+            raise ValueError("Day must be between 0 and 6")
+
         if self.end is None and self.duration is None:
             raise ValueError("Either end or duration must be provided")
 
