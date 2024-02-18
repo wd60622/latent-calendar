@@ -28,7 +28,7 @@ Examples:
 
 """
 import itertools
-from typing import List, Optional
+from typing import List, Optional, Union
 
 import pandas as pd
 import numpy as np
@@ -117,8 +117,12 @@ def create_box_segment(
     return ser.rename(name)
 
 
-def stack_segments(segments: List[pd.Series]) -> pd.DataFrame:
+SEGMENTS = Union[pd.Series, pd.DataFrame]
+
+
+def stack_segments(segments: List[SEGMENTS]) -> pd.DataFrame:
     """Stack segments into a single dataframe."""
+    segments = [seg.T if isinstance(seg, pd.DataFrame) else seg for seg in segments]
     return pd.concat(segments, axis=1).T
 
 

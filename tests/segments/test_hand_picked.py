@@ -3,13 +3,15 @@ import pytest
 import pandas as pd
 import numpy as np
 
-from latent_calendar.const import TIME_SLOTS, DAYS_IN_WEEK
+from latent_calendar.const import TIME_SLOTS, DAYS_IN_WEEK, FULL_VOCAB
 from latent_calendar.segments.hand_picked import (
+    create_blank_segment_series,
     get_vocab_for_range,
     create_empty_template,
     create_hourly_segment,
     create_dow_segments,
     create_every_hour_segments,
+    stack_segments,
 )
 from latent_calendar.vocab import DOWHour
 
@@ -73,3 +75,46 @@ def test_create_every_hour_strategy() -> None:
 
     assert isinstance(df_strat, pd.DataFrame)
     assert df_strat.shape == (TIME_SLOTS, TIME_SLOTS)
+
+
+@pytest.fixture
+def first() -> pd.Series:
+    return create_blank_segment_series().rename("first")
+
+
+@pytest.fixture
+def second() -> pd.Series:
+    return create_blank_segment_series().rename("second")
+
+
+@pytest.fixture
+def third() -> pd.Series:
+    return create_blank_segment_series().rename("third")
+
+
+@pytest.fixture
+def group(first, second) -> pd.DataFrame:
+    return stack_segments([first, second])
+
+
+def test_stack_segments_all_series(group: pd.DataFrame) -> None:
+    pd.testing.assert_index_equal(group.index, pd.Index(["first", "second"]))
+    pd.testing.assert_index_equal(group.columns, FULL_VOCAB)
+
+
+def test_stack_segments_all_df(group: pd.DataFrame) -> None:
+    df_stack = stack_segments([group, group])
+
+    pd.testing.assert_index_equal(
+        df_stack.index, pd.Index(["first", "second", "first", "second"])
+    )
+    pd.testing.assert_index_equal(group.columns, FULL_VOCAB)
+
+
+def test_stack_segments_mixed(group: pd.DataFrame, third: pd.Series) -> None:
+    df_stack = stack_segments([group, third])
+
+    pd.testing.assert_index_equal(
+        df_stack.index, pd.Index(["first", "second", "third"])
+    )
+    pd.testing.assert_index_equal(group.columns, FULL_VOCAB)
