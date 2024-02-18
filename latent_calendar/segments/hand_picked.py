@@ -117,10 +117,10 @@ def create_box_segment(
     return ser.rename(name)
 
 
-SEGMENTS = Union[pd.Series, pd.DataFrame]
+SEGMENT = Union[pd.Series, pd.DataFrame]
 
 
-def stack_segments(segments: List[SEGMENTS]) -> pd.DataFrame:
+def stack_segments(segments: List[SEGMENT]) -> pd.DataFrame:
     """Stack segments into a single dataframe."""
     segments = [seg.T if isinstance(seg, pd.DataFrame) else seg for seg in segments]
     return pd.concat(segments, axis=1).T
