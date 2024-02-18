@@ -122,7 +122,27 @@ def test_multiday_event() -> None:
     fig, ax = plt.subplots(figsize=(10, 10))
     plot_blank_calendar(ax=ax)
     event = CalendarEvent(day=0, start=12, duration=2 * 60, days=3)
-    event.plot(ax=ax, label="3 day block", linestyle="--", alpha=0.25)
+    event.plot(ax=ax, label="3 day block", linestyle="--", alpha=0.25, lw=1.5)
+
+    event = CalendarEvent(day=6, start=5, end=7, days=3)
+    event.plot(
+        ax=ax,
+        label="3 day block into next week",
+        linestyle="--",
+        facecolor="green",
+        alpha=0.25,
+        lw=1.5,
+    )
+
+    event = CalendarEvent(day=6, start=23, duration=2 * 60, days=3)
+    event.plot(
+        ax=ax,
+        label="3 day block into next day and week",
+        linestyle="--",
+        facecolor="orange",
+        alpha=0.25,
+        lw=1.5,
+    )
 
     event = CalendarEvent(day=2, start=23, duration=2 * 60, days=2)
     event.plot(
@@ -131,6 +151,7 @@ def test_multiday_event() -> None:
         linestyle="--",
         alpha=0.25,
         facecolor="red",
+        lw=1.5,
     )
 
     ax.legend()

@@ -323,21 +323,19 @@ class CalendarEvent:
             ```
 
         """
-        events = [replace(self)]
+        event = replace(self)
+        events = [event]
 
-        if self.multiweek_tour:
-            events.append(self._create_next_week_event())
-            events[0]._cap_event_at_week_end()
-
-        if not self.multiday_tour:
-            return events
-
-        next_day_events = []
-        for event in events:
-            next_day_events.append(event._create_next_day_event())
+        if event.multiday_tour:
+            events.append(event._create_next_day_event())
             event._cap_event_at_midnight()
 
-        events.extend(next_day_events)
+        for event in events:
+            if not event.multiweek_tour:
+                continue
+
+            events.append(event._create_next_week_event())
+            event._cap_event_at_week_end()
 
         return events
 
