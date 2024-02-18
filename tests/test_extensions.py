@@ -70,41 +70,72 @@ def df_segments() -> pd.DataFrame:
     ).T
 
 
+def test_max_normalize(df) -> None:
+    df_max_result = pd.DataFrame(
+        {
+            "a": [1 / 3, 2 / 3, 1],
+            "b": [4 / 6, 5 / 6, 1],
+        }
+    ).T
+
+    with pytest.warns(DeprecationWarning):
+        pd.testing.assert_frame_equal(
+            df.cal.normalize("max"),
+            df_max_result,
+        )
+    pd.testing.assert_frame_equal(
+        df.cal.divide_by_max(),
+        df_max_result,
+    )
+
+
+def test_sum_normalize(df) -> None:
+    df_probs_result = pd.DataFrame(
+        {
+            "a": [1 / 6, 2 / 6, 3 / 6],
+            "b": [4 / 15, 5 / 15, 6 / 15],
+        }
+    ).T
+
+    with pytest.warns(DeprecationWarning):
+        pd.testing.assert_frame_equal(
+            df.cal.normalize("probs"),
+            df_probs_result,
+        )
+
+    pd.testing.assert_frame_equal(
+        df.cal.divide_by_sum(),
+        df_probs_result,
+    )
+
+
+def test_even_rate_normalize(df) -> None:
+    df_even_rate_result = pd.DataFrame(
+        {
+            "a": [1 / 3, 2 / 3, 3 / 3],
+            "b": [4 / 3, 5 / 3, 6 / 3],
+        }
+    ).T
+
+    with pytest.warns(DeprecationWarning):
+        pd.testing.assert_frame_equal(
+            df.cal.normalize("even_rate"),
+            df_even_rate_result,
+        )
+    pd.testing.assert_frame_equal(
+        df.cal.divide_by_even_rate(),
+        df_even_rate_result,
+    )
+
+
+def test_unknown_normalize(df) -> None:
+    with pytest.warns(DeprecationWarning):
+        with pytest.raises(ValueError):
+            df.cal.normalize("unknown")
+
+
 def test_all_dataframe_extensions(df, df_segments) -> None:
     assert hasattr(df, "cal")
-
-    pd.testing.assert_frame_equal(
-        df.cal.normalize("max"),
-        pd.DataFrame(
-            {
-                "a": [1 / 3, 2 / 3, 1],
-                "b": [4 / 6, 5 / 6, 1],
-            }
-        ).T,
-    )
-
-    pd.testing.assert_frame_equal(
-        df.cal.normalize("probs"),
-        pd.DataFrame(
-            {
-                "a": [1 / 6, 2 / 6, 3 / 6],
-                "b": [4 / 15, 5 / 15, 6 / 15],
-            }
-        ).T,
-    )
-
-    pd.testing.assert_frame_equal(
-        df.cal.normalize("even_rate"),
-        pd.DataFrame(
-            {
-                "a": [1 / 3, 2 / 3, 3 / 3],
-                "b": [4 / 3, 5 / 3, 6 / 3],
-            }
-        ).T,
-    )
-
-    with pytest.raises(ValueError):
-        df.cal.normalize("unknown")
 
     pd.testing.assert_frame_equal(
         df.cal.sum_over_segments(df_segments),
