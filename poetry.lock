@@ -1437,8 +1437,8 @@ files = [
 [package.dependencies]
 numpy = [
     {version = ">=1.20.3", markers = "python_version < \"3.10\""},
-    {version = ">=1.21.0", markers = "python_version >= \"3.10\" and python_version < \"3.11\""},
     {version = ">=1.23.2", markers = "python_version >= \"3.11\""},
+    {version = ">=1.21.0", markers = "python_version >= \"3.10\" and python_version < \"3.11\""},
 ]
 python-dateutil = ">=2.8.2"
 pytz = ">=2020.1"
@@ -1829,6 +1829,28 @@ pytest = ">=4.6"
 
 [package.extras]
 testing = ["fields", "hunter", "process-tests", "pytest-xdist", "six", "virtualenv"]
+
+[[package]]
+name = "pytest-mpl"
+version = "0.17.0"
+description = "pytest plugin to help with testing figures output from Matplotlib"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "pytest-mpl-0.17.0.tar.gz", hash = "sha256:fbef05d7e664b4b33452fb698ac188e522791f327de34e7ea37dbdfe9d52cac6"},
+    {file = "pytest_mpl-0.17.0-py3-none-any.whl", hash = "sha256:2ee7cf902ef071e45ae14fe190b3d8a9839c2fd8933e0514bf58df310d8ed66b"},
+]
+
+[package.dependencies]
+Jinja2 = "*"
+matplotlib = "*"
+packaging = "*"
+Pillow = "*"
+pytest = "*"
+
+[package.extras]
+docs = ["matplotlib (==3.6)", "mpl-sphinx-theme (>=3.6.0.dev0)", "sphinx", "sphinx-design"]
+test = ["pytest-cov"]
 
 [[package]]
 name = "python-dateutil"
@@ -2432,4 +2454,4 @@ pymc = ["pymc"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<4.0"
-content-hash = "38ba759ad0b687a35917f65b9c392ff8bb62e7f96702afb1f6c7df0a8904f024"
+content-hash = "14697ff853c503cd3f40ef8f6cec5222af02e8c43e39adbbac98d118ef353e2c"

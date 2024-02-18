@@ -29,7 +29,7 @@ ax = axes[0, 1]
 plot_blank_calendar(
     ax=ax, monday_start=False
 )
-ax.set_title("Monday Start")
+ax.set_title("Sunday Start")
 
 ax = axes[1, 0]
 day_labeler = DayLabeler(days_of_week=["M", "T", "W", "Th", "F", "Sa", "Su"], rotation=0)
