@@ -20,7 +20,7 @@ Examples:
     import pandas as pd
     import latent_calendar
 
-    dates = pd.date_range("2023-01-01", "2023-01-14", freq="H")
+    dates = pd.date_range("2023-01-01", "2023-01-14", freq="h")
     ser = (
         pd.Series(dates)
         .sample(10, random_state=42)
@@ -184,7 +184,7 @@ class SeriesAccessor:
             Create the features for some dates
 
             ```python
-            ser = pd.Series(pd.date_range("2023-01-01", "2023-01-14", freq="H"))
+            ser = pd.Series(pd.date_range("2023-01-01", "2023-01-14", freq="h"))
 
             ser.cal.timestamp_features()
             ```
@@ -366,7 +366,7 @@ class DataFrameAccessor:
             )
 
         return self._obj.div(
-            self._obj.groupby(level=level, axis=1).sum(), level=level, axis=1
+            self._obj.T.groupby(level=level).sum().T, level=level, axis=1
         )
 
     def timestamp_features(

@@ -197,6 +197,7 @@ class CalendarEvent:
         calendar_data = CalendarData(day=0, start=0, end=2.5)
         event = CalendarEvent.from_calendar_data(calendar_data=calendar_data, cmap=...)
         event.plot(ax=ax)
+        ```
 
         Plot a single calendar event from vocab
 
