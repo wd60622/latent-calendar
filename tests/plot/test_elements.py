@@ -83,3 +83,15 @@ def test_separate_events(start: float, end: float, answer: List[CalendarEvent]):
 def test_vocab_contructor(vocab: str) -> None:
     event = CalendarEvent.from_vocab(vocab)
     assert isinstance(event, CalendarEvent)
+
+
+def test_week_overlap() -> None:
+    event = CalendarEvent(day=6, start=5, end=7, days=2)
+
+    assert event.multiweek_tour
+
+    events = event.separate_events()
+    assert events == [
+        CalendarEvent(day=6, start=5, end=7, days=1),
+        CalendarEvent(day=0, start=5, end=7, days=1),
+    ]

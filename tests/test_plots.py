@@ -115,3 +115,24 @@ def test_settings() -> plt.Figure:
 
     fig.set_size_inches(15, 15)
     return fig
+
+
+@pytest.mark.mpl_image_compare
+def test_multiday_event() -> None:
+    fig, ax = plt.subplots(figsize=(10, 10))
+    plot_blank_calendar(ax=ax)
+    event = CalendarEvent(day=0, start=12, duration=2 * 60, days=3)
+    event.plot(ax=ax, label="3 day block", linestyle="--", alpha=0.25)
+
+    event = CalendarEvent(day=2, start=23, duration=2 * 60, days=2)
+    event.plot(
+        ax=ax,
+        label="2 day block into next day",
+        linestyle="--",
+        alpha=0.25,
+        facecolor="red",
+    )
+
+    ax.legend()
+
+    return fig
