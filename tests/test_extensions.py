@@ -17,7 +17,7 @@ from latent_calendar.const import (
 
 @pytest.fixture
 def ser() -> pd.Series:
-    return pd.Series(pd.date_range("2023-01-01", "2023-01-14", freq="H"))
+    return pd.Series(pd.date_range("2023-01-01", "2023-01-14", freq="h"))
 
 
 def test_series_extensions(ser) -> None:
