@@ -66,9 +66,16 @@ legacy_tox_ini = """
     deps = 
         pytest 
         pytest-mpl
+        pytest-cov
         pymc
-    commands = pytest tests --mpl --mpl-baseline-path=tests/baseline
+    commands = pytest 
 """
+
+[tool.pytest.ini_options]
+min_version = "6.0.0"
+addopts = "--mpl --mpl-baseline-path=tests/baseline --cov=latent_calendar --cov-report=xml --cov-report=term-missing"
+testpaths = ["tests"]
+
 
 [build-system]
 requires = ["poetry-core"]
