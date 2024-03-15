@@ -9,6 +9,7 @@ comments: false
 [![Tests](https://github.com/wd60622/latent-calendar/actions/workflows/tests.yml/badge.svg)](https://github.com/wd60622/latent-calendar/actions/workflows/tests.yml)
 [![PyPI version](https://badge.fury.io/py/latent-calendar.svg)](https://badge.fury.io/py/latent-calendar)
 [![docs](https://github.com/wd60622/latent-calendar/actions/workflows/docs.yml/badge.svg)](https://wd60622.github.io/latent-calendar/)
+[![codecov](https://codecov.io/gh/wd60622/latent-calendar/graph/badge.svg?token=WN7MMJPZ1S)](https://codecov.io/gh/wd60622/latent-calendar)
 
 Analyze and model data on a weekly calendar
 
