@@ -7,7 +7,7 @@ coverage:
         threshold: 2%
         base: auto
         paths:
-          - "latent_calendar"
+          - latent_calendar
        # advanced settings
         branches:
           - main
