@@ -72,7 +72,7 @@ legacy_tox_ini = """
 """
 
 [tool.pytest.ini_options]
-min_version = "6.0.0"
+minversion = 6.0
 addopts = "--mpl --mpl-baseline-path=tests/baseline --cov=latent_calendar --cov-report=xml --cov-report=term-missing"
 testpaths = ["tests"]
 

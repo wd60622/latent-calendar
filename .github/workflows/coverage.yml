@@ -1,4 +1,4 @@
-name: Workflow for Codecov conjugate
+name: Workflow for Codecov latent-calendar
 on: [push, pull_request]
 jobs:
   run:
