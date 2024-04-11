@@ -8,6 +8,8 @@ from latent_calendar.generate import wide_format_dataframe
 from latent_calendar.const import TIME_SLOTS
 from latent_calendar.model.latent_calendar import (
     LatentCalendar,
+    MarginalModel,
+    ConjugateModel,
     DummyModel,
 )
 
@@ -53,3 +55,18 @@ def test_default_probabilities(dummy_model) -> None:
 
     assert dummy_model.transform(X).shape == (nrows, dummy_model.n_components)
     assert dummy_model.predict(X).shape == (nrows, TIME_SLOTS)
+
+
+@pytest.mark.parametrize(
+    "estimator",
+    [
+        MarginalModel,
+        ConjugateModel,
+        LatentCalendar,
+        DummyModel,
+    ],
+)
+def test_sklearn_documentation(estimator) -> None:
+    instance = estimator()
+
+    assert "wd60622" in instance._get_doc_link()

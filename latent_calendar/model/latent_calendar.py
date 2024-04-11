@@ -185,3 +185,16 @@ class ConjugateModel(BaseEstimator, TransformerMixin):
 
     def predict(self, X, y=None) -> np.ndarray:
         return self.transform(X, y=y)
+
+
+DOC_LINK_TEMPLATE = "https://wd60622.github.io/latent-calendar/modules/model/#latent_calendar.model.latent_calendar.{class_name}"
+
+
+def url_param_generator(self, estimator):
+    return {"class_name": estimator.__class__.__name__}
+
+
+for klass in [LatentCalendar, DummyModel, MarginalModel, ConjugateModel]:
+    klass._doc_link_module = "latent_calendar"
+    klass._doc_link_template = DOC_LINK_TEMPLATE
+    klass._doc_link_url_param_generator = url_param_generator
