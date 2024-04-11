@@ -24,7 +24,7 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.8,<4.0"
+python = ">=3.9,<4.0"
 pandas = ">=1.0.0"
 scikit-learn = ">=1.0.0"
 matplotlib = "*"
@@ -48,6 +48,7 @@ pytest-cov = "^4.1.0"
 ipython = "8.8.0"
 tox = "^4.11.4"
 pytest-mpl = "^0.17.0"
+jupyter = "^1.0.0"
 
 [tool.tox]
 legacy_tox_ini = """
@@ -56,11 +57,10 @@ legacy_tox_ini = """
     isolated_build = true
     env_list =
         # tox and distutils
-        # py312
+        py312
         py311
         py310
         py39
-        py38
 
     [testenv]
     deps = 
