@@ -351,7 +351,7 @@ class DataFrameAccessor:
 
         """
         value = self._obj.shape[1]
-        return self._obj.div(value)
+        return self._obj.mul(value)
 
     def normalize(self, kind: Literal["max", "probs", "even_rate"]) -> pd.DataFrame:
         """Row-wise operations on DataFrame.
