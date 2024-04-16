@@ -112,8 +112,8 @@ def test_sum_normalize(df) -> None:
 def test_even_rate_normalize(df) -> None:
     df_even_rate_result = pd.DataFrame(
         {
-            "a": [1 / 3, 2 / 3, 3 / 3],
-            "b": [4 / 3, 5 / 3, 6 / 3],
+            "a": [1 * 3, 2 * 3, 3 * 3],
+            "b": [4 * 3, 5 * 3, 6 * 3],
         }
     ).T
 
@@ -124,6 +124,22 @@ def test_even_rate_normalize(df) -> None:
         )
     pd.testing.assert_frame_equal(
         df.cal.divide_by_even_rate(),
+        df_even_rate_result,
+    )
+
+
+def test_even_rate_probability_distribution(df) -> None:
+    df_even_rate_result = pd.DataFrame(
+        {
+            "a": [0.5, 1.0, 1.5],
+            "b": [0.8, 1.0, 1.2],
+        }
+    ).T
+
+    df_probs = df.div(df.sum(axis=1), axis=0)
+
+    pd.testing.assert_frame_equal(
+        df_probs.cal.divide_by_even_rate(),
         df_even_rate_result,
     )
 
