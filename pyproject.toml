@@ -27,8 +27,8 @@ classifiers = [
 python = ">=3.9,<4.0"
 pandas = ">=1.0.0"
 scikit-learn = ">=1.0.0"
-matplotlib = "*"
-conjugate-models = "^0.3.0"
+matplotlib = ">=3.5.0"
+conjugate-models = ">=0.3.0"
 pymc = { version = ">=5.0.0", optional = true }
 
 
