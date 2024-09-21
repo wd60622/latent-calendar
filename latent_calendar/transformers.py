@@ -1,6 +1,6 @@
 """scikit-learn transformers for the data.
 
-```python 
+```python
 from latent_calendar.datasets import load_online_transactions
 
 df = load_online_transactions()
@@ -12,6 +12,7 @@ df_wide = transformers.fit_transform(df)
 
 
 """
+
 from typing import List, Optional, Union
 from datetime import datetime
 import warnings
@@ -278,10 +279,8 @@ class LongToWide(BaseEstimator, TransformerMixin):
         """Unstack the assumed last index as vocab column."""
         X_res = X.loc[:, self.col]
 
-        if self.multiindex:
-            X_res = X_res.unstack(-2).unstack(-1)
-        else:
-            X_res = X_res.unstack()
+        level = [-2, -1] if self.multiindex else -1
+        X_res = X_res.unstack(level=level)
 
         X_res = X_res.reindex(self.columns, axis=1)
         X_res = X_res.fillna(value=0)
