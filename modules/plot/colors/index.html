@@ -18,7 +18,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.36">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.42">
     
     
       
@@ -26,7 +26,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.06209087.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.0253249f.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
@@ -1424,14 +1424,14 @@
     <div class="doc doc-contents first">
 
         <p>Handling the colors in the calendar plots.</p>
-<p>This module provides some helper function and some defaults. However, they might 
+<p>This module provides some helper function and some defaults. However, they might
 not be the best of all purposes.</p>
 <p>Color maps here take floats to a color string. Usually a hex string.</p>
 
 
 <details class="example" open>
   <summary>Example</summary>
-  <p>Create a color map for count data. </p>
+  <p>Create a color map for count data.</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">cmap</span> <span class="o">=</span> <span class="n">create_default_cmap</span><span class="p">(</span><span class="n">max_value</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">cmap</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># &#39;#ffffe5&#39;</span>
@@ -1439,6 +1439,11 @@ not be the best of all purposes.</p>
 </span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">cmap</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="c1"># &#39;#004529&#39;</span>
 </span></code></pre></div>
 </details>
+
+
+
+
+
 
 
   <div class="doc doc-children">
@@ -1481,7 +1486,9 @@ not be the best of all purposes.</p>
       </thead>
       <tbody>
           <tr class="doc-section-item">
-            <td><code>norm</code></td>
+            <td>
+                <code>norm</code>
+            </td>
             <td>
             </td>
             <td>
@@ -1494,7 +1501,9 @@ not be the best of all purposes.</p>
             </td>
           </tr>
           <tr class="doc-section-item">
-            <td><code>cmap</code></td>
+            <td>
+                <code>cmap</code>
+            </td>
             <td>
             </td>
             <td>
@@ -1507,7 +1516,9 @@ not be the best of all purposes.</p>
             </td>
           </tr>
           <tr class="doc-section-item">
-            <td><code>default_cm</code></td>
+            <td>
+                <code>default_cm</code>
+            </td>
             <td>
                   <code><span title="latent_calendar.plot.colors.CM">CM</span></code>
             </td>
@@ -1522,6 +1533,11 @@ not be the best of all purposes.</p>
           </tr>
       </tbody>
     </table>
+
+
+
+
+
 
               <details class="quote">
                 <summary>Source code in <code>latent_calendar/plot/colors.py</code></summary>
@@ -1619,7 +1635,9 @@ not be the best of all purposes.</p>
       </thead>
       <tbody>
           <tr class="doc-section-item">
-            <td><code>ax</code></td>
+            <td>
+                <code>ax</code>
+            </td>
             <td>
             </td>
             <td>
@@ -1696,7 +1714,9 @@ not be the best of all purposes.</p>
       </thead>
       <tbody>
           <tr class="doc-section-item">
-            <td><code>max_value</code></td>
+            <td>
+                <code>max_value</code>
+            </td>
             <td>
                   <code>float</code>
             </td>
@@ -1710,7 +1730,9 @@ not be the best of all purposes.</p>
             </td>
           </tr>
           <tr class="doc-section-item">
-            <td><code>min_value</code></td>
+            <td>
+                <code>min_value</code>
+            </td>
             <td>
                   <code>float</code>
             </td>
@@ -1724,7 +1746,9 @@ not be the best of all purposes.</p>
             </td>
           </tr>
           <tr class="doc-section-item">
-            <td><code>cm</code></td>
+            <td>
+                <code>cm</code>
+            </td>
             <td>
                   <code><span title="typing.Optional">Optional</span>[<span title="latent_calendar.plot.colors.CM">CM</span>]</code>
             </td>
@@ -1938,7 +1962,7 @@ not be the best of all purposes.</p>
         : "light"
 
       // Instruct Giscus to set theme
-      giscus.setAttribute("data-theme", theme) 
+      giscus.setAttribute("data-theme", theme)
     }
 
     // Register event handlers after documented loaded
@@ -2020,7 +2044,7 @@ not be the best of all purposes.</p>
     <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.sections", "navigation.tabs", "navigation.expand", "navigation.top"], "search": "../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.56dfad97.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.83f73b43.min.js"></script>
       
         <script src="../../../javascripts/mathjax.js"></script>
       

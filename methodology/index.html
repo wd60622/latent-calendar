@@ -18,7 +18,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.36">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.42">
     
     
       
@@ -26,7 +26,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.06209087.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.0253249f.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
@@ -1313,20 +1313,20 @@
   <h1>Methodology</h1>
 
 <h2 id="multinomial-distribution-from-events-on-calendar">Multinomial Distribution from Events on Calendar</h2>
-<p>With <span class="arithmatex">\(D = \text{Day of Week}\)</span> with <span class="arithmatex">\(d \in \{\text{Monday}, \text{Tuesday}, ..., \text{Sunday}\}\)</span> and <span class="arithmatex">\(T = \text{Time of Day}\)</span> with <span class="arithmatex">\(t \in [0, 24)\)</span>, we are interested in the joint distribution of the <span class="arithmatex">\(P(D=d, T=t)\)</span>. </p>
+<p>With <span class="arithmatex">\(D = \text{Day of Week}\)</span> with <span class="arithmatex">\(d \in \{\text{Monday}, \text{Tuesday}, ..., \text{Sunday}\}\)</span> and <span class="arithmatex">\(T = \text{Time of Day}\)</span> with <span class="arithmatex">\(t \in [0, 24)\)</span>, we are interested in the joint distribution of the <span class="arithmatex">\(P(D=d, T=t)\)</span>.</p>
 <p>However, if we discretize <span class="arithmatex">\(T\)</span> into <span class="arithmatex">\(H = \text{Hour of Day}\)</span> which takes values <span class="arithmatex">\(h \in \{0, 1, 2, ..., 23\}\)</span>, we get a discrete approximation of the distribution, <span class="arithmatex">\(P[D=d, H=h]\)</span></p>
 <p><img alt="Discrete Approximation" src="../images/discrete-approximation.png" /></p>
-<p>Introducing the number of events, <span class="arithmatex">\(N\)</span>, we can express this quantity as </p>
+<p>Introducing the number of events, <span class="arithmatex">\(N\)</span>, we can express this quantity as</p>
 <div class="arithmatex">\[P[D=d, H=h] = \sum_{n=0}^{\infty} P[N=n] \times P[D=d, H=h | N=n]\]</div>
-<p>having </p>
+<p>having</p>
 <div class="arithmatex">\[\sum_{d, h \in D \times H} N(d, h) = n\]</div>
 <p>where <span class="arithmatex">\(N(d, h)\)</span> is the number of events at <span class="arithmatex">\(D=d\)</span>, <span class="arithmatex">\(H=h\)</span>.</p>
-<p>This is two quantities now: </p>
+<p>This is two quantities now:</p>
 <ol>
 <li>How many events will happen: <span class="arithmatex">\(P[N=n]\)</span></li>
 <li>When on the calendar will these events happen: <span class="arithmatex">\(P[D=d, H=h | N=n]\)</span></li>
 </ol>
-<p>But since the day of week and time of day make up a discrete space of "time slots", we can use the multinomial distribution to model quantity 2. </p>
+<p>But since the day of week and time of day make up a discrete space of "time slots", we can use the multinomial distribution to model quantity 2.</p>
 <p><img alt="Time Slots" src="../images/time-slots.png" /></p>
 <h2 id="linking-to-latent-dirichlet-allocation">Linking to Latent Dirichlet Allocation</h2>
 <p>The generative model for Latent Dirichlet Allocation is a mixture of multinomial distributions allowing us to introduce <span class="arithmatex">\(c\)</span> calendar distributions.</p>
@@ -1335,7 +1335,7 @@
 <li><span class="arithmatex">\(P[L=l | N=n]\)</span> is the probability of being latent component</li>
 <li><span class="arithmatex">\(P[D=d, H=h | L=l, N=n]\)</span> is the calendar from latent component <span class="arithmatex">\(l\)</span></li>
 </ol>
-<p>By introducing latent calendar distributions, we introduce correlations between the time slots. </p>
+<p>By introducing latent calendar distributions, we introduce correlations between the time slots.</p>
 
 
 
@@ -1385,7 +1385,7 @@
         : "light"
 
       // Instruct Giscus to set theme
-      giscus.setAttribute("data-theme", theme) 
+      giscus.setAttribute("data-theme", theme)
     }
 
     // Register event handlers after documented loaded
@@ -1467,7 +1467,7 @@
     <script id="__config" type="application/json">{"base": "..", "features": ["navigation.sections", "navigation.tabs", "navigation.expand", "navigation.top"], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.56dfad97.min.js"></script>
+      <script src="../assets/javascripts/bundle.83f73b43.min.js"></script>
       
         <script src="../javascripts/mathjax.js"></script>
       

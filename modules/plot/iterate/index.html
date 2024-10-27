@@ -18,7 +18,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.36">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.42">
     
     
       
@@ -26,7 +26,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.06209087.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.0253249f.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
@@ -1393,12 +1393,12 @@
 <a id="latent_calendar.plot.iterate"></a>
     <div class="doc doc-contents first">
 
-        <p>Generalize the iteration to support different data formats. Namely, </p>
+        <p>Generalize the iteration to support different data formats. Namely,</p>
 <ul>
-<li>2d numpy array </li>
+<li>2d numpy array</li>
 <li>1d numpy array (long format)</li>
-<li>pandas Series </li>
-<li>pandas DataFrame with various columns </li>
+<li>pandas Series</li>
+<li>pandas DataFrame with various columns</li>
 </ul>
 <p>This powers the calendar plot and is passed into the <code>plot_calendar</code> function.</p>
 
@@ -1428,9 +1428,14 @@
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">7</span><span class="p">,</span> <span class="mi">24</span> <span class="o">*</span> <span class="mi">2</span><span class="p">))</span>
 </span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">plot_calendar</span><span class="p">(</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    <span class="n">iterate_matrix</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> 
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    <span class="n">iterate_matrix</span><span class="p">(</span><span class="n">data</span><span class="p">),</span>
 </span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="p">)</span>
 </span></code></pre></div>
+
+
+
+
+
 
 
 
@@ -1462,6 +1467,11 @@
 
 
         <p>All the data that goes into calendar plot.</p>
+
+
+
+
+
 
               <details class="quote">
                 <summary>Source code in <code>latent_calendar/plot/iterate.py</code></summary>
@@ -1524,6 +1534,11 @@
 
 
         <p>Small wrapper to hold the column mapping in DataFrame.</p>
+
+
+
+
+
 
               <details class="quote">
                 <summary>Source code in <code>latent_calendar/plot/iterate.py</code></summary>
@@ -1612,6 +1627,11 @@
 
 
         <p>Small wrapper to hold the column mapping in the DataFrame.</p>
+
+
+
+
+
 
               <details class="quote">
                 <summary>Source code in <code>latent_calendar/plot/iterate.py</code></summary>
@@ -1710,7 +1730,9 @@
       </thead>
       <tbody>
           <tr class="doc-section-item">
-            <td><code>df</code></td>
+            <td>
+                <code>df</code>
+            </td>
             <td>
                   <code><span title="pandas.DataFrame">DataFrame</span></code>
             </td>
@@ -1724,7 +1746,9 @@
             </td>
           </tr>
           <tr class="doc-section-item">
-            <td><code>config</code></td>
+            <td>
+                <code>config</code>
+            </td>
             <td>
                   <code><span title="latent_calendar.plot.iterate.DataFrameConfig">DataFrameConfig</span></code>
             </td>
@@ -1881,7 +1905,7 @@
         : "light"
 
       // Instruct Giscus to set theme
-      giscus.setAttribute("data-theme", theme) 
+      giscus.setAttribute("data-theme", theme)
     }
 
     // Register event handlers after documented loaded
@@ -1963,7 +1987,7 @@
     <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.sections", "navigation.tabs", "navigation.expand", "navigation.top"], "search": "../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.56dfad97.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.83f73b43.min.js"></script>
       
         <script src="../../../javascripts/mathjax.js"></script>
       
