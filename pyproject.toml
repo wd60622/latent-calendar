@@ -24,11 +24,11 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.9,<4.0"
+python = ">=3.10,<4.0"
 pandas = ">=1.0.0"
 scikit-learn = ">=1.0.0"
 matplotlib = ">=3.5.0"
-conjugate-models = ">=0.3.0"
+conjugate-models = ">=0.8.0"
 pymc = { version = ">=5.0.0", optional = true }
 
 [tool.poetry.extras]
@@ -57,7 +57,6 @@ legacy_tox_ini = """
         py312
         py311
         py310
-        py39
 
     [testenv]
     deps =
