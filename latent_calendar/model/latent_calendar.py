@@ -185,7 +185,7 @@ class ConjugateModel(BaseEstimator, TransformerMixin):
         return self
 
     def transform(self, X, y=None) -> np.ndarray:
-        return multinomial_dirichlet(X, self.prior_).dist.mean()
+        return multinomial_dirichlet(x=X, prior=self.prior_).dist.mean()
 
     def predict(self, X, y=None) -> np.ndarray:
         return self.transform(X, y=y)
