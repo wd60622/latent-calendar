@@ -12,6 +12,7 @@ X_pred = model.predict(X)
 
 
 """
+
 from typing import Optional
 
 import numpy as np

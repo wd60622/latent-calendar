@@ -1,5 +1,5 @@
 ---
-comments: true 
+comments: true
 ---
 # Bikes in Chicago
 
@@ -27,9 +27,9 @@ CA8E2C38AF641DFB                NaN              NaN  electric_bike 2023-06-30 0
 FDBCEFE7890F7262                NaN              NaN  electric_bike 2023-06-30 16:29:48 2023-06-30 16:38:51        member
 ```
 
-This dataset is two weeks of data starting at the end of June 2023. We can easily see this by plotting it as a calendar grouped by the week of year. 
+This dataset is two weeks of data starting at the end of June 2023. We can easily see this by plotting it as a calendar grouped by the week of year.
 
-```python 
+```python
 # Map the week number to a human readable label
 df["week_number"] = df["started_at"].dt.isocalendar().week
 
@@ -125,12 +125,12 @@ plot_storms(axes[2], axes[3])
 plt.show()
 ```
 
-We can see that the holiday weekend has heavy volume from the casual riders showing on the Monday and Tuesday of the holiday weekend. Not only that, but the members that use the bikes heavily to commute shift their usage with this holiday too. 
+We can see that the holiday weekend has heavy volume from the casual riders showing on the Monday and Tuesday of the holiday weekend. Not only that, but the members that use the bikes heavily to commute shift their usage with this holiday too.
 
 ![Member by Week](../../images/member-by-week-w-storm.png)
 
 
-The effect of rain can be investigated by sum the trips that happen during the day time. We can do this by creating a segment for each day of the week between the hours of 7am and 6pm, the time of the Sunday storm. 
+The effect of rain can be investigated by sum the trips that happen during the day time. We can do this by creating a segment for each day of the week between the hours of 7am and 6pm, the time of the Sunday storm.
 
 ```python
 from latent_calendar.vocab import DOWHour
@@ -165,10 +165,10 @@ Visualizing this data, we can see the heavy impact of the Sunday weather for cas
 
 
 
-def replace_index(ser: pd.Series, index: pd.Index) -> pd.Series: 
-    ser.index = index 
+def replace_index(ser: pd.Series, index: pd.Index) -> pd.Series:
+    ser.index = index
     return ser
-    
+
 start_date = df["started_at"].min().date()
 end_date = df["started_at"].max().date()
 dates = pd.date_range(start_date, end_date, freq="D")

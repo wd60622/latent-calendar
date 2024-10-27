@@ -1,13 +1,13 @@
-"""Example datasets for latent_calendar. 
+"""Example datasets for latent_calendar.
 
 All datasets are loaded from the web and cached locally if desired with the `local_save` argument.
 
 The datasets all include one or more columns that represent a datetime that can be used for calendar analysis.
 
-Examples: 
+Examples:
     Load the chicago bikes dataset:
 
-    ```python 
+    ```python
     from latent_calendar.datasets import load_chicago_bikes
 
     df = load_chicago_bikes()
@@ -25,6 +25,7 @@ Examples:
     ```
 
 """
+
 from pathlib import Path
 
 import pandas as pd

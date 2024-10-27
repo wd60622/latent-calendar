@@ -1,12 +1,12 @@
 """Handling the colors in the calendar plots.
 
-This module provides some helper function and some defaults. However, they might 
+This module provides some helper function and some defaults. However, they might
 not be the best of all purposes.
 
 Color maps here take floats to a color string. Usually a hex string.
 
 Example:
-    Create a color map for count data. 
+    Create a color map for count data.
 
     ```python
     cmap = create_default_cmap(max_value=10)

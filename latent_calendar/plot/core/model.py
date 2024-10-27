@@ -1,4 +1,5 @@
 """Plots including a model."""
+
 from typing import Iterable, Optional
 
 import numpy as np

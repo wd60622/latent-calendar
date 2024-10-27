@@ -26,11 +26,11 @@ CA8E2C38AF641DFB                NaN              NaN  electric_bike 2023-06-30 0
 FDBCEFE7890F7262                NaN              NaN  electric_bike 2023-06-30 16:29:48 2023-06-30 16:38:51        member
 ```
 
-## Calendar Data 
+## Calendar Data
 
 Aggregate event level data into wide format calendar data with the [`cal.aggregate_events`](./../modules/extensions.md#latent_calendar.extensions.DataFrameAccessor.aggregate_events) method. This results in 7 * 24 = 168 columns, one for each hour of the week.
 
-    
+
 ```python
 df_member_casual = df.cal.aggregate_events("member_casual", "started_at")
 ```

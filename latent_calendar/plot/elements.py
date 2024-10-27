@@ -1,8 +1,9 @@
-"""The specific elements on the calendar plot. 
+"""The specific elements on the calendar plot.
 
-Includes x-axis, y-axis, and their settings, as well as the calendar events. 
+Includes x-axis, y-axis, and their settings, as well as the calendar events.
 
 """
+
 import calendar
 from dataclasses import dataclass, field, replace
 from typing import List, Optional, Tuple
