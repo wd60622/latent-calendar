@@ -8,7 +8,7 @@ homepage = "https://wd60622.github.io/latent-calendar/"
 documentation = "https://wd60622.github.io/latent-calendar/"
 repository = "https://github.com/wd60622/latent-calendar/"
 packages = [
-    {include = "latent_calendar"}, 
+    {include = "latent_calendar"},
     {include = "latent_calendar/py.typed"}
 ]
 classifiers = [
@@ -60,12 +60,12 @@ legacy_tox_ini = """
         py39
 
     [testenv]
-    deps = 
-        pytest 
+    deps =
+        pytest
         pytest-mpl
         pytest-cov
         pymc
-    commands = pytest 
+    commands = pytest
 """
 
 [tool.pytest.ini_options]

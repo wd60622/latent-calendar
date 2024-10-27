@@ -1,13 +1,13 @@
-"""Generalize the iteration to support different data formats. Namely, 
+"""Generalize the iteration to support different data formats. Namely,
 
-- 2d numpy array 
+- 2d numpy array
 - 1d numpy array (long format)
-- pandas Series 
-- pandas DataFrame with various columns 
+- pandas Series
+- pandas DataFrame with various columns
 
 This powers the calendar plot and is passed into the `plot_calendar` function.
 
-Examples: 
+Examples:
     Plot calendar based on 1d numpy array.
 
     ```python
@@ -40,7 +40,7 @@ Examples:
 
     data = np.ones((7, 24 * 2))
     plot_calendar(
-        iterate_matrix(data), 
+        iterate_matrix(data),
     )
     ```
 

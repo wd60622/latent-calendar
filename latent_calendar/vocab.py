@@ -1,6 +1,5 @@
-"""Operations and relationship with the "vocab" of the default time slots.
+"""Operations and relationship with the "vocab" of the default time slots."""
 
-"""
 from dataclasses import dataclass
 import calendar
 from typing import Callable, Dict, Tuple, Optional

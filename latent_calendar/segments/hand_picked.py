@@ -1,13 +1,13 @@
 """Create hand picked segments on the calendar.
 
 
-Examples: 
-    Create some segments for a calendar: 
+Examples:
+    Create some segments for a calendar:
 
     ```python
     mornings = create_box_segment(
         day_start=0, day_end=7, hour_start=6, hour_end=11, name="Mornings"
-    ) 
+    )
     afternoons = create_box_segment(
         day_start=0, day_end=7, hour_start=11, hour_end=16, name="Afternoons"
     )
@@ -27,6 +27,7 @@ Examples:
     ![New Segments](./../images/new-segments.png)
 
 """
+
 import itertools
 from typing import List, Optional, Union
 

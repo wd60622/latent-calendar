@@ -2,19 +2,19 @@
 
 Provides a `cal` accessor to `DataFrame` and `Series` instances for easy transformation and plotting after import of `latent_calendar`.
 
-Functionality includes: 
+Functionality includes:
 
 - aggregation of events to wide format
 - convolutions of wide formats
 - making transformations and predictions with models
 - plotting of events, predictions, and comparisons as calendars
 
-Each `DataFrame` will be either at event level or an aggregated wide format. 
+Each `DataFrame` will be either at event level or an aggregated wide format.
 
-Methods that end in `row` or `by_row` will be for wide format DataFrames and will plot each row as a calendar. 
+Methods that end in `row` or `by_row` will be for wide format DataFrames and will plot each row as a calendar.
 
-Examples: 
-    Plotting an event level Series as a calendar 
+Examples:
+    Plotting an event level Series as a calendar
 
     ```python
     import pandas as pd
@@ -53,9 +53,9 @@ Examples:
 
     ![Customer Transactions](./../images/customer-transactions.png)
 
-    Train a model and plot predictions 
+    Train a model and plot predictions
 
-    ```python 
+    ```python
     from latent_calendar import LatentCalendar
 
     model = LatentCalendar(n_components=5, random_state=42)
@@ -72,6 +72,7 @@ Examples:
 
 
 """
+
 from typing import List, Optional, Union, Literal
 
 import pandas as pd

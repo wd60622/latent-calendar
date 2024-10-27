@@ -1,4 +1,5 @@
 """Generate some fake data for various purposes."""
+
 from typing import Optional, Tuple, Union
 
 import numpy as np

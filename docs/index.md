@@ -1,5 +1,5 @@
 ---
-hide: 
+hide:
     - navigation
 comments: false
 ---
@@ -15,15 +15,15 @@ Analyze and model data on a weekly calendar
 
 ## Installation
 
-Install from PyPI: 
+Install from PyPI:
 
 ```bash
 pip install latent-calendar
 ```
 
-Or install directly from GitHub for the latest functionality. 
+Or install directly from GitHub for the latest functionality.
 
-## Features 
+## Features
 
 - Integrated automatically into `pandas` with [`cal` attribute on DataFrames and Series](./modules/extensions.md)
 - Compatible with [`scikit-learn` pipelines and transformers](./examples/model/sklearn-compat.md)

@@ -1,17 +1,16 @@
-test: 
+test:
 	poetry run pytest
 
-test.download: 
-	CI=INTEGRATION poetry run pytest -k test_load_func 
+test.download:
+	CI=INTEGRATION poetry run pytest -k test_load_func
 
-cov: 
+cov:
 	poetry run pytest --cov-report html
-	open htmlcov/index.html 
+	open htmlcov/index.html
 
-format: 
+format:
 	poetry run pre-commit run --all-files
 
-html: 
+html:
 	open http://localhost:8000/
 	poetry run mkdocs serve
-	
