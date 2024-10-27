@@ -15,8 +15,11 @@ X_pred = model.predict(X)
 
 from typing import Optional
 
+from packaging.version import Version
+
 import numpy as np
 
+from sklearn import __version__ as sklearn_version
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.decomposition import LatentDirichletAllocation as BaseLDA
 
@@ -191,8 +194,21 @@ class ConjugateModel(BaseEstimator, TransformerMixin):
 DOC_LINK_TEMPLATE = "https://wd60622.github.io/latent-calendar/modules/model/#latent_calendar.model.latent_calendar.{class_name}"
 
 
-def url_param_generator(self, estimator):
+def url_param_generator_old(self, estimator):
     return {"class_name": estimator.__class__.__name__}
+
+
+def url_param_generator_new(self):
+    return {"class_name": self.__class__.__name__}
+
+
+switch_version = Version("1.5.2")
+current_version = Version(sklearn_version)
+url_param_generator = (
+    url_param_generator_new
+    if current_version >= switch_version
+    else url_param_generator_old
+)
 
 
 for klass in [LatentCalendar, DummyModel, MarginalModel, ConjugateModel]:
