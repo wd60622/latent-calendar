@@ -29,7 +29,6 @@ Examples:
 """
 
 import itertools
-from typing import List, Optional, Union
 
 import pandas as pd
 import numpy as np
@@ -84,7 +83,7 @@ def create_series_for_range(start: DOWHour, end: DOWHour) -> pd.Series:
     return ser.astype(int)
 
 
-def get_vocab_for_range(start: DOWHour, end: DOWHour) -> List[str]:
+def get_vocab_for_range(start: DOWHour, end: DOWHour) -> list[str]:
     """Get the vocab for a range of hours."""
     return (
         create_series_for_range(start=start, end=end)
@@ -103,7 +102,7 @@ def create_box_segment(
     day_end: int,
     hour_start: int,
     hour_end: int,
-    name: Optional[str] = None,
+    name: str | None = None,
 ) -> pd.Series:
     """Programmatically make segment of box described by inputs."""
     ser = create_blank_segment_series()
@@ -118,10 +117,10 @@ def create_box_segment(
     return ser.rename(name)
 
 
-SEGMENT = Union[pd.Series, pd.DataFrame]
+SEGMENT = pd.Series | pd.DataFrame
 
 
-def stack_segments(segments: List[SEGMENT]) -> pd.DataFrame:
+def stack_segments(segments: list[SEGMENT]) -> pd.DataFrame:
     """Stack segments into a single dataframe."""
     segments = [seg.T if isinstance(seg, pd.DataFrame) else seg for seg in segments]
     return pd.concat(segments, axis=1).T

@@ -1,7 +1,5 @@
 """Generate some fake data for various purposes."""
 
-from typing import Optional, Tuple, Union
-
 import numpy as np
 import pandas as pd
 
@@ -28,7 +26,9 @@ except ImportError:
 
 
 def wide_format_dataframe(
-    n_rows: int, rate: float = 1.0, random_state: Optional[int] = None
+    n_rows: int,
+    rate: float = 1.0,
+    random_state: int | None = None,
 ) -> pd.DataFrame:
     """Generate some data from Poisson distribution.
 
@@ -50,8 +50,10 @@ def wide_format_dataframe(
 
 
 def define_single_user_samples(
-    travel_style, time_slot_styles: TensorVariable, n_samples: int
-) -> Tuple[TensorVariable, TensorVariable]:
+    travel_style,
+    time_slot_styles: TensorVariable,
+    n_samples: int,
+) -> tuple[TensorVariable, TensorVariable]:
     travel_style_user = pm.Categorical.dist(p=travel_style, shape=n_samples)
     time_slots = pm.Multinomial.dist(p=time_slot_styles[travel_style_user], n=1)
 
@@ -59,11 +61,11 @@ def define_single_user_samples(
 
 
 def sample_from_lda(
-    components_prior: Union[np.ndarray, TensorVariable],
-    components_time_slots_prior: Union[np.ndarray, TensorVariable],
+    components_prior: np.ndarray | TensorVariable,
+    components_time_slots_prior: np.ndarray | TensorVariable,
     n_samples: np.ndarray,
-    random_state: Optional[int] = None,
-) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    random_state: int | None = None,
+) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Sample from LDA model.
 
     Args:
