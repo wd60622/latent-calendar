@@ -13,7 +13,6 @@ df_wide = transformers.fit_transform(df)
 
 """
 
-from typing import List, Optional, Union
 from datetime import datetime
 import warnings
 
@@ -33,7 +32,7 @@ from latent_calendar.const import (
 )
 
 
-def prop_into_day(dt: Union[datetime, DatetimeProperties]) -> Union[float, pd.Series]:
+def prop_into_day(dt: datetime | DatetimeProperties) -> float | pd.Series:
     """Returns the proportion into the day from datetime like object.
 
     0.0 is midnight and 1.0 is midnight again.
@@ -216,7 +215,7 @@ class VocabAggregation(BaseEstimator, TransformerMixin):
 
     """
 
-    def __init__(self, groups: List[str], cols: Optional[List[str]] = None) -> None:
+    def __init__(self, groups: list[str], cols: list[str] | None = None) -> None:
         self.groups = groups
         self.cols = cols
 
@@ -268,7 +267,7 @@ class LongToWide(BaseEstimator, TransformerMixin):
         return self
 
     @property
-    def columns(self) -> List[str]:
+    def columns(self) -> list[str]:
         return create_full_vocab(
             days_in_week=DAYS_IN_WEEK,
             minutes=self.minutes,
@@ -311,8 +310,8 @@ class RawToVocab(BaseEstimator, TransformerMixin):
         id_col: str,
         timestamp_col: str,
         minutes: int = 60,
-        additional_groups: Optional[List[str]] = None,
-        cols: Optional[List[str]] = None,
+        additional_groups: list[str] | None = None,
+        cols: list[str] | None = None,
         as_multiindex: bool = True,
     ) -> None:
         self.id_col = id_col
@@ -364,7 +363,7 @@ def create_raw_to_vocab_transformer(
     id_col: str,
     timestamp_col: str,
     minutes: int = 60,
-    additional_groups: Optional[List[str]] = None,
+    additional_groups: list[str] | None = None,
     as_multiindex: bool = True,
 ) -> RawToVocab:
     """Wrapper to create the transformer from the configuration options.
