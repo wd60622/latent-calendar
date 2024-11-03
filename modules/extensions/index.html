@@ -18,7 +18,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.42">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.43">
     
     
       
@@ -2445,7 +2445,7 @@
 </span><span id="__span-0-393"><a id="__codelineno-0-393" name="__codelineno-0-393"></a>    <span class="k">def</span> <span class="nf">conditional_probabilities</span><span class="p">(</span>
 </span><span id="__span-0-394"><a id="__codelineno-0-394" name="__codelineno-0-394"></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="__span-0-395"><a id="__codelineno-0-395" name="__codelineno-0-395"></a>        <span class="o">*</span><span class="p">,</span>
-</span><span id="__span-0-396"><a id="__codelineno-0-396" name="__codelineno-0-396"></a>        <span class="n">level</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span id="__span-0-396"><a id="__codelineno-0-396" name="__codelineno-0-396"></a>        <span class="n">level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
 </span><span id="__span-0-397"><a id="__codelineno-0-397" name="__codelineno-0-397"></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 </span><span id="__span-0-398"><a id="__codelineno-0-398" name="__codelineno-0-398"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate conditional probabilities for each row over the level.</span>
 </span><span id="__span-0-399"><a id="__codelineno-0-399" name="__codelineno-0-399"></a>
@@ -2530,7 +2530,7 @@
 </span><span id="__span-0-478"><a id="__codelineno-0-478" name="__codelineno-0-478"></a>
 </span><span id="__span-0-479"><a id="__codelineno-0-479" name="__codelineno-0-479"></a>    <span class="k">def</span> <span class="nf">aggregate_events</span><span class="p">(</span>
 </span><span id="__span-0-480"><a id="__codelineno-0-480" name="__codelineno-0-480"></a>        <span class="bp">self</span><span class="p">,</span>
-</span><span id="__span-0-481"><a id="__codelineno-0-481" name="__codelineno-0-481"></a>        <span class="n">by</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+</span><span id="__span-0-481"><a id="__codelineno-0-481" name="__codelineno-0-481"></a>        <span class="n">by</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
 </span><span id="__span-0-482"><a id="__codelineno-0-482" name="__codelineno-0-482"></a>        <span class="n">timestamp_col</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 </span><span id="__span-0-483"><a id="__codelineno-0-483" name="__codelineno-0-483"></a>        <span class="n">minutes</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span><span class="p">,</span>
 </span><span id="__span-0-484"><a id="__codelineno-0-484" name="__codelineno-0-484"></a>        <span class="n">as_multiindex</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
@@ -2637,15 +2637,15 @@
 </span><span id="__span-0-585"><a id="__codelineno-0-585" name="__codelineno-0-585"></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="__span-0-586"><a id="__codelineno-0-586" name="__codelineno-0-586"></a>        <span class="n">start_col</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 </span><span id="__span-0-587"><a id="__codelineno-0-587" name="__codelineno-0-587"></a>        <span class="o">*</span><span class="p">,</span>
-</span><span id="__span-0-588"><a id="__codelineno-0-588" name="__codelineno-0-588"></a>        <span class="n">end_col</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="__span-0-589"><a id="__codelineno-0-589" name="__codelineno-0-589"></a>        <span class="n">duration</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-588"><a id="__codelineno-0-588" name="__codelineno-0-588"></a>        <span class="n">end_col</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-589"><a id="__codelineno-0-589" name="__codelineno-0-589"></a>        <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="__span-0-590"><a id="__codelineno-0-590" name="__codelineno-0-590"></a>        <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="__span-0-591"><a id="__codelineno-0-591" name="__codelineno-0-591"></a>        <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 </span><span id="__span-0-592"><a id="__codelineno-0-592" name="__codelineno-0-592"></a>        <span class="n">day_labeler</span><span class="p">:</span> <span class="n">DayLabeler</span> <span class="o">=</span> <span class="n">DayLabeler</span><span class="p">(),</span>
 </span><span id="__span-0-593"><a id="__codelineno-0-593" name="__codelineno-0-593"></a>        <span class="n">time_labeler</span><span class="p">:</span> <span class="n">TimeLabeler</span> <span class="o">=</span> <span class="n">TimeLabeler</span><span class="p">(),</span>
 </span><span id="__span-0-594"><a id="__codelineno-0-594" name="__codelineno-0-594"></a>        <span class="n">grid_lines</span><span class="p">:</span> <span class="n">GridLines</span> <span class="o">=</span> <span class="n">GridLines</span><span class="p">(),</span>
 </span><span id="__span-0-595"><a id="__codelineno-0-595" name="__codelineno-0-595"></a>        <span class="n">monday_start</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-</span><span id="__span-0-596"><a id="__codelineno-0-596" name="__codelineno-0-596"></a>        <span class="n">ax</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-596"><a id="__codelineno-0-596" name="__codelineno-0-596"></a>        <span class="n">ax</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="__span-0-597"><a id="__codelineno-0-597" name="__codelineno-0-597"></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">:</span>
 </span><span id="__span-0-598"><a id="__codelineno-0-598" name="__codelineno-0-598"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Plot DataFrame of timestamps as a calendar.</span>
 </span><span id="__span-0-599"><a id="__codelineno-0-599" name="__codelineno-0-599"></a>
@@ -2681,8 +2681,8 @@
 </span><span id="__span-0-629"><a id="__codelineno-0-629" name="__codelineno-0-629"></a>        <span class="n">start_col</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 </span><span id="__span-0-630"><a id="__codelineno-0-630" name="__codelineno-0-630"></a>        <span class="n">grid_col</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 </span><span id="__span-0-631"><a id="__codelineno-0-631" name="__codelineno-0-631"></a>        <span class="o">*</span><span class="p">,</span>
-</span><span id="__span-0-632"><a id="__codelineno-0-632" name="__codelineno-0-632"></a>        <span class="n">end_col</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="__span-0-633"><a id="__codelineno-0-633" name="__codelineno-0-633"></a>        <span class="n">duration</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-632"><a id="__codelineno-0-632" name="__codelineno-0-632"></a>        <span class="n">end_col</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-633"><a id="__codelineno-0-633" name="__codelineno-0-633"></a>        <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="__span-0-634"><a id="__codelineno-0-634" name="__codelineno-0-634"></a>        <span class="n">day_labeler</span><span class="p">:</span> <span class="n">DayLabeler</span> <span class="o">=</span> <span class="n">DayLabeler</span><span class="p">(),</span>
 </span><span id="__span-0-635"><a id="__codelineno-0-635" name="__codelineno-0-635"></a>        <span class="n">time_labeler</span><span class="p">:</span> <span class="n">TimeLabeler</span> <span class="o">=</span> <span class="n">TimeLabeler</span><span class="p">(),</span>
 </span><span id="__span-0-636"><a id="__codelineno-0-636" name="__codelineno-0-636"></a>        <span class="n">grid_lines</span><span class="p">:</span> <span class="n">GridLines</span> <span class="o">=</span> <span class="n">GridLines</span><span class="p">(),</span>
@@ -2722,8 +2722,8 @@
 </span><span id="__span-0-670"><a id="__codelineno-0-670" name="__codelineno-0-670"></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="__span-0-671"><a id="__codelineno-0-671" name="__codelineno-0-671"></a>        <span class="o">*</span><span class="p">,</span>
 </span><span id="__span-0-672"><a id="__codelineno-0-672" name="__codelineno-0-672"></a>        <span class="n">max_cols</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
-</span><span id="__span-0-673"><a id="__codelineno-0-673" name="__codelineno-0-673"></a>        <span class="n">title_func</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TITLE_FUNC</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="__span-0-674"><a id="__codelineno-0-674" name="__codelineno-0-674"></a>        <span class="n">cmaps</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">CMAP</span><span class="p">,</span> <span class="n">ColorMap</span><span class="p">,</span> <span class="n">CMAP_GENERATOR</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-673"><a id="__codelineno-0-673" name="__codelineno-0-673"></a>        <span class="n">title_func</span><span class="p">:</span> <span class="n">TITLE_FUNC</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-674"><a id="__codelineno-0-674" name="__codelineno-0-674"></a>        <span class="n">cmaps</span><span class="p">:</span> <span class="n">CMAP</span> <span class="o">|</span> <span class="n">ColorMap</span> <span class="o">|</span> <span class="n">CMAP_GENERATOR</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="__span-0-675"><a id="__codelineno-0-675" name="__codelineno-0-675"></a>        <span class="n">day_labeler</span><span class="p">:</span> <span class="n">DayLabeler</span> <span class="o">=</span> <span class="n">DayLabeler</span><span class="p">(),</span>
 </span><span id="__span-0-676"><a id="__codelineno-0-676" name="__codelineno-0-676"></a>        <span class="n">time_labeler</span><span class="p">:</span> <span class="n">TimeLabeler</span> <span class="o">=</span> <span class="n">TimeLabeler</span><span class="p">(),</span>
 </span><span id="__span-0-677"><a id="__codelineno-0-677" name="__codelineno-0-677"></a>        <span class="n">grid_lines</span><span class="p">:</span> <span class="n">GridLines</span> <span class="o">=</span> <span class="n">GridLines</span><span class="p">(),</span>
@@ -2896,7 +2896,7 @@
                 <code>by</code>
             </td>
             <td>
-                  <code><span title="typing.Union">Union</span>[str, <span title="typing.List">List</span>[str]]</code>
+                  <code>str | list[str]</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -3019,7 +3019,7 @@
 <span class="normal"><a href="#__codelineno-0-512">512</a></span>
 <span class="normal"><a href="#__codelineno-0-513">513</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-479"><a id="__codelineno-0-479" name="__codelineno-0-479"></a><span class="k">def</span> <span class="nf">aggregate_events</span><span class="p">(</span>
 </span><span id="__span-0-480"><a id="__codelineno-0-480" name="__codelineno-0-480"></a>    <span class="bp">self</span><span class="p">,</span>
-</span><span id="__span-0-481"><a id="__codelineno-0-481" name="__codelineno-0-481"></a>    <span class="n">by</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+</span><span id="__span-0-481"><a id="__codelineno-0-481" name="__codelineno-0-481"></a>    <span class="n">by</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
 </span><span id="__span-0-482"><a id="__codelineno-0-482" name="__codelineno-0-482"></a>    <span class="n">timestamp_col</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 </span><span id="__span-0-483"><a id="__codelineno-0-483" name="__codelineno-0-483"></a>    <span class="n">minutes</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span><span class="p">,</span>
 </span><span id="__span-0-484"><a id="__codelineno-0-484" name="__codelineno-0-484"></a>    <span class="n">as_multiindex</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
@@ -3088,7 +3088,7 @@
                 <code>level</code>
             </td>
             <td>
-                  <code><span title="typing.Union">Union</span>[int, str]</code>
+                  <code>int | str</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -3153,7 +3153,7 @@ Default 0 or day_of_week</p>
 <span class="normal"><a href="#__codelineno-0-415">415</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-393"><a id="__codelineno-0-393" name="__codelineno-0-393"></a><span class="k">def</span> <span class="nf">conditional_probabilities</span><span class="p">(</span>
 </span><span id="__span-0-394"><a id="__codelineno-0-394" name="__codelineno-0-394"></a>    <span class="bp">self</span><span class="p">,</span>
 </span><span id="__span-0-395"><a id="__codelineno-0-395" name="__codelineno-0-395"></a>    <span class="o">*</span><span class="p">,</span>
-</span><span id="__span-0-396"><a id="__codelineno-0-396" name="__codelineno-0-396"></a>    <span class="n">level</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span id="__span-0-396"><a id="__codelineno-0-396" name="__codelineno-0-396"></a>    <span class="n">level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
 </span><span id="__span-0-397"><a id="__codelineno-0-397" name="__codelineno-0-397"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 </span><span id="__span-0-398"><a id="__codelineno-0-398" name="__codelineno-0-398"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate conditional probabilities for each row over the level.</span>
 </span><span id="__span-0-399"><a id="__codelineno-0-399" name="__codelineno-0-399"></a>
@@ -3548,7 +3548,7 @@ Default 0 or day_of_week</p>
                 <code>end_col</code>
             </td>
             <td>
-                  <code><span title="typing.Optional">Optional</span>[str]</code>
+                  <code>str | None</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -3564,7 +3564,7 @@ Default 0 or day_of_week</p>
                 <code>duration</code>
             </td>
             <td>
-                  <code><span title="typing.Optional">Optional</span>[int]</code>
+                  <code>int | None</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -3627,7 +3627,7 @@ Default 0 or day_of_week</p>
                 <code>ax</code>
             </td>
             <td>
-                  <code><span title="typing.Optional">Optional</span>[<span title="matplotlib.pyplot.Axes">Axes</span>]</code>
+                  <code><span title="matplotlib.pyplot.Axes">Axes</span> | None</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -3711,15 +3711,15 @@ Default 0 or day_of_week</p>
 </span><span id="__span-0-585"><a id="__codelineno-0-585" name="__codelineno-0-585"></a>    <span class="bp">self</span><span class="p">,</span>
 </span><span id="__span-0-586"><a id="__codelineno-0-586" name="__codelineno-0-586"></a>    <span class="n">start_col</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 </span><span id="__span-0-587"><a id="__codelineno-0-587" name="__codelineno-0-587"></a>    <span class="o">*</span><span class="p">,</span>
-</span><span id="__span-0-588"><a id="__codelineno-0-588" name="__codelineno-0-588"></a>    <span class="n">end_col</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="__span-0-589"><a id="__codelineno-0-589" name="__codelineno-0-589"></a>    <span class="n">duration</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-588"><a id="__codelineno-0-588" name="__codelineno-0-588"></a>    <span class="n">end_col</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-589"><a id="__codelineno-0-589" name="__codelineno-0-589"></a>    <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="__span-0-590"><a id="__codelineno-0-590" name="__codelineno-0-590"></a>    <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="__span-0-591"><a id="__codelineno-0-591" name="__codelineno-0-591"></a>    <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 </span><span id="__span-0-592"><a id="__codelineno-0-592" name="__codelineno-0-592"></a>    <span class="n">day_labeler</span><span class="p">:</span> <span class="n">DayLabeler</span> <span class="o">=</span> <span class="n">DayLabeler</span><span class="p">(),</span>
 </span><span id="__span-0-593"><a id="__codelineno-0-593" name="__codelineno-0-593"></a>    <span class="n">time_labeler</span><span class="p">:</span> <span class="n">TimeLabeler</span> <span class="o">=</span> <span class="n">TimeLabeler</span><span class="p">(),</span>
 </span><span id="__span-0-594"><a id="__codelineno-0-594" name="__codelineno-0-594"></a>    <span class="n">grid_lines</span><span class="p">:</span> <span class="n">GridLines</span> <span class="o">=</span> <span class="n">GridLines</span><span class="p">(),</span>
 </span><span id="__span-0-595"><a id="__codelineno-0-595" name="__codelineno-0-595"></a>    <span class="n">monday_start</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-</span><span id="__span-0-596"><a id="__codelineno-0-596" name="__codelineno-0-596"></a>    <span class="n">ax</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-596"><a id="__codelineno-0-596" name="__codelineno-0-596"></a>    <span class="n">ax</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="__span-0-597"><a id="__codelineno-0-597" name="__codelineno-0-597"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">:</span>
 </span><span id="__span-0-598"><a id="__codelineno-0-598" name="__codelineno-0-598"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Plot DataFrame of timestamps as a calendar.</span>
 </span><span id="__span-0-599"><a id="__codelineno-0-599" name="__codelineno-0-599"></a>
@@ -3818,7 +3818,7 @@ Default 0 or day_of_week</p>
                 <code>end_col</code>
             </td>
             <td>
-                  <code><span title="typing.Optional">Optional</span>[str]</code>
+                  <code>str | None</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -3834,7 +3834,7 @@ Default 0 or day_of_week</p>
                 <code>duration</code>
             </td>
             <td>
-                  <code><span title="typing.Optional">Optional</span>[int]</code>
+                  <code>int | None</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -3950,8 +3950,8 @@ Default 0 or day_of_week</p>
 </span><span id="__span-0-629"><a id="__codelineno-0-629" name="__codelineno-0-629"></a>    <span class="n">start_col</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 </span><span id="__span-0-630"><a id="__codelineno-0-630" name="__codelineno-0-630"></a>    <span class="n">grid_col</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 </span><span id="__span-0-631"><a id="__codelineno-0-631" name="__codelineno-0-631"></a>    <span class="o">*</span><span class="p">,</span>
-</span><span id="__span-0-632"><a id="__codelineno-0-632" name="__codelineno-0-632"></a>    <span class="n">end_col</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="__span-0-633"><a id="__codelineno-0-633" name="__codelineno-0-633"></a>    <span class="n">duration</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-632"><a id="__codelineno-0-632" name="__codelineno-0-632"></a>    <span class="n">end_col</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-633"><a id="__codelineno-0-633" name="__codelineno-0-633"></a>    <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="__span-0-634"><a id="__codelineno-0-634" name="__codelineno-0-634"></a>    <span class="n">day_labeler</span><span class="p">:</span> <span class="n">DayLabeler</span> <span class="o">=</span> <span class="n">DayLabeler</span><span class="p">(),</span>
 </span><span id="__span-0-635"><a id="__codelineno-0-635" name="__codelineno-0-635"></a>    <span class="n">time_labeler</span><span class="p">:</span> <span class="n">TimeLabeler</span> <span class="o">=</span> <span class="n">TimeLabeler</span><span class="p">(),</span>
 </span><span id="__span-0-636"><a id="__codelineno-0-636" name="__codelineno-0-636"></a>    <span class="n">grid_lines</span><span class="p">:</span> <span class="n">GridLines</span> <span class="o">=</span> <span class="n">GridLines</span><span class="p">(),</span>
@@ -4039,7 +4039,7 @@ Default 0 or day_of_week</p>
                 <code>title_func</code>
             </td>
             <td>
-                  <code><span title="typing.Optional">Optional</span>[<span title="latent_calendar.plot.core.calendar.TITLE_FUNC">TITLE_FUNC</span>]</code>
+                  <code><span title="latent_calendar.plot.core.calendar.TITLE_FUNC">TITLE_FUNC</span> | None</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -4087,7 +4087,7 @@ Default 0 or day_of_week</p>
                 <code>cmaps</code>
             </td>
             <td>
-                  <code><span title="typing.Optional">Optional</span>[<span title="typing.Union">Union</span>[<span title="latent_calendar.plot.colors.CMAP">CMAP</span>, <a class="autorefs autorefs-internal" title="latent_calendar.plot.colors.ColorMap" href="../plot/colors/#latent_calendar.plot.colors.ColorMap">ColorMap</a>, <span title="latent_calendar.plot.core.calendar.CMAP_GENERATOR">CMAP_GENERATOR</span>]]</code>
+                  <code><span title="latent_calendar.plot.colors.CMAP">CMAP</span> | <a class="autorefs autorefs-internal" title="latent_calendar.plot.colors.ColorMap" href="../plot/colors/#latent_calendar.plot.colors.ColorMap">ColorMap</a> | <span title="latent_calendar.plot.core.calendar.CMAP_GENERATOR">CMAP_GENERATOR</span> | None</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -4199,8 +4199,8 @@ Default 0 or day_of_week</p>
 </span><span id="__span-0-670"><a id="__codelineno-0-670" name="__codelineno-0-670"></a>    <span class="bp">self</span><span class="p">,</span>
 </span><span id="__span-0-671"><a id="__codelineno-0-671" name="__codelineno-0-671"></a>    <span class="o">*</span><span class="p">,</span>
 </span><span id="__span-0-672"><a id="__codelineno-0-672" name="__codelineno-0-672"></a>    <span class="n">max_cols</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
-</span><span id="__span-0-673"><a id="__codelineno-0-673" name="__codelineno-0-673"></a>    <span class="n">title_func</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TITLE_FUNC</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="__span-0-674"><a id="__codelineno-0-674" name="__codelineno-0-674"></a>    <span class="n">cmaps</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">CMAP</span><span class="p">,</span> <span class="n">ColorMap</span><span class="p">,</span> <span class="n">CMAP_GENERATOR</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-673"><a id="__codelineno-0-673" name="__codelineno-0-673"></a>    <span class="n">title_func</span><span class="p">:</span> <span class="n">TITLE_FUNC</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-674"><a id="__codelineno-0-674" name="__codelineno-0-674"></a>    <span class="n">cmaps</span><span class="p">:</span> <span class="n">CMAP</span> <span class="o">|</span> <span class="n">ColorMap</span> <span class="o">|</span> <span class="n">CMAP_GENERATOR</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="__span-0-675"><a id="__codelineno-0-675" name="__codelineno-0-675"></a>    <span class="n">day_labeler</span><span class="p">:</span> <span class="n">DayLabeler</span> <span class="o">=</span> <span class="n">DayLabeler</span><span class="p">(),</span>
 </span><span id="__span-0-676"><a id="__codelineno-0-676" name="__codelineno-0-676"></a>    <span class="n">time_labeler</span><span class="p">:</span> <span class="n">TimeLabeler</span> <span class="o">=</span> <span class="n">TimeLabeler</span><span class="p">(),</span>
 </span><span id="__span-0-677"><a id="__codelineno-0-677" name="__codelineno-0-677"></a>    <span class="n">grid_lines</span><span class="p">:</span> <span class="n">GridLines</span> <span class="o">=</span> <span class="n">GridLines</span><span class="p">(),</span>
@@ -6057,7 +6057,7 @@ Default 0 or day_of_week</p>
 </span><span id="__span-0-221"><a id="__codelineno-0-221" name="__codelineno-0-221"></a>    <span class="k">def</span> <span class="nf">conditional_probabilities</span><span class="p">(</span>
 </span><span id="__span-0-222"><a id="__codelineno-0-222" name="__codelineno-0-222"></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="__span-0-223"><a id="__codelineno-0-223" name="__codelineno-0-223"></a>        <span class="o">*</span><span class="p">,</span>
-</span><span id="__span-0-224"><a id="__codelineno-0-224" name="__codelineno-0-224"></a>        <span class="n">level</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span id="__span-0-224"><a id="__codelineno-0-224" name="__codelineno-0-224"></a>        <span class="n">level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
 </span><span id="__span-0-225"><a id="__codelineno-0-225" name="__codelineno-0-225"></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
 </span><span id="__span-0-226"><a id="__codelineno-0-226" name="__codelineno-0-226"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate conditional probabilities for each the row over the level.</span>
 </span><span id="__span-0-227"><a id="__codelineno-0-227" name="__codelineno-0-227"></a>
@@ -6087,7 +6087,7 @@ Default 0 or day_of_week</p>
 </span><span id="__span-0-251"><a id="__codelineno-0-251" name="__codelineno-0-251"></a>        <span class="n">time_labeler</span><span class="p">:</span> <span class="n">TimeLabeler</span> <span class="o">=</span> <span class="n">TimeLabeler</span><span class="p">(),</span>
 </span><span id="__span-0-252"><a id="__codelineno-0-252" name="__codelineno-0-252"></a>        <span class="n">grid_lines</span><span class="p">:</span> <span class="n">GridLines</span> <span class="o">=</span> <span class="n">GridLines</span><span class="p">(),</span>
 </span><span id="__span-0-253"><a id="__codelineno-0-253" name="__codelineno-0-253"></a>        <span class="n">monday_start</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-</span><span id="__span-0-254"><a id="__codelineno-0-254" name="__codelineno-0-254"></a>        <span class="n">ax</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-254"><a id="__codelineno-0-254" name="__codelineno-0-254"></a>        <span class="n">ax</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="__span-0-255"><a id="__codelineno-0-255" name="__codelineno-0-255"></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">:</span>
 </span><span id="__span-0-256"><a id="__codelineno-0-256" name="__codelineno-0-256"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Plot Series of timestamps as a calendar.</span>
 </span><span id="__span-0-257"><a id="__codelineno-0-257" name="__codelineno-0-257"></a>
@@ -6129,7 +6129,7 @@ Default 0 or day_of_week</p>
 </span><span id="__span-0-293"><a id="__codelineno-0-293" name="__codelineno-0-293"></a>        <span class="n">time_labeler</span><span class="p">:</span> <span class="n">TimeLabeler</span> <span class="o">=</span> <span class="n">TimeLabeler</span><span class="p">(),</span>
 </span><span id="__span-0-294"><a id="__codelineno-0-294" name="__codelineno-0-294"></a>        <span class="n">grid_lines</span><span class="p">:</span> <span class="n">GridLines</span> <span class="o">=</span> <span class="n">GridLines</span><span class="p">(),</span>
 </span><span id="__span-0-295"><a id="__codelineno-0-295" name="__codelineno-0-295"></a>        <span class="n">monday_start</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-</span><span id="__span-0-296"><a id="__codelineno-0-296" name="__codelineno-0-296"></a>        <span class="n">ax</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-296"><a id="__codelineno-0-296" name="__codelineno-0-296"></a>        <span class="n">ax</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="__span-0-297"><a id="__codelineno-0-297" name="__codelineno-0-297"></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">:</span>
 </span><span id="__span-0-298"><a id="__codelineno-0-298" name="__codelineno-0-298"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Plot Series of timestamps as a calendar.</span>
 </span><span id="__span-0-299"><a id="__codelineno-0-299" name="__codelineno-0-299"></a>
@@ -6408,7 +6408,7 @@ Default 0 or day_of_week</p>
                 <code>level</code>
             </td>
             <td>
-                  <code><span title="typing.Union">Union</span>[int, str]</code>
+                  <code>int | str</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -6472,7 +6472,7 @@ Default 0 or day_of_week</p>
 <span class="normal"><a href="#__codelineno-0-242">242</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-221"><a id="__codelineno-0-221" name="__codelineno-0-221"></a><span class="k">def</span> <span class="nf">conditional_probabilities</span><span class="p">(</span>
 </span><span id="__span-0-222"><a id="__codelineno-0-222" name="__codelineno-0-222"></a>    <span class="bp">self</span><span class="p">,</span>
 </span><span id="__span-0-223"><a id="__codelineno-0-223" name="__codelineno-0-223"></a>    <span class="o">*</span><span class="p">,</span>
-</span><span id="__span-0-224"><a id="__codelineno-0-224" name="__codelineno-0-224"></a>    <span class="n">level</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span id="__span-0-224"><a id="__codelineno-0-224" name="__codelineno-0-224"></a>    <span class="n">level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
 </span><span id="__span-0-225"><a id="__codelineno-0-225" name="__codelineno-0-225"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
 </span><span id="__span-0-226"><a id="__codelineno-0-226" name="__codelineno-0-226"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate conditional probabilities for each the row over the level.</span>
 </span><span id="__span-0-227"><a id="__codelineno-0-227" name="__codelineno-0-227"></a>
@@ -6638,7 +6638,7 @@ Default 0 or day_of_week</p>
                 <code>ax</code>
             </td>
             <td>
-                  <code><span title="typing.Optional">Optional</span>[<span title="matplotlib.pyplot.Axes">Axes</span>]</code>
+                  <code><span title="matplotlib.pyplot.Axes">Axes</span> | None</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -6728,7 +6728,7 @@ Default 0 or day_of_week</p>
 </span><span id="__span-0-251"><a id="__codelineno-0-251" name="__codelineno-0-251"></a>    <span class="n">time_labeler</span><span class="p">:</span> <span class="n">TimeLabeler</span> <span class="o">=</span> <span class="n">TimeLabeler</span><span class="p">(),</span>
 </span><span id="__span-0-252"><a id="__codelineno-0-252" name="__codelineno-0-252"></a>    <span class="n">grid_lines</span><span class="p">:</span> <span class="n">GridLines</span> <span class="o">=</span> <span class="n">GridLines</span><span class="p">(),</span>
 </span><span id="__span-0-253"><a id="__codelineno-0-253" name="__codelineno-0-253"></a>    <span class="n">monday_start</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-</span><span id="__span-0-254"><a id="__codelineno-0-254" name="__codelineno-0-254"></a>    <span class="n">ax</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-254"><a id="__codelineno-0-254" name="__codelineno-0-254"></a>    <span class="n">ax</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="__span-0-255"><a id="__codelineno-0-255" name="__codelineno-0-255"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">:</span>
 </span><span id="__span-0-256"><a id="__codelineno-0-256" name="__codelineno-0-256"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Plot Series of timestamps as a calendar.</span>
 </span><span id="__span-0-257"><a id="__codelineno-0-257" name="__codelineno-0-257"></a>
@@ -6843,7 +6843,7 @@ Default 0 or day_of_week</p>
                 <code>ax</code>
             </td>
             <td>
-                  <code><span title="typing.Optional">Optional</span>[<span title="matplotlib.pyplot.Axes">Axes</span>]</code>
+                  <code><span title="matplotlib.pyplot.Axes">Axes</span> | None</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -6923,7 +6923,7 @@ Default 0 or day_of_week</p>
 </span><span id="__span-0-293"><a id="__codelineno-0-293" name="__codelineno-0-293"></a>    <span class="n">time_labeler</span><span class="p">:</span> <span class="n">TimeLabeler</span> <span class="o">=</span> <span class="n">TimeLabeler</span><span class="p">(),</span>
 </span><span id="__span-0-294"><a id="__codelineno-0-294" name="__codelineno-0-294"></a>    <span class="n">grid_lines</span><span class="p">:</span> <span class="n">GridLines</span> <span class="o">=</span> <span class="n">GridLines</span><span class="p">(),</span>
 </span><span id="__span-0-295"><a id="__codelineno-0-295" name="__codelineno-0-295"></a>    <span class="n">monday_start</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-</span><span id="__span-0-296"><a id="__codelineno-0-296" name="__codelineno-0-296"></a>    <span class="n">ax</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-296"><a id="__codelineno-0-296" name="__codelineno-0-296"></a>    <span class="n">ax</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="__span-0-297"><a id="__codelineno-0-297" name="__codelineno-0-297"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">:</span>
 </span><span id="__span-0-298"><a id="__codelineno-0-298" name="__codelineno-0-298"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Plot Series of timestamps as a calendar.</span>
 </span><span id="__span-0-299"><a id="__codelineno-0-299" name="__codelineno-0-299"></a>
