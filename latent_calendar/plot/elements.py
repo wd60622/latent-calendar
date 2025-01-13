@@ -347,9 +347,9 @@ class CalendarEvent:
     ) -> plt.Rectangle:
         """Create a rectangle matplotlib instance from the event."""
         height = self.end - self.start
-        assert (
-            height > 0.0
-        ), f"The rectangle doesn't have positive height. Hour start {self.start} > Hour end {self.end}"
+        assert height > 0.0, (
+            f"The rectangle doesn't have positive height. Hour start {self.start} > Hour end {self.end}"
+        )
 
         x = self.day if monday_start else (self.day + 1) % DAYS_IN_WEEK
         rect_kwargs = {
