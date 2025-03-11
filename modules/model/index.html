@@ -1781,6 +1781,7 @@
 
 
 
+
   <div class="doc doc-children">
 
 
@@ -1843,6 +1844,7 @@ the prior is the average of the data.</p>
           </tr>
       </tbody>
     </table>
+
 
 
 
@@ -1940,6 +1942,7 @@ the prior is the average of the data.</p>
 
         <p>Fit the conjugate model.</p>
 
+
             <details class="quote">
               <summary>Source code in <code>latent_calendar/model/latent_calendar.py</code></summary>
               <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-177">177</a></span>
@@ -1982,11 +1985,12 @@ the prior is the average of the data.</p>
 
     <div class="doc doc-contents ">
             <p class="doc doc-class-bases">
-              Bases: <code><a class="autorefs autorefs-internal" title="latent_calendar.model.latent_calendar.LatentCalendar" href="#latent_calendar.model.latent_calendar.LatentCalendar">LatentCalendar</a></code></p>
+              Bases: <code><a class="autorefs autorefs-internal" title="LatentCalendar (latent_calendar.model.latent_calendar.LatentCalendar)" href="#latent_calendar.model.latent_calendar.LatentCalendar">LatentCalendar</a></code></p>
 
 
         <p>Return even probability of a latent.</p>
 <p>This can be used as the worse possible baseline.</p>
+
 
 
 
@@ -2104,6 +2108,7 @@ the prior is the average of the data.</p>
 
         <p>Return a dummy model ready for transforming and predicting.</p>
 
+
             <details class="quote">
               <summary>Source code in <code>latent_calendar/model/latent_calendar.py</code></summary>
               <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-97"> 97</a></span>
@@ -2137,6 +2142,7 @@ the prior is the average of the data.</p>
     <div class="doc doc-contents ">
 
         <p>All components are equal probabilty of every hour.</p>
+
 
             <details class="quote">
               <summary>Source code in <code>latent_calendar/model/latent_calendar.py</code></summary>
@@ -2180,6 +2186,7 @@ the prior is the average of the data.</p>
 
         <p>Return a dummy model from a prior.</p>
 
+
             <details class="quote">
               <summary>Source code in <code>latent_calendar/model/latent_calendar.py</code></summary>
               <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-105">105</a></span>
@@ -2215,6 +2222,7 @@ the prior is the average of the data.</p>
     <div class="doc doc-contents ">
 
         <p>Everyone has equal probability of being in each group.</p>
+
 
             <details class="quote">
               <summary>Source code in <code>latent_calendar/model/latent_calendar.py</code></summary>
@@ -2261,6 +2269,7 @@ the prior is the average of the data.</p>
 <p>Adapted from sklearn's <a href="https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.LatentDirichletAllocation.html">Latent Dirichlet Allocation</a> model.</p>
 <p>Provides a <code>predict</code> method that returns the marginal probability of each time slot for a given row and
 a <code>transform</code> method that returns the latent representation of each row.</p>
+
 
 
 
@@ -2374,6 +2383,7 @@ a <code>transform</code> method that returns the latent representation of each r
     <div class="doc doc-contents ">
 
         <p>Population frequency of each component.</p>
+
     </div>
 
 </div>
@@ -2395,6 +2405,7 @@ a <code>transform</code> method that returns the latent representation of each r
     <div class="doc doc-contents ">
 
         <p>Components that each sum to 1.</p>
+
     </div>
 
 </div>
@@ -2413,6 +2424,7 @@ a <code>transform</code> method that returns the latent representation of each r
     <div class="doc doc-contents ">
 
         <p>Marginalize out the components.</p>
+
 
             <details class="quote">
               <summary>Source code in <code>latent_calendar/model/latent_calendar.py</code></summary>
@@ -2445,6 +2457,7 @@ a <code>transform</code> method that returns the latent representation of each r
         <p>Return the marginal probabilities for a given row.</p>
 <p>Marginalize out the loads via law of total probability</p>
 <div class="arithmatex">\[P[time=t | Row=r] = \sum_{l=0}^{c} P[time=t | L=l, Row=r] * P[L=l | Row=r]\]</div>
+
 
             <details class="quote">
               <summary>Source code in <code>latent_calendar/model/latent_calendar.py</code></summary>
@@ -2498,7 +2511,8 @@ a <code>transform</code> method that returns the latent representation of each r
 
     <div class="doc doc-contents ">
             <p class="doc doc-class-bases">
-              Bases: <code><a class="autorefs autorefs-internal" title="latent_calendar.model.latent_calendar.LatentCalendar" href="#latent_calendar.model.latent_calendar.LatentCalendar">LatentCalendar</a></code></p>
+              Bases: <code><a class="autorefs autorefs-internal" title="LatentCalendar (latent_calendar.model.latent_calendar.LatentCalendar)" href="#latent_calendar.model.latent_calendar.LatentCalendar">LatentCalendar</a></code></p>
+
 
 
 
@@ -2565,6 +2579,7 @@ a <code>transform</code> method that returns the latent representation of each r
 
         <p>Just sum over all the rows.</p>
 
+
             <details class="quote">
               <summary>Source code in <code>latent_calendar/model/latent_calendar.py</code></summary>
               <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-116">116</a></span>
@@ -2598,6 +2613,7 @@ a <code>transform</code> method that returns the latent representation of each r
     <div class="doc doc-contents ">
 
         <p>There is only one component to be a part of.</p>
+
 
             <details class="quote">
               <summary>Source code in <code>latent_calendar/model/latent_calendar.py</code></summary>
@@ -2671,6 +2687,7 @@ a <code>transform</code> method that returns the latent representation of each r
           </tr>
       </tbody>
     </table>
+
 
             <details class="quote">
               <summary>Source code in <code>latent_calendar/model/latent_calendar.py</code></summary>
@@ -2767,6 +2784,7 @@ a <code>transform</code> method that returns the latent representation of each r
       </tbody>
     </table>
 
+
             <details class="quote">
               <summary>Source code in <code>latent_calendar/model/latent_calendar.py</code></summary>
               <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-144">144</a></span>
@@ -2813,6 +2831,7 @@ a <code>transform</code> method that returns the latent representation of each r
 
         <p>Marginalize out the components.</p>
 
+
             <details class="quote">
               <summary>Source code in <code>latent_calendar/model/latent_calendar.py</code></summary>
               <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-29">29</a></span>
@@ -2848,6 +2867,7 @@ a <code>transform</code> method that returns the latent representation of each r
 
 
 
+
   <div class="doc doc-children">
 
 
@@ -2870,6 +2890,7 @@ a <code>transform</code> method that returns the latent representation of each r
     <div class="doc doc-contents ">
 
         <p>Small wrapper to predict on DataFrame and keep same columns and index.</p>
+
 
             <details class="quote">
               <summary>Source code in <code>latent_calendar/model/utils.py</code></summary>
@@ -2900,6 +2921,7 @@ a <code>transform</code> method that returns the latent representation of each r
     <div class="doc doc-contents ">
 
         <p>Small wrapper to transform on DataFrame and keep index.</p>
+
 
             <details class="quote">
               <summary>Source code in <code>latent_calendar/model/utils.py</code></summary>
