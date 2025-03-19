@@ -34,7 +34,9 @@ __all__ = ["load_online_transactions", "load_chicago_bikes", "load_ufo_sightings
 
 
 HERE = Path(__file__).parent
-BASE_URL = "https://raw.githubusercontent.com/wd60622/latent-calendar/main/datasets"
+BASE_URL = (
+    "https://raw.githubusercontent.com/williambdean/latent-calendar/main/datasets"
+)
 
 
 def _download_csv(name: str, **kwargs) -> pd.DataFrame:

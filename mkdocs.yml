@@ -27,15 +27,15 @@ theme:
         name: Switch to light mode
 
 repo_name: Latent Calendar
-repo_url: https://github.com/wd60622/latent-calendar
+repo_url: https://github.com/williambdean/latent-calendar
 edit_uri: blob/main/docs/
-site_url: https://wd60622.github.io/latent-calendar
+site_url: https://williambdean.github.io/latent-calendar
 
 extra:
-  homepage: https://wd60622.github.io/
+  homepage: https://williambdean.github.io/
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/wd60622/latent-calendar
+      link: https://github.com/williambdean/latent-calendar
 
 nav:
   - Overview: index.md
