@@ -73,7 +73,7 @@ Examples:
 
 """
 
-from typing import List, Optional, Union, Literal
+from typing import Literal
 
 import pandas as pd
 import numpy as np
@@ -221,7 +221,7 @@ class SeriesAccessor:
     def conditional_probabilities(
         self,
         *,
-        level: Union[int, str] = 0,
+        level: int | str = 0,
     ) -> pd.Series:
         """Calculate conditional probabilities for each the row over the level.
 
@@ -251,7 +251,7 @@ class SeriesAccessor:
         time_labeler: TimeLabeler = TimeLabeler(),
         grid_lines: GridLines = GridLines(),
         monday_start: bool = True,
-        ax: Optional[plt.Axes] = None,
+        ax: plt.Axes | None = None,
     ) -> plt.Axes:
         """Plot Series of timestamps as a calendar.
 
@@ -293,7 +293,7 @@ class SeriesAccessor:
         time_labeler: TimeLabeler = TimeLabeler(),
         grid_lines: GridLines = GridLines(),
         monday_start: bool = True,
-        ax: Optional[plt.Axes] = None,
+        ax: plt.Axes | None = None,
     ) -> plt.Axes:
         """Plot Series of timestamps as a calendar.
 
@@ -393,7 +393,7 @@ class DataFrameAccessor:
     def conditional_probabilities(
         self,
         *,
-        level: Union[int, str] = 0,
+        level: int | str = 0,
     ) -> pd.DataFrame:
         """Calculate conditional probabilities for each row over the level.
 
@@ -478,7 +478,7 @@ class DataFrameAccessor:
 
     def aggregate_events(
         self,
-        by: Union[str, List[str]],
+        by: str | list[str],
         timestamp_col: str,
         minutes: int = 60,
         as_multiindex: bool = True,
@@ -585,15 +585,15 @@ class DataFrameAccessor:
         self,
         start_col: str,
         *,
-        end_col: Optional[str] = None,
-        duration: Optional[int] = None,
+        end_col: str | None = None,
+        duration: int | None = None,
         alpha: float = None,
         cmap=None,
         day_labeler: DayLabeler = DayLabeler(),
         time_labeler: TimeLabeler = TimeLabeler(),
         grid_lines: GridLines = GridLines(),
         monday_start: bool = True,
-        ax: Optional[plt.Axes] = None,
+        ax: plt.Axes | None = None,
     ) -> plt.Axes:
         """Plot DataFrame of timestamps as a calendar.
 
@@ -629,8 +629,8 @@ class DataFrameAccessor:
         start_col: str,
         grid_col: str,
         *,
-        end_col: Optional[str] = None,
-        duration: Optional[int] = None,
+        end_col: str | None = None,
+        duration: int | None = None,
         day_labeler: DayLabeler = DayLabeler(),
         time_labeler: TimeLabeler = TimeLabeler(),
         grid_lines: GridLines = GridLines(),
@@ -670,8 +670,8 @@ class DataFrameAccessor:
         self,
         *,
         max_cols: int = 3,
-        title_func: Optional[TITLE_FUNC] = None,
-        cmaps: Optional[Union[CMAP, ColorMap, CMAP_GENERATOR]] = None,
+        title_func: TITLE_FUNC | None = None,
+        cmaps: CMAP | ColorMap | CMAP_GENERATOR | None = None,
         day_labeler: DayLabeler = DayLabeler(),
         time_labeler: TimeLabeler = TimeLabeler(),
         grid_lines: GridLines = GridLines(),

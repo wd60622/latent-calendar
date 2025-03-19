@@ -87,4 +87,4 @@ def test_conjugate_model(conjugate_model) -> None:
 def test_sklearn_documentation(estimator) -> None:
     instance = estimator()
 
-    assert "wd60622" in instance._get_doc_link()
+    assert "williambdean" in instance._get_doc_link()

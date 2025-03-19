@@ -13,8 +13,6 @@ X_pred = model.predict(X)
 
 """
 
-from typing import Optional
-
 from packaging.version import Version
 
 import numpy as np
@@ -173,7 +171,7 @@ class ConjugateModel(BaseEstimator, TransformerMixin):
 
     """
 
-    def __init__(self, a: Optional[np.ndarray] = None) -> None:
+    def __init__(self, a: np.ndarray | None = None) -> None:
         self.a = a
 
     def fit(self, X, y=None) -> "ConjugateModel":
@@ -191,7 +189,7 @@ class ConjugateModel(BaseEstimator, TransformerMixin):
         return self.transform(X, y=y)
 
 
-DOC_LINK_TEMPLATE = "https://wd60622.github.io/latent-calendar/modules/model/#latent_calendar.model.latent_calendar.{class_name}"
+DOC_LINK_TEMPLATE = "https://williambdean.github.io/latent-calendar/modules/model/#latent_calendar.model.latent_calendar.{class_name}"
 
 
 def url_param_generator_old(self, estimator):

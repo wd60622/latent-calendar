@@ -3,7 +3,7 @@ title: Latent Calendar
 subtitle: Modeling Weekly Behavior with Latent Components
 author:
   - name: Will Dean
-    url: https://wd60622.github.io/
+    url: https://williambdean.github.io/
     affiliations:
       - name: Data Scientist
 format:
